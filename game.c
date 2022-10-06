@@ -214,7 +214,7 @@ void test_collision(void){
 		
 	// change the BG color, if sprites are touching
 	if (collision){
-	pal_col(0,0x30);
+	pal_col(0,0x12);
 	}
 	else{
 	pal_col(0,0x0f);

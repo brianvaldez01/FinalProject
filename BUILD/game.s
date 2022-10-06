@@ -1446,11 +1446,11 @@ L0003:	jmp     incsp1
 	lda     _collision
 	beq     L0002
 ;
-; pal_col(0,0x30);
+; pal_col(0,0x12);
 ;
 	lda     #$00
 	jsr     pusha
-	lda     #$30
+	lda     #$12
 ;
 ; else{
 ;

@@ -6,8 +6,6 @@
 
 #pragma bss-name(push, "ZEROPAGE")
 
-unsigned char pad2;
-
 
 #pragma bss-name(push, "BSS")
 
@@ -49,11 +47,13 @@ void show_title() {
 	
 	break;
 	}
+
   }
+
 }
 void fade_out() {
   char vb;
-  for (vb=4; vb!=0; vb--) {
+  for ( vb =4; vb!=0; vb--) {
     // Set brightness value
     pal_bright(vb);
     // wait for 4/60 sec
@@ -130,8 +130,10 @@ void draw_sprites(void){
 	
 	// draw 2 metasprites
 	oam_meta_spr(GoodGuy1.x, GoodGuy1.y, sprPlayer);
-	
 	oam_meta_spr(BadGuy1.x, BadGuy1.y, sprGhost);
+
+	//small ai
+
 }
 	
 	
@@ -245,9 +247,12 @@ void main (void) {
 	
 	//load title screen
 	show_title();
+	fade_out();
+	
 	
 	//when show_title breaks, load level
 	draw_bg();
+	fade_in();
 	music_play(song+1);
 
 	//infinite loop

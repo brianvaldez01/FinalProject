@@ -21,10 +21,10 @@ unsigned char c_map[240];
 enum {SONG_GAME, SONG_PAUSE};
 void change_song(void);
 
-#include "TILESETS/beeoop.c" // called c1
+#include "TILESETS/boop.c" // called c1
 
 
-const unsigned char * const All_Collision_Maps[] = {beeoop};
+const unsigned char * const All_Collision_Maps[] = {boop};
 
 // a 16x16 pixel metasprite
 const unsigned char sprPlayer[]={

@@ -60,7 +60,6 @@
 	.export		_draw_sprites
 	.export		_movement
 	.export		_bg_collision
-	.export		_pad2
 	.export		_GoodGuy1
 	.export		_BadGuy1
 	.export		_collided
@@ -386,6 +385,8 @@ _beep:
 	.byte	$02
 	.byte	$00
 _beeoop:
+	.byte	$08
+	.byte	$08
 	.byte	$01
 	.byte	$01
 	.byte	$01
@@ -417,22 +418,20 @@ _beeoop:
 	.byte	$01
 	.byte	$01
 	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$01
 	.byte	$01
 	.byte	$00
@@ -469,7 +468,7 @@ _beeoop:
 	.byte	$01
 	.byte	$00
 	.byte	$00
-	.byte	$02
+	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -577,30 +576,22 @@ _beeoop:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$01
 	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$01
 	.byte	$01
 	.byte	$01
@@ -608,6 +599,10 @@ _beeoop:
 	.byte	$01
 	.byte	$01
 	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$01
 	.byte	$01
 	.byte	$01
@@ -620,6 +615,10 @@ _beeoop:
 	.byte	$01
 	.byte	$01
 	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$01
 	.byte	$01
 	.byte	$01
@@ -720,9 +719,6 @@ _song:
 	.res	1,$00
 _c_map:
 	.res	240,$00
-.segment	"ZEROPAGE"
-_pad2:
-	.res	1,$00
 
 ; ---------------------------------------------------------------
 ; void __near__ draw_bg (void)
@@ -1312,7 +1308,7 @@ L0002:	jsr     _ppu_wait_frame
 .segment	"CODE"
 
 ;
-; for (vb=4; vb!=0; vb--) {
+; for ( vb =4; vb!=0; vb--) {
 ;
 	jsr     decsp1
 	lda     #$04
@@ -1341,7 +1337,7 @@ L0006:	sta     (sp),y
 ;
 	jsr     _ppu_wait_frame
 ;
-; for (vb=4; vb!=0; vb--) {
+; for ( vb =4; vb!=0; vb--) {
 ;
 	ldy     #$00
 	lda     (sp),y
@@ -1517,9 +1513,17 @@ L0002:	jsr     pusha
 ;
 	jsr     _show_title
 ;
+; fade_out();
+;
+	jsr     _fade_out
+;
 ; draw_bg();
 ;
 	jsr     _draw_bg
+;
+; fade_in();
+;
+	jsr     _fade_in
 ;
 ; music_play(song+1);
 ;

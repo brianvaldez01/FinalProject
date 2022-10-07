@@ -21,6 +21,13 @@ unsigned char c_map[240];
 enum {SONG_GAME, SONG_PAUSE};
 void change_song(void);
 
+
+
+#define FP_BITS 4;//
+
+
+
+
 #include "TILESETS/boop.c" // called c1
 
 

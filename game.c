@@ -22,6 +22,12 @@ unsigned int collided = 0;
 
 
 
+static unsigned char wait;//
+static unsigned char frame_cnt;//
+static int iy,dy, Badguy_dx, Badguy_dy, Goodguy_dx, Goodguy_dy;//
+
+
+
 
 const unsigned char palTitle[]={ 0x0f,0x03,0x15,0x30,0x0f,0x01,0x21,0x31,0x0f,0x06,0x30,0x26,0x0f,0x09,0x19,0x29 };
 
@@ -39,15 +45,31 @@ void show_title() {
   // Enable Rendering
   ppu_on_all();
   
+iy=220<<FP_BITS;
+
+
   while(1) {
     ppu_wait_frame();
     
     if (pad_trigger(0)&PAD_START) 
-	{
-	
-	break;
-	}
+	{break;}
 
+
+	iy+=dy;//
+	if(iy<0)//
+	{//
+		iy =0;//
+		dy=-dy>>1;//
+	}//
+	if(wait)//
+	{//
+		--wait;//
+	}//
+	else//
+	{//
+		pal_col(10,(frame_cnt&32)?0x0f:0x20);//
+		++frame_cnt;//
+	}//
   }
 
 }
@@ -133,9 +155,8 @@ void draw_sprites(void){
 	oam_meta_spr(BadGuy1.x, BadGuy1.y, sprGhost);
 
 	//small ai
-
-}
 	
+}
 	
 	
 void movement(void){
@@ -160,6 +181,29 @@ void movement(void){
 	bg_collision((char *)&GoodGuy1);
 	if(collision_D) GoodGuy1.y -= 1;
 	if(collision_U) GoodGuy1.y += 1;
+
+
+	bg_collision((char *)&BadGuy1);
+	if(collision_R) BadGuy1.x -= 1;
+	if(collision_L) BadGuy1.x += 1;
+	bg_collision((char *)&BadGuy1);
+	if(collision_D) BadGuy1.y -= 1;
+	if(collision_U) BadGuy1.y += 1;
+
+
+
+  Badguy_dx = 0;//
+  Badguy_dy = 0;//
+  Goodguy_dx = 0;//
+  Goodguy_dy = 0;//
+  GoodGuy1.x += Goodguy_dx;//
+  GoodGuy1.y += Goodguy_dy;//
+  Badguy_dx = (GoodGuy1.x - BadGuy1.x);//
+  Badguy_dy = (GoodGuy1.y - BadGuy1.y);//
+  BadGuy1.x += Badguy_dx/20;//
+  BadGuy1.y += Badguy_dy/20;//
+
+
 }	
 
 

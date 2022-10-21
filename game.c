@@ -18,19 +18,31 @@ struct Assets {
 
 struct Assets GoodGuy1 = {128,64,15,15};
 struct Assets BadGuy1 = {128,168,15,15};
+struct Assets BadGuy2 = {120,120,15,15};
+struct Assets BadGuy3 = {120,120,15,15};
+struct Assets BadGuy4 = {120,120,15,15};
+struct Assets BadGuy5 = {120,120,15,15};
+struct Assets BadGuy6 = {120,120,15,15};
+struct Assets coin = {100, 100, 7, 7};
 unsigned int collided = 0;
 
+// Max amount of enemies on our screen
+#define maxEnemies 5
+
+// List of enemies
+struct Assets enemyList[maxEnemies] = {{128,168,15,15}, {120,120,15,15}, {120,120,15,15}, {120,120,15,15}, {120,120,15,15}};
+
+// Enemy velocities
+int enemy_dx[maxEnemies];
+int enemy_dy[maxEnemies];
 
 
 static unsigned char wait;//
 static unsigned char frame_cnt;//
-static int iy,dy, Badguy_dx, Badguy_dy, Goodguy_dx, Goodguy_dy;//
-
-
+static int iy,dy, Goodguy_dx, Goodguy_dy;//
 
 
 const unsigned char palTitle[]={ 0x0f,0x03,0x15,0x30,0x0f,0x01,0x21,0x31,0x0f,0x06,0x30,0x26,0x0f,0x09,0x19,0x29 };
-
 
 
 // Shows title screen
@@ -73,6 +85,7 @@ iy=220<<FP_BITS;
   }
 
 }
+
 void fade_out() {
   char vb;
   for ( vb =4; vb!=0; vb--) {
@@ -150,12 +163,17 @@ void draw_sprites(void){
 	// clear all sprites from sprite buffer
 	oam_clear();
 	
-	// draw 2 metasprites
+	// draw first 2 metasprites
 	oam_meta_spr(GoodGuy1.x, GoodGuy1.y, sprPlayer);
-	oam_meta_spr(BadGuy1.x, BadGuy1.y, sprGhost);
+	oam_meta_spr(enemyList[0].x, enemyList[0].y, sprGhost);
 
-	//small ai
-	
+	// draw rest of enemies
+	for(i = 1; i < numEnemies; i++) {
+		oam_meta_spr(enemyList[i].x, enemyList[i].y, sprGhost);
+	}
+
+	// draw coin
+	oam_meta_spr(coin.x, coin.y, sprCoin);
 }
 	
 	
@@ -182,28 +200,30 @@ void movement(void){
 	if(collision_D) GoodGuy1.y -= 1;
 	if(collision_U) GoodGuy1.y += 1;
 
+	for(i = 0; i < numEnemies; i++) {
+		bg_collision((char *)&enemyList[i]);
+		if(collision_R) enemyList[i].x -= 1;
+		if(collision_L) enemyList[i].x += 1;
+		bg_collision((char *)&enemyList[i]);
+		if(collision_D) enemyList[i].y -= 1;
+		if(collision_U) enemyList[i].y += 1;
+	}
 
-	bg_collision((char *)&BadGuy1);
-	if(collision_R) BadGuy1.x -= 1;
-	if(collision_L) BadGuy1.x += 1;
-	bg_collision((char *)&BadGuy1);
-	if(collision_D) BadGuy1.y -= 1;
-	if(collision_U) BadGuy1.y += 1;
+	Goodguy_dx = 0;//
+	Goodguy_dy = 0;//
+	GoodGuy1.x += Goodguy_dx;//
+	GoodGuy1.y += Goodguy_dy;//
+	enemy_dx[0] = (GoodGuy1.x - enemyList[0].x);
+	enemy_dy[0] = (GoodGuy1.y - enemyList[0].y);
+	enemyList[0].x += enemy_dx[0]/20;
+	enemyList[0].y += enemy_dy[0]/20;
 
-
-
-  Badguy_dx = 0;//
-  Badguy_dy = 0;//
-  Goodguy_dx = 0;//
-  Goodguy_dy = 0;//
-  GoodGuy1.x += Goodguy_dx;//
-  GoodGuy1.y += Goodguy_dy;//
-  Badguy_dx = (GoodGuy1.x - BadGuy1.x);//
-  Badguy_dy = (GoodGuy1.y - BadGuy1.y);//
-  BadGuy1.x += Badguy_dx/20;//
-  BadGuy1.y += Badguy_dy/20;//
-
-
+	for(i = 1; i < numEnemies; i++) {
+		enemy_dx[i] = (enemyList[i - 1].x - enemyList[i].x);
+		enemy_dy[i] = (enemyList[i - 1].y - enemyList[i].y);
+		enemyList[i].x += enemy_dx[i]/20;
+		enemyList[i].y += enemy_dy[i]/20;
+	}
 }	
 
 
@@ -256,65 +276,162 @@ void bg_collision(char * object){
 
 
 void test_collision(void){
-	collision = check_collision(&GoodGuy1, &BadGuy1);
-		
-	// change the BG color, if sprites are touching
-	if (collision){
-	pal_col(0,0x12);
-	}
-	else{
-	pal_col(0,0x0f);
-	}
 
+	collision1 = check_collision(&GoodGuy1, &enemyList[0]);
+	collision2 = check_collision(&GoodGuy1, &enemyList[1]);
+	collision3 = check_collision(&GoodGuy1, &enemyList[2]);
+	collision4 = check_collision(&GoodGuy1, &enemyList[3]);
+	collision5 = check_collision(&GoodGuy1, &enemyList[4]);
+
+	if (numEnemies == 1) {
+		if (collision1) playerDead = 1;
+		else playerDead = 0;
+	} else if (numEnemies == 2) {
+		if (collision1 || collision2) playerDead = 1;
+		else playerDead = 0;
+	} else if (numEnemies == 3) {
+		if (collision1 || collision2 || collision3) playerDead = 1;
+		else playerDead = 0;
+	} else if (numEnemies == 4) {
+		if (collision1 || collision2 || collision3 || collision4) playerDead = 1;
+		else playerDead = 0;
+	} else {
+		if (collision1 || collision2 || collision3 || collision4 || collision5) playerDead = 1;
+		else playerDead = 0;
+	}
+}
+
+void coin_pickup(void) {
+	coin_collision = check_collision(&GoodGuy1, &coin);
+
+	if (coin_collision) {
+		// If player is in left side of screen
+		if (GoodGuy1.x < 100) {
+			// If player is on top half of screen
+				if (GoodGuy1.y < 100) {
+					coin.x = 50;
+					coin.y = 175;
+				}
+			// Else bottom half of screen
+				else {
+					coin.x = 200;
+					coin.y = 175;
+				}
+		} 
+		
+		// Else player is on the right side of screen
+		else {
+			// If player is on top half of screen
+			if (GoodGuy1.y < 100) {
+				coin.x = 50;
+				coin.y = 40;
+			}
+			// Else bottom half of screen
+			else {
+				coin.x = 200;
+				coin.y = 40;
+			}
+		}
+
+		// If we are not at max enemies
+		if (numEnemies != maxEnemies) {
+			// Add enemies
+			numEnemies++;
+		}
+		
+	} else {
+		// Do nothing, keep coin at the same spot
+		pal_col(0,0x0f);
+	}
 }
 
 void main (void) {
-	
-	ppu_off(); // screen off
-	
-	// load the palettes
-	pal_bg(palTitle);
-	pal_spr(palTitle);
 
-	// use the second set of tiles for sprites
-	// both bg and sprite are set to 0 by default
-	bank_spr(1);
-	set_vram_buffer();
+	while(1) {
 	
-	song = 0;
-	music_play(song);
-	
-	// turn on screen
-	ppu_on_all(); 
-	//music_play(song);
+		ppu_off(); // screen off
+		
+		// load the palettes
+		pal_bg(palTitle);
+		pal_spr(palTitle);
 
+		// use the second set of tiles for sprites
+		// both bg and sprite are set to 0 by default
+		bank_spr(1);
+		set_vram_buffer();
 	
-	//load title screen
-	show_title();
-	fade_out();
-	
-	
-	//when show_title breaks, load level
-	draw_bg();
-	fade_in();
-	music_play(song+1);
+		song = 0;
+		music_play(song);
+		
+		// turn on screen
+		ppu_on_all(); 
+		//music_play(song);
 
-	//infinite loop
-	
-	while (1){
-		ppu_wait_nmi(); // wait till beginning of the frame
-		// the sprites are pushed from a buffer to the OAM during nmi
-		set_music_speed(8);
-		// clear all sprites from sprite buffer
-		oam_clear();
+		
+		//load title screen
+		fade_in();
+		show_title();
+		fade_out();
+		
+		
+		//when show_title breaks, load level
+		draw_bg();
+		fade_in();
+		music_play(song+1);
 
-		//set everything up
-		pad1 = pad_poll(0);
-		draw_sprites();
-		movement();
-		test_collision();
-		}		
+		// Initialize position of player, 1st enemy, and 1st coin
+		GoodGuy1.x = 128;
+		GoodGuy1.y = 64;
+		enemyList[0].x = 128;
+		enemyList[0].y = 168;
+		for(i = 1; i < maxEnemies; i++) {
+			enemyList[i].x = 120;
+			enemyList[i].y = 120;
+		}
+		coin.x = 100;
+		coin.y = 100;
+
+
+		// Initialize all enemy velocities to 0
+		for(i = 0; i < maxEnemies; i++) {
+			enemy_dx[i] = 0;
+			enemy_dy[i] = 0;
+		}
+
+		// Loop until player dies
+		
+		while (playerDead == 0){
+			ppu_wait_nmi(); // wait till beginning of the frame
+			// the sprites are pushed from a buffer to the OAM during nmi
+			set_music_speed(8);
+			// clear all sprites from sprite buffer
+			oam_clear();
+
+			//set everything up
+			pad1 = pad_poll(0);
+			draw_sprites();
+			movement();
+			coin_pickup();
+			test_collision();
+			}	
+
+			ppu_wait_frame();
+
+			// Once player dies, go back to title screen
+			fade_out();
+
+			playerDead = 0;
+
+			// Turn off Screen
+			ppu_off();
+
+			// Clear the sprites
+			oam_clear();
+
+			// Set numEnemies back to 1
+			numEnemies = 1;
+
+			// Fade out of screen
+			fade_out();
+		}
 	}
-
-	
-	

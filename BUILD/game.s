@@ -36,11 +36,19 @@
 	.export		_beep
 	.export		_pad1
 	.export		_pad1_new
-	.export		_collision
+	.export		_collision1
+	.export		_collision2
+	.export		_collision3
+	.export		_collision4
+	.export		_collision5
+	.export		_coin_collision
+	.export		_i
+	.export		_numEnemies
 	.export		_collision_L
 	.export		_collision_R
 	.export		_collision_U
 	.export		_collision_D
+	.export		_playerDead
 	.export		_which_bg
 	.export		_p_maps
 	.export		_coordinates
@@ -56,13 +64,24 @@
 	.export		_All_Collision_Maps
 	.export		_sprPlayer
 	.export		_sprGhost
+	.export		_sprCoin
 	.export		_draw_bg
 	.export		_draw_sprites
 	.export		_movement
 	.export		_bg_collision
+	.export		_coin_pickup
 	.export		_GoodGuy1
 	.export		_BadGuy1
+	.export		_BadGuy2
+	.export		_BadGuy3
+	.export		_BadGuy4
+	.export		_BadGuy5
+	.export		_BadGuy6
+	.export		_coin
 	.export		_collided
+	.export		_enemyList
+	.export		_enemy_dx
+	.export		_enemy_dy
 	.export		_palTitle
 	.export		_show_title
 	.export		_fade_out
@@ -72,6 +91,10 @@
 
 .segment	"DATA"
 
+_numEnemies:
+	.byte	$01
+_playerDead:
+	.byte	$00
 _GoodGuy1:
 	.byte	$80
 	.byte	$40
@@ -82,8 +105,59 @@ _BadGuy1:
 	.byte	$A8
 	.byte	$0F
 	.byte	$0F
+_BadGuy2:
+	.byte	$78
+	.byte	$78
+	.byte	$0F
+	.byte	$0F
+_BadGuy3:
+	.byte	$78
+	.byte	$78
+	.byte	$0F
+	.byte	$0F
+_BadGuy4:
+	.byte	$78
+	.byte	$78
+	.byte	$0F
+	.byte	$0F
+_BadGuy5:
+	.byte	$78
+	.byte	$78
+	.byte	$0F
+	.byte	$0F
+_BadGuy6:
+	.byte	$78
+	.byte	$78
+	.byte	$0F
+	.byte	$0F
+_coin:
+	.byte	$64
+	.byte	$64
+	.byte	$07
+	.byte	$07
 _collided:
 	.word	$0000
+_enemyList:
+	.byte	$80
+	.byte	$A8
+	.byte	$0F
+	.byte	$0F
+	.byte	$78
+	.byte	$78
+	.byte	$0F
+	.byte	$0F
+	.byte	$78
+	.byte	$78
+	.byte	$0F
+	.byte	$0F
+	.byte	$78
+	.byte	$78
+	.byte	$0F
+	.byte	$0F
+	.byte	$78
+	.byte	$78
+	.byte	$0F
+	.byte	$0F
 
 .segment	"RODATA"
 
@@ -599,10 +673,6 @@ _boop:
 	.byte	$01
 	.byte	$01
 	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
 	.byte	$01
 	.byte	$01
 	.byte	$01
@@ -615,10 +685,14 @@ _boop:
 	.byte	$01
 	.byte	$01
 	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
 	.byte	$01
 	.byte	$01
 	.byte	$01
@@ -648,19 +722,37 @@ _sprPlayer:
 _sprGhost:
 	.byte	$00
 	.byte	$FF
-	.byte	$49
+	.byte	$4D
 	.byte	$00
 	.byte	$08
 	.byte	$FF
-	.byte	$4A
+	.byte	$4E
 	.byte	$00
 	.byte	$00
 	.byte	$07
-	.byte	$4B
+	.byte	$4F
 	.byte	$00
 	.byte	$08
 	.byte	$07
-	.byte	$4C
+	.byte	$50
+	.byte	$00
+	.byte	$80
+_sprCoin:
+	.byte	$00
+	.byte	$FF
+	.byte	$45
+	.byte	$00
+	.byte	$08
+	.byte	$FF
+	.byte	$46
+	.byte	$00
+	.byte	$00
+	.byte	$07
+	.byte	$47
+	.byte	$00
+	.byte	$08
+	.byte	$07
+	.byte	$48
 	.byte	$00
 	.byte	$80
 _palTitle:
@@ -687,7 +779,19 @@ _pad1:
 	.res	1,$00
 _pad1_new:
 	.res	1,$00
-_collision:
+_collision1:
+	.res	1,$00
+_collision2:
+	.res	1,$00
+_collision3:
+	.res	1,$00
+_collision4:
+	.res	1,$00
+_collision5:
+	.res	1,$00
+_coin_collision:
+	.res	1,$00
+_i:
 	.res	1,$00
 _collision_L:
 	.res	1,$00
@@ -719,6 +823,10 @@ _song:
 	.res	1,$00
 _c_map:
 	.res	240,$00
+_enemy_dx:
+	.res	10,$00
+_enemy_dy:
+	.res	10,$00
 _wait:
 	.res	1,$00
 _frame_cnt:
@@ -726,10 +834,6 @@ _frame_cnt:
 _iy:
 	.res	2,$00
 _dy:
-	.res	2,$00
-_Badguy_dx:
-	.res	2,$00
-_Badguy_dy:
 	.res	2,$00
 _Goodguy_dx:
 	.res	2,$00
@@ -940,17 +1044,74 @@ L0003:	jmp     _ppu_on_all
 	ldx     #>(_sprPlayer)
 	jsr     _oam_meta_spr
 ;
-; oam_meta_spr(BadGuy1.x, BadGuy1.y, sprGhost);
+; oam_meta_spr(enemyList[0].x, enemyList[0].y, sprGhost);
 ;
 	jsr     decsp2
-	lda     _BadGuy1
+	lda     _enemyList
 	ldy     #$01
 	sta     (sp),y
-	lda     _BadGuy1+1
+	lda     _enemyList+1
 	dey
 	sta     (sp),y
 	lda     #<(_sprGhost)
 	ldx     #>(_sprGhost)
+	jsr     _oam_meta_spr
+;
+; for(i = 1; i < numEnemies; i++) {
+;
+	lda     #$01
+	sta     _i
+L0006:	lda     _i
+	cmp     _numEnemies
+	bcs     L0003
+;
+; oam_meta_spr(enemyList[i].x, enemyList[i].y, sprGhost);
+;
+	jsr     decsp2
+	ldx     #$00
+	lda     _i
+	jsr     aslax2
+	sta     ptr1
+	txa
+	clc
+	adc     #>(_enemyList)
+	sta     ptr1+1
+	ldy     #<(_enemyList)
+	lda     (ptr1),y
+	ldy     #$01
+	sta     (sp),y
+	ldx     #$00
+	lda     _i
+	jsr     aslax2
+	clc
+	adc     #<(_enemyList)
+	sta     ptr1
+	txa
+	adc     #>(_enemyList)
+	sta     ptr1+1
+	lda     (ptr1),y
+	dey
+	sta     (sp),y
+	lda     #<(_sprGhost)
+	ldx     #>(_sprGhost)
+	jsr     _oam_meta_spr
+;
+; for(i = 1; i < numEnemies; i++) {
+;
+	inc     _i
+	jmp     L0006
+;
+; oam_meta_spr(coin.x, coin.y, sprCoin);
+;
+L0003:	jsr     decsp2
+	lda     _coin
+	ldy     #$01
+	sta     (sp),y
+	lda     _coin+1
+	dey
+	sta     (sp),y
+	lda     #<(_sprCoin)
+	ldx     #>(_sprCoin)
 	jmp     _oam_meta_spr
 
 .endproc
@@ -970,7 +1131,7 @@ L0003:	jmp     _ppu_on_all
 ;
 	lda     _pad1
 	and     #$02
-	beq     L0012
+	beq     L0024
 ;
 ; GoodGuy1.x -= 1;
 ;
@@ -979,7 +1140,7 @@ L0003:	jmp     _ppu_on_all
 ; else if (pad1 & PAD_RIGHT){
 ;
 	jmp     L0004
-L0012:	lda     _pad1
+L0024:	lda     _pad1
 	and     #$01
 	beq     L0004
 ;
@@ -1009,7 +1170,7 @@ L0005:	lda     _collision_L
 ;
 L0006:	lda     _pad1
 	and     #$08
-	beq     L0013
+	beq     L0025
 ;
 ; GoodGuy1.y -= 1;
 ;
@@ -1018,7 +1179,7 @@ L0006:	lda     _pad1
 ; else if (pad1 & PAD_DOWN){
 ;
 	jmp     L0009
-L0013:	lda     _pad1
+L0025:	lda     _pad1
 	and     #$04
 	beq     L0009
 ;
@@ -1041,59 +1202,129 @@ L0009:	lda     #<(_GoodGuy1)
 ; if(collision_U) GoodGuy1.y += 1;
 ;
 L000A:	lda     _collision_U
-	beq     L000B
+	beq     L0029
 	inc     _GoodGuy1+1
 ;
-; bg_collision((char *)&BadGuy1);
+; for(i = 0; i < numEnemies; i++) {
 ;
-L000B:	lda     #<(_BadGuy1)
-	ldx     #>(_BadGuy1)
+	lda     #$00
+L0029:	sta     _i
+	tax
+L0026:	lda     _i
+	cmp     _numEnemies
+	jcs     L0027
+;
+; bg_collision((char *)&enemyList[i]);
+;
+	jsr     aslax2
+	clc
+	adc     #<(_enemyList)
+	tay
+	txa
+	adc     #>(_enemyList)
+	tax
+	tya
 	jsr     _bg_collision
 ;
-; if(collision_R) BadGuy1.x -= 1;
+; if(collision_R) enemyList[i].x -= 1;
 ;
 	lda     _collision_R
-	beq     L000C
-	dec     _BadGuy1
+	beq     L0010
+	ldx     #$00
+	lda     _i
+	jsr     aslax2
+	clc
+	adc     #<(_enemyList)
+	sta     ptr1
+	txa
+	adc     #>(_enemyList)
+	sta     ptr1+1
+	ldy     #$00
+	lda     (ptr1),y
+	sec
+	sbc     #$01
+	sta     (ptr1),y
 ;
-; if(collision_L) BadGuy1.x += 1;
+; if(collision_L) enemyList[i].x += 1;
 ;
-L000C:	lda     _collision_L
-	beq     L000D
-	inc     _BadGuy1
+L0010:	lda     _collision_L
+	beq     L0011
+	ldx     #$00
+	lda     _i
+	jsr     aslax2
+	clc
+	adc     #<(_enemyList)
+	sta     ptr1
+	txa
+	adc     #>(_enemyList)
+	sta     ptr1+1
+	ldy     #$00
+	lda     (ptr1),y
+	clc
+	adc     #$01
+	sta     (ptr1),y
 ;
-; bg_collision((char *)&BadGuy1);
+; bg_collision((char *)&enemyList[i]);
 ;
-L000D:	lda     #<(_BadGuy1)
-	ldx     #>(_BadGuy1)
+L0011:	ldx     #$00
+	lda     _i
+	jsr     aslax2
+	clc
+	adc     #<(_enemyList)
+	tay
+	txa
+	adc     #>(_enemyList)
+	tax
+	tya
 	jsr     _bg_collision
 ;
-; if(collision_D) BadGuy1.y -= 1;
+; if(collision_D) enemyList[i].y -= 1;
 ;
 	lda     _collision_D
-	beq     L000E
-	dec     _BadGuy1+1
-;
-; if(collision_U) BadGuy1.y += 1;
-;
-L000E:	lda     _collision_U
-	beq     L000F
-	inc     _BadGuy1+1
-;
-; Badguy_dx = 0;//
-;
-L000F:	ldx     #$00
+	beq     L0012
+	ldx     #$00
+	lda     _i
+	jsr     aslax2
+	clc
+	adc     #<(_enemyList)
+	sta     ptr1
 	txa
-	sta     _Badguy_dx
-	sta     _Badguy_dx+1
+	adc     #>(_enemyList)
+	sta     ptr1+1
+	ldy     #$01
+	lda     (ptr1),y
+	sec
+	sbc     #$01
+	sta     (ptr1),y
 ;
-; Badguy_dy = 0;//
+; if(collision_U) enemyList[i].y += 1;
 ;
-	sta     _Badguy_dy
-	sta     _Badguy_dy+1
+L0012:	lda     _collision_U
+	beq     L000E
+	ldx     #$00
+	lda     _i
+	jsr     aslax2
+	clc
+	adc     #<(_enemyList)
+	sta     ptr1
+	txa
+	adc     #>(_enemyList)
+	sta     ptr1+1
+	ldy     #$01
+	lda     (ptr1),y
+	clc
+	adc     #$01
+	sta     (ptr1),y
+;
+; for(i = 0; i < numEnemies; i++) {
+;
+L000E:	ldx     #$00
+	inc     _i
+	jmp     L0026
 ;
 ; Goodguy_dx = 0;//
 ;
+L0027:	txa
 	sta     _Goodguy_dx
 	sta     _Goodguy_dx+1
 ;
@@ -1116,51 +1347,232 @@ L000F:	ldx     #$00
 	adc     _GoodGuy1+1
 	sta     _GoodGuy1+1
 ;
-; Badguy_dx = (GoodGuy1.x - BadGuy1.x);//
+; enemy_dx[0] = (GoodGuy1.x - enemyList[0].x);
 ;
 	lda     _GoodGuy1
 	sec
-	sbc     _BadGuy1
-	sta     _Badguy_dx
+	sbc     _enemyList
+	sta     _enemy_dx
 	txa
 	sbc     #$00
-	sta     _Badguy_dx+1
+	sta     _enemy_dx+1
 ;
-; Badguy_dy = (GoodGuy1.y - BadGuy1.y);//
+; enemy_dy[0] = (GoodGuy1.y - enemyList[0].y);
 ;
 	lda     _GoodGuy1+1
 	sec
-	sbc     _BadGuy1+1
-	sta     _Badguy_dy
+	sbc     _enemyList+1
+	sta     _enemy_dy
 	txa
 	sbc     #$00
-	sta     _Badguy_dy+1
+	sta     _enemy_dy+1
 ;
-; BadGuy1.x += Badguy_dx/20;//
+; enemyList[0].x += enemy_dx[0]/20;
 ;
-	lda     _Badguy_dx
-	ldx     _Badguy_dx+1
+	lda     _enemy_dx
+	ldx     _enemy_dx+1
 	jsr     pushax
 	lda     #$14
 	jsr     tosdiva0
 	clc
-	adc     _BadGuy1
-	sta     _BadGuy1
+	adc     _enemyList
+	sta     _enemyList
 ;
-; BadGuy1.y += Badguy_dy/20;//
+; enemyList[0].y += enemy_dy[0]/20;
 ;
-	lda     _Badguy_dy
-	ldx     _Badguy_dy+1
+	lda     _enemy_dy
+	ldx     _enemy_dy+1
 	jsr     pushax
 	lda     #$14
 	jsr     tosdiva0
 	clc
-	adc     _BadGuy1+1
-	sta     _BadGuy1+1
+	adc     _enemyList+1
+	sta     _enemyList+1
+;
+; for(i = 1; i < numEnemies; i++) {
+;
+	lda     #$01
+	sta     _i
+L0028:	lda     _i
+	cmp     _numEnemies
+	bcc     L002A
 ;
 ; } 
 ;
 	rts
+;
+; enemy_dx[i] = (enemyList[i - 1].x - enemyList[i].x);
+;
+L002A:	ldx     #$00
+	lda     _i
+	asl     a
+	bcc     L0020
+	inx
+	clc
+L0020:	adc     #<(_enemy_dx)
+	tay
+	txa
+	adc     #>(_enemy_dx)
+	tax
+	tya
+	jsr     pushax
+	ldx     #$00
+	lda     _i
+	sec
+	sbc     #$01
+	bcs     L0018
+	dex
+L0018:	jsr     aslax2
+	sta     ptr1
+	txa
+	clc
+	adc     #>(_enemyList)
+	sta     ptr1+1
+	ldy     #<(_enemyList)
+	lda     (ptr1),y
+	jsr     pusha0
+	lda     _i
+	jsr     aslax2
+	sta     ptr1
+	txa
+	clc
+	adc     #>(_enemyList)
+	sta     ptr1+1
+	ldy     #<(_enemyList)
+	lda     (ptr1),y
+	jsr     tossuba0
+	ldy     #$00
+	jsr     staxspidx
+;
+; enemy_dy[i] = (enemyList[i - 1].y - enemyList[i].y);
+;
+	ldx     #$00
+	lda     _i
+	asl     a
+	bcc     L0021
+	inx
+	clc
+L0021:	adc     #<(_enemy_dy)
+	tay
+	txa
+	adc     #>(_enemy_dy)
+	tax
+	tya
+	jsr     pushax
+	ldx     #$00
+	lda     _i
+	sec
+	sbc     #$01
+	bcs     L0019
+	dex
+L0019:	jsr     aslax2
+	clc
+	adc     #<(_enemyList)
+	sta     ptr1
+	txa
+	adc     #>(_enemyList)
+	sta     ptr1+1
+	ldy     #$01
+	lda     (ptr1),y
+	jsr     pusha0
+	lda     _i
+	jsr     aslax2
+	clc
+	adc     #<(_enemyList)
+	sta     ptr1
+	txa
+	adc     #>(_enemyList)
+	sta     ptr1+1
+	ldy     #$01
+	lda     (ptr1),y
+	jsr     tossuba0
+	ldy     #$00
+	jsr     staxspidx
+;
+; enemyList[i].x += enemy_dx[i]/20;
+;
+	ldx     #$00
+	lda     _i
+	jsr     aslax2
+	clc
+	adc     #<(_enemyList)
+	tay
+	txa
+	adc     #>(_enemyList)
+	tax
+	tya
+	jsr     pushax
+	sta     ptr1
+	stx     ptr1+1
+	ldx     #$00
+	lda     (ptr1,x)
+	jsr     pusha0
+	lda     _i
+	asl     a
+	bcc     L0022
+	ldx     #$01
+	clc
+L0022:	adc     #<(_enemy_dx)
+	sta     ptr1
+	txa
+	adc     #>(_enemy_dx)
+	sta     ptr1+1
+	ldy     #$01
+	lda     (ptr1),y
+	tax
+	dey
+	lda     (ptr1),y
+	jsr     pushax
+	lda     #$14
+	jsr     tosdiva0
+	jsr     tosaddax
+	ldy     #$00
+	jsr     staspidx
+;
+; enemyList[i].y += enemy_dy[i]/20;
+;
+	ldx     #$00
+	lda     _i
+	jsr     aslax2
+	clc
+	adc     #<(_enemyList)
+	tay
+	txa
+	adc     #>(_enemyList)
+	tax
+	tya
+	jsr     pushax
+	sta     ptr1
+	stx     ptr1+1
+	ldy     #$01
+	lda     (ptr1),y
+	jsr     pusha0
+	lda     _i
+	asl     a
+	bcc     L0023
+	ldx     #$01
+	clc
+L0023:	adc     #<(_enemy_dy)
+	sta     ptr1
+	txa
+	adc     #>(_enemy_dy)
+	sta     ptr1+1
+	ldy     #$01
+	lda     (ptr1),y
+	tax
+	dey
+	lda     (ptr1),y
+	jsr     pushax
+	lda     #$14
+	jsr     tosdiva0
+	jsr     tosaddax
+	ldy     #$01
+	jsr     staspidx
+;
+; for(i = 1; i < numEnemies; i++) {
+;
+	inc     _i
+	jmp     L0028
 
 .endproc
 
@@ -1376,6 +1788,120 @@ L0017:	lda     _temp2
 ; }
 ;
 L000D:	jmp     incsp2
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ coin_pickup (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_coin_pickup: near
+
+.segment	"CODE"
+
+;
+; coin_collision = check_collision(&GoodGuy1, &coin);
+;
+	lda     #<(_GoodGuy1)
+	ldx     #>(_GoodGuy1)
+	jsr     pushax
+	lda     #<(_coin)
+	ldx     #>(_coin)
+	jsr     _check_collision
+	sta     _coin_collision
+;
+; if (coin_collision) {
+;
+	lda     _coin_collision
+	beq     L0010
+;
+; if (GoodGuy1.x < 100) {
+;
+	lda     _GoodGuy1
+	cmp     #$64
+	bcs     L000D
+;
+; if (GoodGuy1.y < 100) {
+;
+	lda     _GoodGuy1+1
+	cmp     #$64
+	bcs     L000C
+;
+; coin.x = 50;
+;
+	lda     #$32
+	sta     _coin
+;
+; coin.y = 175;
+;
+	lda     #$AF
+;
+; else {
+;
+	jmp     L000B
+;
+; coin.x = 200;
+;
+L000C:	lda     #$C8
+	sta     _coin
+;
+; coin.y = 175;
+;
+	lda     #$AF
+;
+; else {
+;
+	jmp     L000B
+;
+; if (GoodGuy1.y < 100) {
+;
+L000D:	lda     _GoodGuy1+1
+	cmp     #$64
+	bcs     L000E
+;
+; coin.x = 50;
+;
+	lda     #$32
+;
+; else {
+;
+	jmp     L0011
+;
+; coin.x = 200;
+;
+L000E:	lda     #$C8
+L0011:	sta     _coin
+;
+; coin.y = 40;
+;
+	lda     #$28
+L000B:	sta     _coin+1
+;
+; if (numEnemies != maxEnemies) {
+;
+	lda     _numEnemies
+	cmp     #$05
+	beq     L000A
+;
+; numEnemies++;
+;
+	inc     _numEnemies
+;
+; } else {
+;
+	rts
+;
+; pal_col(0,0x0f);
+;
+L0010:	jsr     pusha
+	lda     #$0F
+	jmp     _pal_col
+;
+; }
+;
+L000A:	rts
 
 .endproc
 
@@ -1631,36 +2157,145 @@ L0003:	jmp     incsp1
 .segment	"CODE"
 
 ;
-; collision = check_collision(&GoodGuy1, &BadGuy1);
+; collision1 = check_collision(&GoodGuy1, &enemyList[0]);
 ;
 	lda     #<(_GoodGuy1)
 	ldx     #>(_GoodGuy1)
 	jsr     pushax
-	lda     #<(_BadGuy1)
-	ldx     #>(_BadGuy1)
+	lda     #<(_enemyList)
+	ldx     #>(_enemyList)
 	jsr     _check_collision
-	sta     _collision
+	sta     _collision1
 ;
-; if (collision){
+; collision2 = check_collision(&GoodGuy1, &enemyList[1]);
 ;
-	lda     _collision
-	beq     L0002
+	lda     #<(_GoodGuy1)
+	ldx     #>(_GoodGuy1)
+	jsr     pushax
+	lda     #<(_enemyList+4)
+	ldx     #>(_enemyList+4)
+	jsr     _check_collision
+	sta     _collision2
 ;
-; pal_col(0,0x12);
+; collision3 = check_collision(&GoodGuy1, &enemyList[2]);
 ;
-	lda     #$00
-	jsr     pusha
-	lda     #$12
+	lda     #<(_GoodGuy1)
+	ldx     #>(_GoodGuy1)
+	jsr     pushax
+	lda     #<(_enemyList+8)
+	ldx     #>(_enemyList+8)
+	jsr     _check_collision
+	sta     _collision3
 ;
-; else{
+; collision4 = check_collision(&GoodGuy1, &enemyList[3]);
 ;
-	jmp     _pal_col
+	lda     #<(_GoodGuy1)
+	ldx     #>(_GoodGuy1)
+	jsr     pushax
+	lda     #<(_enemyList+12)
+	ldx     #>(_enemyList+12)
+	jsr     _check_collision
+	sta     _collision4
 ;
-; pal_col(0,0x0f);
+; collision5 = check_collision(&GoodGuy1, &enemyList[4]);
 ;
-L0002:	jsr     pusha
-	lda     #$0F
-	jmp     _pal_col
+	lda     #<(_GoodGuy1)
+	ldx     #>(_GoodGuy1)
+	jsr     pushax
+	lda     #<(_enemyList+16)
+	ldx     #>(_enemyList+16)
+	jsr     _check_collision
+	sta     _collision5
+;
+; if (numEnemies == 1) {
+;
+	lda     _numEnemies
+	cmp     #$01
+	bne     L001F
+;
+; if (collision1) playerDead = 1;
+;
+	lda     _collision1
+;
+; else playerDead = 0;
+;
+	jmp     L002D
+;
+; } else if (numEnemies == 2) {
+;
+L001F:	lda     _numEnemies
+	cmp     #$02
+	bne     L0023
+;
+; if (collision1 || collision2) playerDead = 1;
+;
+	lda     _collision1
+	bne     L002B
+	lda     _collision2
+;
+; else playerDead = 0;
+;
+	jmp     L002D
+;
+; } else if (numEnemies == 3) {
+;
+L0023:	lda     _numEnemies
+	cmp     #$03
+	bne     L0027
+;
+; if (collision1 || collision2 || collision3) playerDead = 1;
+;
+	lda     _collision1
+	bne     L002B
+	lda     _collision2
+	bne     L002B
+	lda     _collision3
+;
+; else playerDead = 0;
+;
+	jmp     L002D
+;
+; } else if (numEnemies == 4) {
+;
+L0027:	lda     _numEnemies
+	cmp     #$04
+	bne     L0012
+;
+; if (collision1 || collision2 || collision3 || collision4) playerDead = 1;
+;
+	lda     _collision1
+	bne     L002B
+	lda     _collision2
+	bne     L002B
+	lda     _collision3
+	bne     L002B
+	lda     _collision4
+;
+; else playerDead = 0;
+;
+	jmp     L002D
+;
+; if (collision1 || collision2 || collision3 || collision4 || collision5) playerDead = 1;
+;
+L0012:	lda     _collision1
+	bne     L002B
+	lda     _collision2
+	bne     L002B
+	lda     _collision3
+	bne     L002B
+	lda     _collision4
+	bne     L002B
+	lda     _collision5
+L002D:	beq     L001C
+L002B:	lda     #$01
+;
+; else playerDead = 0;
+;
+L001C:	sta     _playerDead
+;
+; }
+;
+	rts
 
 .endproc
 
@@ -1677,7 +2312,7 @@ L0002:	jsr     pusha
 ;
 ; ppu_off(); // screen off
 ;
-	jsr     _ppu_off
+L0002:	jsr     _ppu_off
 ;
 ; pal_bg(palTitle);
 ;
@@ -1713,6 +2348,10 @@ L0002:	jsr     pusha
 ;
 	jsr     _ppu_on_all
 ;
+; fade_in();
+;
+	jsr     _fade_in
+;
 ; show_title();
 ;
 	jsr     _show_title
@@ -1736,9 +2375,132 @@ L0002:	jsr     pusha
 	adc     #$01
 	jsr     _music_play
 ;
+; GoodGuy1.x = 128;
+;
+	lda     #$80
+	sta     _GoodGuy1
+;
+; GoodGuy1.y = 64;
+;
+	lda     #$40
+	sta     _GoodGuy1+1
+;
+; enemyList[0].x = 128;
+;
+	lda     #$80
+	sta     _enemyList
+;
+; enemyList[0].y = 168;
+;
+	lda     #$A8
+	sta     _enemyList+1
+;
+; for(i = 1; i < maxEnemies; i++) {
+;
+	lda     #$01
+	sta     _i
+L0015:	lda     _i
+	cmp     #$05
+	bcs     L0016
+;
+; enemyList[i].x = 120;
+;
+	ldx     #$00
+	lda     _i
+	jsr     aslax2
+	clc
+	adc     #<(_enemyList)
+	sta     ptr1
+	txa
+	adc     #>(_enemyList)
+	sta     ptr1+1
+	lda     #$78
+	ldy     #$00
+	sta     (ptr1),y
+;
+; enemyList[i].y = 120;
+;
+	ldx     #$00
+	lda     _i
+	jsr     aslax2
+	clc
+	adc     #<(_enemyList)
+	sta     ptr1
+	txa
+	adc     #>(_enemyList)
+	sta     ptr1+1
+	lda     #$78
+	iny
+	sta     (ptr1),y
+;
+; for(i = 1; i < maxEnemies; i++) {
+;
+	inc     _i
+	jmp     L0015
+;
+; coin.x = 100;
+;
+L0016:	lda     #$64
+	sta     _coin
+;
+; coin.y = 100;
+;
+	sta     _coin+1
+;
+; for(i = 0; i < maxEnemies; i++) {
+;
+	lda     #$00
+	sta     _i
+L0017:	lda     _i
+	cmp     #$05
+	bcs     L0018
+;
+; enemy_dx[i] = 0;
+;
+	ldx     #$00
+	lda     _i
+	asl     a
+	bcc     L0013
+	inx
+	clc
+L0013:	adc     #<(_enemy_dx)
+	sta     ptr1
+	txa
+	adc     #>(_enemy_dx)
+	sta     ptr1+1
+	lda     #$00
+	tay
+	sta     (ptr1),y
+	iny
+	sta     (ptr1),y
+;
+; enemy_dy[i] = 0;
+;
+	tax
+	lda     _i
+	asl     a
+	bcc     L0014
+	inx
+	clc
+L0014:	adc     #<(_enemy_dy)
+	sta     ptr1
+	txa
+	adc     #>(_enemy_dy)
+	sta     ptr1+1
+	lda     #$00
+	dey
+	sta     (ptr1),y
+	iny
+	sta     (ptr1),y
+;
+; for(i = 0; i < maxEnemies; i++) {
+;
+	inc     _i
+	jmp     L0017
+;
 ; ppu_wait_nmi(); // wait till beginning of the frame
 ;
-L0003:	jsr     _ppu_wait_nmi
+L000E:	jsr     _ppu_wait_nmi
 ;
 ; set_music_speed(8);
 ;
@@ -1763,13 +2525,52 @@ L0003:	jsr     _ppu_wait_nmi
 ;
 	jsr     _movement
 ;
+; coin_pickup();
+;
+	jsr     _coin_pickup
+;
 ; test_collision();
 ;
 	jsr     _test_collision
 ;
-; while (1){
+; while (playerDead == 0){
 ;
-	jmp     L0003
+L0018:	lda     _playerDead
+	beq     L000E
+;
+; ppu_wait_frame();
+;
+	jsr     _ppu_wait_frame
+;
+; fade_out();
+;
+	jsr     _fade_out
+;
+; playerDead = 0;
+;
+	lda     #$00
+	sta     _playerDead
+;
+; ppu_off();
+;
+	jsr     _ppu_off
+;
+; oam_clear();
+;
+	jsr     _oam_clear
+;
+; numEnemies = 1;
+;
+	lda     #$01
+	sta     _numEnemies
+;
+; fade_out();
+;
+	jsr     _fade_out
+;
+; while(1) {
+;
+	jmp     L0002
 
 .endproc
 

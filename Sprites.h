@@ -1,10 +1,18 @@
 unsigned char pad1;
 unsigned char pad1_new;
-unsigned char collision;
+unsigned char collision1;
+unsigned char collision2;
+unsigned char collision3;
+unsigned char collision4;
+unsigned char collision5;
+unsigned char coin_collision;
+unsigned char i;
+unsigned char numEnemies = 1;
 unsigned char collision_L;
 unsigned char collision_R;
 unsigned char collision_U;
 unsigned char collision_D;
+unsigned char playerDead = 0;
 unsigned char which_bg;
 const unsigned char * p_maps;
 unsigned char coordinates;
@@ -43,10 +51,18 @@ const unsigned char sprPlayer[]={
 };
 
 const unsigned char sprGhost[]={
-  0,-1,0x49,0,
-  8,-1,0x4a,0,
-  0, 7,0x4b,0,
-  8, 7,0x4c,0,
+  0,-1,0x4d,0,
+  8,-1,0x4e,0,
+  0, 7,0x4f,0,
+  8, 7,0x50,0,
+  128
+};
+
+const unsigned char sprCoin[]={
+  0,-1,0x45,0,
+  8,-1,0x46,0,
+  0, 7,0x47,0,
+  8, 7,0x48,0,
   128
 };
 
@@ -56,3 +72,4 @@ void draw_sprites(void);
 void movement(void);	
 void bg_collision(char * object);
 void check_start(void);
+void coin_pickup(void);

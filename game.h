@@ -1,5 +1,7 @@
 #define SPEED 0x180
 #define MAX_RIGHT 0xb000
+#define JUMP_VEL -0x600
+#define GRAVITY 0x50
 
 
 #pragma bss-name(push, "ZEROPAGE")
@@ -68,7 +70,7 @@ struct Player {
   signed int vel_y;
 };
 
-struct Player PlayerGuy = {0x4000,0xc400}; // starting position
+struct Player PlayerGuy = {0x1000,0xc200}; // starting position
 // the width and height should be 1 less than the dimensions (14x14)
 // note, I'm using the top left as the 0,0 on x,y
 
@@ -85,6 +87,8 @@ const unsigned char metatiles1[]={
 	0, 0, 0, 0,  1,
 	16, 16, 16, 16,  1
 };
+#define COL_DOWN 0x80
+#define COL_ALL 0x40
 
 
 // Map Things
@@ -122,3 +126,4 @@ void bg_collision(void);
 void bg_collision_sub(void);
 void draw_screen_R(void);
 void new_cmap(void);
+void bg_collision_low(void);

@@ -12,22 +12,28 @@ static int iy,dy;
 const unsigned char palTitle[]={ 0x0f,0x03,0x15,0x30,0x0f,0x01,0x21,0x31,0x0f,0x06,0x30,0x26,0x0f,0x09,0x19,0x29 };
 
 void main (void) {
-
-	ppu_off(); // screen off
 	
-	// load the palettes
+	 // load the pallets
+	 // use the second set of tiles for sprites
+	// both bg and sprite are set to 0 by default
 	pal_bg(palTitle);
 	pal_spr(palTitle);
-
-	// use the second set of tiles for sprites
-	// both bg and sprite are set to 0 by default
+	
 	bank_spr(1);
-
-
 	set_vram_buffer();
-
-	song = 0;
-	music_play(song);
+	
+	//show title;
+	show_title();
+	//turn on
+	ppu_on_all();
+	
+	//fade out and turn off
+	fade_out();
+	ppu_off();
+	fade_in();
+	
+	bank_spr(1);
+	set_vram_buffer();
 
 	// Load the level
 	load_room();
@@ -37,10 +43,9 @@ void main (void) {
 	set_scroll_y(scroll_y); // shift the bg down 1 pixel
 
 	// Turn screen on again
+	
 	ppu_on_all();
-
-	// Fade in
-	fade_in();
+	
 
 	// Player level music
 	music_play(song+1);
@@ -66,14 +71,18 @@ void main (void) {
 	}	
 }
 
+
 // Shows title screen
 void show_title() {
+	song = 0;
   // Disable Rendering
   ppu_off();
   
   // Unpack nametable into VRAM
   vram_adr(NAMETABLE_A);
   vram_unrle(beep);
+  music_play(song);
+
   
   // Enable Rendering
   ppu_on_all();
@@ -85,7 +94,9 @@ iy=220<<FP_BITS;
     ppu_wait_frame();
     
     if (pad_trigger(0)&PAD_START) 
-	{break;}
+	{ 
+	
+		break;}
 
 
 	iy+=dy;//

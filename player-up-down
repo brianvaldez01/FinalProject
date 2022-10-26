@@ -1,0 +1,30 @@
+	if(pad1 & PAD_UP){
+		if(PlayerGuy.y <= 0x100) {
+			PlayerGuy.vel_y = 0;
+			PlayerGuy.y = 0x100;
+		}
+
+		else if(PlayerGuy.y < 0x400) { // don't want to wrap around to the other side
+			PlayerGuy.vel_y = -0x100;
+		}
+
+		else {
+			PlayerGuy.vel_y = -SPEED;
+		}
+	}
+
+	else if (pad1 & PAD_DOWN) 
+	{
+		if(PlayerGuy.y >= 0xe000) {
+			PlayerGuy.vel_y = 0;
+			PlayerGuy.y = 0xe000;
+		}
+
+		else if(PlayerGuy.y > 0xdc00) { // don't want to wrap around to the other side
+			PlayerGuy.vel_y = 0x100;
+		}
+
+		else {
+			PlayerGuy.vel_y = SPEED;
+		}
+	}

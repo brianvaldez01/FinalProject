@@ -27,137 +27,85 @@
 	.import		_bank_spr
 	.import		_set_vram_update
 	.import		_vram_adr
-	.import		_vram_put
 	.import		_vram_unrle
 	.import		_memcpy
 	.import		_set_vram_buffer
 	.import		_set_music_speed
-	.import		_check_collision
+	.import		_set_scroll_x
+	.import		_set_scroll_y
+	.import		_get_ppu_addr
+	.import		_set_data_pointer
+	.import		_set_mt_pointer
+	.import		_buffer_4_mt
+	.import		_flush_vram_update2
 	.export		_beep
+	.export		_sprPlayer
+	.export		_sprGhost
+	.export		_sprCoin
 	.export		_pad1
 	.export		_pad1_new
-	.export		_collision1
-	.export		_collision2
-	.export		_collision3
-	.export		_collision4
-	.export		_collision5
-	.export		_coin_collision
-	.export		_i
-	.export		_numEnemies
+	.export		_collision
 	.export		_collision_L
 	.export		_collision_R
 	.export		_collision_U
 	.export		_collision_D
-	.export		_playerDead
-	.export		_which_bg
-	.export		_p_maps
 	.export		_coordinates
 	.export		_temp1
 	.export		_temp2
 	.export		_temp3
 	.export		_temp4
-	.export		_temp_x
-	.export		_temp_y
+	.export		_temp5
+	.export		_temp6
+	.export		_eject_L
+	.export		_eject_R
+	.export		_eject_U
+	.export		_eject_D
+	.export		_direction
 	.export		_song
+	.export		_address
+	.export		_x
+	.export		_y
+	.export		_nt
+	.export		_index
+	.export		_room
+	.export		_map
+	.export		_scroll_x
+	.export		_scroll_y
+	.export		_scroll_count
+	.export		_pseudo_scroll_x
+	.export		_L_R_switch
+	.export		_old_x
+	.export		_old_y
+	.export		_Generic
+	.export		_PlayerGuy
+	.export		_metatiles1
 	.export		_c_map
-	.export		_boop
-	.export		_All_Collision_Maps
-	.export		_sprPlayer
-	.export		_sprGhost
-	.export		_sprCoin
-	.export		_draw_bg
+	.export		_c_map2
+	.export		_which_bg
+	.export		_p_maps
+	.export		_room1
+	.export		_room2
+	.export		_room3
+	.export		_Rooms
+	.export		_show_title
+	.export		_fade_in
+	.export		_fade_out
+	.export		_load_room
 	.export		_draw_sprites
 	.export		_movement
 	.export		_bg_collision
-	.export		_coin_pickup
-	.export		_GoodGuy1
-	.export		_BadGuy1
-	.export		_BadGuy2
-	.export		_BadGuy3
-	.export		_BadGuy4
-	.export		_BadGuy5
-	.export		_BadGuy6
-	.export		_coin
-	.export		_collided
-	.export		_enemyList
-	.export		_enemy_dx
-	.export		_enemy_dy
+	.export		_bg_collision_sub
+	.export		_draw_screen_R
+	.export		_new_cmap
 	.export		_palTitle
-	.export		_show_title
-	.export		_fade_out
-	.export		_fade_in
-	.export		_test_collision
 	.export		_main
 
 .segment	"DATA"
 
-_numEnemies:
-	.byte	$01
-_playerDead:
-	.byte	$00
-_GoodGuy1:
-	.byte	$80
-	.byte	$40
-	.byte	$0F
-	.byte	$0F
-_BadGuy1:
-	.byte	$80
-	.byte	$A8
-	.byte	$0F
-	.byte	$0F
-_BadGuy2:
-	.byte	$78
-	.byte	$78
-	.byte	$0F
-	.byte	$0F
-_BadGuy3:
-	.byte	$78
-	.byte	$78
-	.byte	$0F
-	.byte	$0F
-_BadGuy4:
-	.byte	$78
-	.byte	$78
-	.byte	$0F
-	.byte	$0F
-_BadGuy5:
-	.byte	$78
-	.byte	$78
-	.byte	$0F
-	.byte	$0F
-_BadGuy6:
-	.byte	$78
-	.byte	$78
-	.byte	$0F
-	.byte	$0F
-_coin:
-	.byte	$64
-	.byte	$64
-	.byte	$07
-	.byte	$07
-_collided:
-	.word	$0000
-_enemyList:
-	.byte	$80
-	.byte	$A8
-	.byte	$0F
-	.byte	$0F
-	.byte	$78
-	.byte	$78
-	.byte	$0F
-	.byte	$0F
-	.byte	$78
-	.byte	$78
-	.byte	$0F
-	.byte	$0F
-	.byte	$78
-	.byte	$78
-	.byte	$0F
-	.byte	$0F
-	.byte	$78
-	.byte	$78
-	.byte	$0F
-	.byte	$0F
+_PlayerGuy:
+	.word	$4000
+	.word	$C400
+	.res	4,$00
 
 .segment	"RODATA"
 
@@ -458,249 +406,6 @@ _beep:
 	.byte	$00
 	.byte	$02
 	.byte	$00
-_boop:
-	.byte	$08
-	.byte	$08
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-_All_Collision_Maps:
-	.addr	_boop
 _sprPlayer:
 	.byte	$00
 	.byte	$FF
@@ -755,6 +460,744 @@ _sprCoin:
 	.byte	$48
 	.byte	$00
 	.byte	$80
+_metatiles1:
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$10
+	.byte	$10
+	.byte	$10
+	.byte	$10
+	.byte	$01
+_room1:
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+_room2:
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+_room3:
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+	.byte	$01
+_Rooms:
+	.addr	_room1
+	.addr	_room2
+	.addr	_room3
 _palTitle:
 	.byte	$0F
 	.byte	$03
@@ -775,23 +1218,12 @@ _palTitle:
 
 .segment	"BSS"
 
+.segment	"ZEROPAGE"
 _pad1:
 	.res	1,$00
 _pad1_new:
 	.res	1,$00
-_collision1:
-	.res	1,$00
-_collision2:
-	.res	1,$00
-_collision3:
-	.res	1,$00
-_collision4:
-	.res	1,$00
-_collision5:
-	.res	1,$00
-_coin_collision:
-	.res	1,$00
-_i:
+_collision:
 	.res	1,$00
 _collision_L:
 	.res	1,$00
@@ -801,10 +1233,6 @@ _collision_U:
 	.res	1,$00
 _collision_D:
 	.res	1,$00
-_which_bg:
-	.res	1,$00
-_p_maps:
-	.res	2,$00
 _coordinates:
 	.res	1,$00
 _temp1:
@@ -815,18 +1243,61 @@ _temp3:
 	.res	1,$00
 _temp4:
 	.res	1,$00
-_temp_x:
+_temp5:
+	.res	2,$00
+_temp6:
+	.res	2,$00
+_eject_L:
 	.res	1,$00
-_temp_y:
+_eject_R:
+	.res	1,$00
+_eject_U:
+	.res	1,$00
+_eject_D:
+	.res	1,$00
+_direction:
 	.res	1,$00
 _song:
 	.res	1,$00
+_address:
+	.res	2,$00
+_x:
+	.res	1,$00
+_y:
+	.res	1,$00
+_nt:
+	.res	1,$00
+_index:
+	.res	1,$00
+_room:
+	.res	1,$00
+_map:
+	.res	1,$00
+_scroll_x:
+	.res	2,$00
+_scroll_y:
+	.res	2,$00
+_scroll_count:
+	.res	1,$00
+_pseudo_scroll_x:
+	.res	2,$00
+_L_R_switch:
+	.res	1,$00
+_old_x:
+	.res	2,$00
+_old_y:
+	.res	2,$00
+.segment	"BSS"
+_Generic:
+	.res	4,$00
 _c_map:
 	.res	240,$00
-_enemy_dx:
-	.res	10,$00
-_enemy_dy:
-	.res	10,$00
+_c_map2:
+	.res	240,$00
+_which_bg:
+	.res	1,$00
+_p_maps:
+	.res	2,$00
 _wait:
 	.res	1,$00
 _frame_cnt:
@@ -835,1075 +1306,6 @@ _iy:
 	.res	2,$00
 _dy:
 	.res	2,$00
-_Goodguy_dx:
-	.res	2,$00
-_Goodguy_dy:
-	.res	2,$00
-
-; ---------------------------------------------------------------
-; void __near__ draw_bg (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_draw_bg: near
-
-.segment	"CODE"
-
-;
-; ppu_off(); // screen off
-;
-	jsr     _ppu_off
-;
-; p_maps = All_Collision_Maps[which_bg];
-;
-	ldx     #$00
-	lda     _which_bg
-	asl     a
-	bcc     L0019
-	inx
-	clc
-L0019:	adc     #<(_All_Collision_Maps)
-	sta     ptr1
-	txa
-	adc     #>(_All_Collision_Maps)
-	sta     ptr1+1
-	ldy     #$01
-	lda     (ptr1),y
-	sta     _p_maps+1
-	dey
-	lda     (ptr1),y
-	sta     _p_maps
-;
-; memcpy (c_map, p_maps, 240);
-;
-	lda     #<(_c_map)
-	ldx     #>(_c_map)
-	jsr     pushax
-	lda     _p_maps
-	ldx     _p_maps+1
-	jsr     pushax
-	ldx     #$00
-	lda     #$F0
-	jsr     _memcpy
-;
-; vram_adr(NAMETABLE_A);
-;
-	ldx     #$20
-	lda     #$00
-	jsr     _vram_adr
-;
-; for(temp_y = 0; temp_y < 15; ++temp_y){
-;
-	lda     #$00
-	sta     _temp_y
-L001A:	lda     _temp_y
-	cmp     #$0F
-	bcs     L0003
-;
-; for(temp_x = 0; temp_x < 16; ++temp_x){
-;
-	lda     #$00
-	sta     _temp_x
-L001B:	lda     _temp_x
-	cmp     #$10
-	bcs     L001E
-;
-; temp1 = (temp_y << 4) + temp_x;
-;
-	lda     _temp_y
-	asl     a
-	asl     a
-	asl     a
-	asl     a
-	clc
-	adc     _temp_x
-	sta     _temp1
-;
-; if(c_map[temp1]){
-;
-	ldy     _temp1
-	lda     _c_map,y
-	beq     L001D
-;
-; vram_put(0x10); // wall
-;
-	lda     #$10
-	jsr     _vram_put
-;
-; vram_put(0x10);
-;
-	lda     #$10
-;
-; else{
-;
-	jmp     L0017
-;
-; vram_put(0); // blank
-;
-L001D:	jsr     _vram_put
-;
-; vram_put(0);
-;
-	lda     #$00
-L0017:	jsr     _vram_put
-;
-; for(temp_x = 0; temp_x < 16; ++temp_x){
-;
-	inc     _temp_x
-	jmp     L001B
-;
-; for(temp_x = 0; temp_x < 16; ++temp_x){
-;
-L001E:	lda     #$00
-	sta     _temp_x
-L001F:	lda     _temp_x
-	cmp     #$10
-	bcs     L0022
-;
-; temp1 = (temp_y << 4) + temp_x;
-;
-	lda     _temp_y
-	asl     a
-	asl     a
-	asl     a
-	asl     a
-	clc
-	adc     _temp_x
-	sta     _temp1
-;
-; if(c_map[temp1]){
-;
-	ldy     _temp1
-	lda     _c_map,y
-	beq     L0021
-;
-; vram_put(0x10); // wall
-;
-	lda     #$10
-	jsr     _vram_put
-;
-; vram_put(0x10);
-;
-	lda     #$10
-;
-; else{
-;
-	jmp     L0018
-;
-; vram_put(0); // blank
-;
-L0021:	jsr     _vram_put
-;
-; vram_put(0);
-;
-	lda     #$00
-L0018:	jsr     _vram_put
-;
-; for(temp_x = 0; temp_x < 16; ++temp_x){
-;
-	inc     _temp_x
-	jmp     L001F
-;
-; for(temp_y = 0; temp_y < 15; ++temp_y){
-;
-L0022:	inc     _temp_y
-	jmp     L001A
-;
-; ppu_on_all(); // turn on screen
-;
-L0003:	jmp     _ppu_on_all
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ draw_sprites (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_draw_sprites: near
-
-.segment	"CODE"
-
-;
-; oam_clear();
-;
-	jsr     _oam_clear
-;
-; oam_meta_spr(GoodGuy1.x, GoodGuy1.y, sprPlayer);
-;
-	jsr     decsp2
-	lda     _GoodGuy1
-	ldy     #$01
-	sta     (sp),y
-	lda     _GoodGuy1+1
-	dey
-	sta     (sp),y
-	lda     #<(_sprPlayer)
-	ldx     #>(_sprPlayer)
-	jsr     _oam_meta_spr
-;
-; oam_meta_spr(enemyList[0].x, enemyList[0].y, sprGhost);
-;
-	jsr     decsp2
-	lda     _enemyList
-	ldy     #$01
-	sta     (sp),y
-	lda     _enemyList+1
-	dey
-	sta     (sp),y
-	lda     #<(_sprGhost)
-	ldx     #>(_sprGhost)
-	jsr     _oam_meta_spr
-;
-; for(i = 1; i < numEnemies; i++) {
-;
-	lda     #$01
-	sta     _i
-L0006:	lda     _i
-	cmp     _numEnemies
-	bcs     L0003
-;
-; oam_meta_spr(enemyList[i].x, enemyList[i].y, sprGhost);
-;
-	jsr     decsp2
-	ldx     #$00
-	lda     _i
-	jsr     aslax2
-	sta     ptr1
-	txa
-	clc
-	adc     #>(_enemyList)
-	sta     ptr1+1
-	ldy     #<(_enemyList)
-	lda     (ptr1),y
-	ldy     #$01
-	sta     (sp),y
-	ldx     #$00
-	lda     _i
-	jsr     aslax2
-	clc
-	adc     #<(_enemyList)
-	sta     ptr1
-	txa
-	adc     #>(_enemyList)
-	sta     ptr1+1
-	lda     (ptr1),y
-	dey
-	sta     (sp),y
-	lda     #<(_sprGhost)
-	ldx     #>(_sprGhost)
-	jsr     _oam_meta_spr
-;
-; for(i = 1; i < numEnemies; i++) {
-;
-	inc     _i
-	jmp     L0006
-;
-; oam_meta_spr(coin.x, coin.y, sprCoin);
-;
-L0003:	jsr     decsp2
-	lda     _coin
-	ldy     #$01
-	sta     (sp),y
-	lda     _coin+1
-	dey
-	sta     (sp),y
-	lda     #<(_sprCoin)
-	ldx     #>(_sprCoin)
-	jmp     _oam_meta_spr
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ movement (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_movement: near
-
-.segment	"CODE"
-
-;
-; if(pad1 & PAD_LEFT){
-;
-	lda     _pad1
-	and     #$02
-	beq     L0024
-;
-; GoodGuy1.x -= 1;
-;
-	dec     _GoodGuy1
-;
-; else if (pad1 & PAD_RIGHT){
-;
-	jmp     L0004
-L0024:	lda     _pad1
-	and     #$01
-	beq     L0004
-;
-; GoodGuy1.x += 1;
-;
-	inc     _GoodGuy1
-;
-; bg_collision((char *)&GoodGuy1);
-;
-L0004:	lda     #<(_GoodGuy1)
-	ldx     #>(_GoodGuy1)
-	jsr     _bg_collision
-;
-; if(collision_R) GoodGuy1.x -= 1;
-;
-	lda     _collision_R
-	beq     L0005
-	dec     _GoodGuy1
-;
-; if(collision_L) GoodGuy1.x += 1;
-;
-L0005:	lda     _collision_L
-	beq     L0006
-	inc     _GoodGuy1
-;
-; if(pad1 & PAD_UP){
-;
-L0006:	lda     _pad1
-	and     #$08
-	beq     L0025
-;
-; GoodGuy1.y -= 1;
-;
-	dec     _GoodGuy1+1
-;
-; else if (pad1 & PAD_DOWN){
-;
-	jmp     L0009
-L0025:	lda     _pad1
-	and     #$04
-	beq     L0009
-;
-; GoodGuy1.y += 1;
-;
-	inc     _GoodGuy1+1
-;
-; bg_collision((char *)&GoodGuy1);
-;
-L0009:	lda     #<(_GoodGuy1)
-	ldx     #>(_GoodGuy1)
-	jsr     _bg_collision
-;
-; if(collision_D) GoodGuy1.y -= 1;
-;
-	lda     _collision_D
-	beq     L000A
-	dec     _GoodGuy1+1
-;
-; if(collision_U) GoodGuy1.y += 1;
-;
-L000A:	lda     _collision_U
-	beq     L0029
-	inc     _GoodGuy1+1
-;
-; for(i = 0; i < numEnemies; i++) {
-;
-	lda     #$00
-L0029:	sta     _i
-	tax
-L0026:	lda     _i
-	cmp     _numEnemies
-	jcs     L0027
-;
-; bg_collision((char *)&enemyList[i]);
-;
-	jsr     aslax2
-	clc
-	adc     #<(_enemyList)
-	tay
-	txa
-	adc     #>(_enemyList)
-	tax
-	tya
-	jsr     _bg_collision
-;
-; if(collision_R) enemyList[i].x -= 1;
-;
-	lda     _collision_R
-	beq     L0010
-	ldx     #$00
-	lda     _i
-	jsr     aslax2
-	clc
-	adc     #<(_enemyList)
-	sta     ptr1
-	txa
-	adc     #>(_enemyList)
-	sta     ptr1+1
-	ldy     #$00
-	lda     (ptr1),y
-	sec
-	sbc     #$01
-	sta     (ptr1),y
-;
-; if(collision_L) enemyList[i].x += 1;
-;
-L0010:	lda     _collision_L
-	beq     L0011
-	ldx     #$00
-	lda     _i
-	jsr     aslax2
-	clc
-	adc     #<(_enemyList)
-	sta     ptr1
-	txa
-	adc     #>(_enemyList)
-	sta     ptr1+1
-	ldy     #$00
-	lda     (ptr1),y
-	clc
-	adc     #$01
-	sta     (ptr1),y
-;
-; bg_collision((char *)&enemyList[i]);
-;
-L0011:	ldx     #$00
-	lda     _i
-	jsr     aslax2
-	clc
-	adc     #<(_enemyList)
-	tay
-	txa
-	adc     #>(_enemyList)
-	tax
-	tya
-	jsr     _bg_collision
-;
-; if(collision_D) enemyList[i].y -= 1;
-;
-	lda     _collision_D
-	beq     L0012
-	ldx     #$00
-	lda     _i
-	jsr     aslax2
-	clc
-	adc     #<(_enemyList)
-	sta     ptr1
-	txa
-	adc     #>(_enemyList)
-	sta     ptr1+1
-	ldy     #$01
-	lda     (ptr1),y
-	sec
-	sbc     #$01
-	sta     (ptr1),y
-;
-; if(collision_U) enemyList[i].y += 1;
-;
-L0012:	lda     _collision_U
-	beq     L000E
-	ldx     #$00
-	lda     _i
-	jsr     aslax2
-	clc
-	adc     #<(_enemyList)
-	sta     ptr1
-	txa
-	adc     #>(_enemyList)
-	sta     ptr1+1
-	ldy     #$01
-	lda     (ptr1),y
-	clc
-	adc     #$01
-	sta     (ptr1),y
-;
-; for(i = 0; i < numEnemies; i++) {
-;
-L000E:	ldx     #$00
-	inc     _i
-	jmp     L0026
-;
-; Goodguy_dx = 0;//
-;
-L0027:	txa
-	sta     _Goodguy_dx
-	sta     _Goodguy_dx+1
-;
-; Goodguy_dy = 0;//
-;
-	sta     _Goodguy_dy
-	sta     _Goodguy_dy+1
-;
-; GoodGuy1.x += Goodguy_dx;//
-;
-	lda     _Goodguy_dx
-	clc
-	adc     _GoodGuy1
-	sta     _GoodGuy1
-;
-; GoodGuy1.y += Goodguy_dy;//
-;
-	lda     _Goodguy_dy
-	clc
-	adc     _GoodGuy1+1
-	sta     _GoodGuy1+1
-;
-; enemy_dx[0] = (GoodGuy1.x - enemyList[0].x);
-;
-	lda     _GoodGuy1
-	sec
-	sbc     _enemyList
-	sta     _enemy_dx
-	txa
-	sbc     #$00
-	sta     _enemy_dx+1
-;
-; enemy_dy[0] = (GoodGuy1.y - enemyList[0].y);
-;
-	lda     _GoodGuy1+1
-	sec
-	sbc     _enemyList+1
-	sta     _enemy_dy
-	txa
-	sbc     #$00
-	sta     _enemy_dy+1
-;
-; enemyList[0].x += enemy_dx[0]/20;
-;
-	lda     _enemy_dx
-	ldx     _enemy_dx+1
-	jsr     pushax
-	lda     #$14
-	jsr     tosdiva0
-	clc
-	adc     _enemyList
-	sta     _enemyList
-;
-; enemyList[0].y += enemy_dy[0]/20;
-;
-	lda     _enemy_dy
-	ldx     _enemy_dy+1
-	jsr     pushax
-	lda     #$14
-	jsr     tosdiva0
-	clc
-	adc     _enemyList+1
-	sta     _enemyList+1
-;
-; for(i = 1; i < numEnemies; i++) {
-;
-	lda     #$01
-	sta     _i
-L0028:	lda     _i
-	cmp     _numEnemies
-	bcc     L002A
-;
-; } 
-;
-	rts
-;
-; enemy_dx[i] = (enemyList[i - 1].x - enemyList[i].x);
-;
-L002A:	ldx     #$00
-	lda     _i
-	asl     a
-	bcc     L0020
-	inx
-	clc
-L0020:	adc     #<(_enemy_dx)
-	tay
-	txa
-	adc     #>(_enemy_dx)
-	tax
-	tya
-	jsr     pushax
-	ldx     #$00
-	lda     _i
-	sec
-	sbc     #$01
-	bcs     L0018
-	dex
-L0018:	jsr     aslax2
-	sta     ptr1
-	txa
-	clc
-	adc     #>(_enemyList)
-	sta     ptr1+1
-	ldy     #<(_enemyList)
-	lda     (ptr1),y
-	jsr     pusha0
-	lda     _i
-	jsr     aslax2
-	sta     ptr1
-	txa
-	clc
-	adc     #>(_enemyList)
-	sta     ptr1+1
-	ldy     #<(_enemyList)
-	lda     (ptr1),y
-	jsr     tossuba0
-	ldy     #$00
-	jsr     staxspidx
-;
-; enemy_dy[i] = (enemyList[i - 1].y - enemyList[i].y);
-;
-	ldx     #$00
-	lda     _i
-	asl     a
-	bcc     L0021
-	inx
-	clc
-L0021:	adc     #<(_enemy_dy)
-	tay
-	txa
-	adc     #>(_enemy_dy)
-	tax
-	tya
-	jsr     pushax
-	ldx     #$00
-	lda     _i
-	sec
-	sbc     #$01
-	bcs     L0019
-	dex
-L0019:	jsr     aslax2
-	clc
-	adc     #<(_enemyList)
-	sta     ptr1
-	txa
-	adc     #>(_enemyList)
-	sta     ptr1+1
-	ldy     #$01
-	lda     (ptr1),y
-	jsr     pusha0
-	lda     _i
-	jsr     aslax2
-	clc
-	adc     #<(_enemyList)
-	sta     ptr1
-	txa
-	adc     #>(_enemyList)
-	sta     ptr1+1
-	ldy     #$01
-	lda     (ptr1),y
-	jsr     tossuba0
-	ldy     #$00
-	jsr     staxspidx
-;
-; enemyList[i].x += enemy_dx[i]/20;
-;
-	ldx     #$00
-	lda     _i
-	jsr     aslax2
-	clc
-	adc     #<(_enemyList)
-	tay
-	txa
-	adc     #>(_enemyList)
-	tax
-	tya
-	jsr     pushax
-	sta     ptr1
-	stx     ptr1+1
-	ldx     #$00
-	lda     (ptr1,x)
-	jsr     pusha0
-	lda     _i
-	asl     a
-	bcc     L0022
-	ldx     #$01
-	clc
-L0022:	adc     #<(_enemy_dx)
-	sta     ptr1
-	txa
-	adc     #>(_enemy_dx)
-	sta     ptr1+1
-	ldy     #$01
-	lda     (ptr1),y
-	tax
-	dey
-	lda     (ptr1),y
-	jsr     pushax
-	lda     #$14
-	jsr     tosdiva0
-	jsr     tosaddax
-	ldy     #$00
-	jsr     staspidx
-;
-; enemyList[i].y += enemy_dy[i]/20;
-;
-	ldx     #$00
-	lda     _i
-	jsr     aslax2
-	clc
-	adc     #<(_enemyList)
-	tay
-	txa
-	adc     #>(_enemyList)
-	tax
-	tya
-	jsr     pushax
-	sta     ptr1
-	stx     ptr1+1
-	ldy     #$01
-	lda     (ptr1),y
-	jsr     pusha0
-	lda     _i
-	asl     a
-	bcc     L0023
-	ldx     #$01
-	clc
-L0023:	adc     #<(_enemy_dy)
-	sta     ptr1
-	txa
-	adc     #>(_enemy_dy)
-	sta     ptr1+1
-	ldy     #$01
-	lda     (ptr1),y
-	tax
-	dey
-	lda     (ptr1),y
-	jsr     pushax
-	lda     #$14
-	jsr     tosdiva0
-	jsr     tosaddax
-	ldy     #$01
-	jsr     staspidx
-;
-; for(i = 1; i < numEnemies; i++) {
-;
-	inc     _i
-	jmp     L0028
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ bg_collision (char *object)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_bg_collision: near
-
-.segment	"CODE"
-
-;
-; void bg_collision(char * object){
-;
-	jsr     pushax
-;
-; collision_L = 0;
-;
-	lda     #$00
-	sta     _collision_L
-;
-; collision_R = 0;
-;
-	sta     _collision_R
-;
-; collision_U = 0;
-;
-	sta     _collision_U
-;
-; collision_D = 0;
-;
-	sta     _collision_D
-;
-; temp1 = object[0]; // left side
-;
-	ldy     #$01
-	lda     (sp),y
-	sta     ptr1+1
-	dey
-	lda     (sp),y
-	sta     ptr1
-	lda     (ptr1),y
-	sta     _temp1
-;
-; temp2 = temp1 + object[2]; // right side
-;
-	iny
-	lda     (sp),y
-	tax
-	dey
-	lda     (sp),y
-	ldy     #$02
-	sta     ptr1
-	stx     ptr1+1
-	lda     (ptr1),y
-	clc
-	adc     _temp1
-	sta     _temp2
-;
-; temp3 = object[1]; // top side
-;
-	dey
-	lda     (sp),y
-	tax
-	dey
-	lda     (sp),y
-	iny
-	sta     ptr1
-	stx     ptr1+1
-	lda     (ptr1),y
-	sta     _temp3
-;
-; temp4 = temp3 + object[3]; // bottom side
-;
-	lda     (sp),y
-	tax
-	dey
-	lda     (sp),y
-	ldy     #$03
-	sta     ptr1
-	stx     ptr1+1
-	lda     (ptr1),y
-	clc
-	adc     _temp3
-	sta     _temp4
-;
-; if(temp3 >= 0xf0) return;
-;
-	lda     _temp3
-	cmp     #$F0
-	jcs     L000D
-;
-; coordinates = (temp1 >> 4) + (temp3 & 0xf0); // upper left
-;
-	lda     _temp1
-	lsr     a
-	lsr     a
-	lsr     a
-	lsr     a
-	sta     ptr1
-	lda     _temp3
-	and     #$F0
-	clc
-	adc     ptr1
-	sta     _coordinates
-;
-; if(c_map[coordinates]){ // find a corner in the collision map
-;
-	ldy     _coordinates
-	lda     _c_map,y
-	beq     L0015
-;
-; ++collision_L;
-;
-	inc     _collision_L
-;
-; ++collision_U;
-;
-	inc     _collision_U
-;
-; coordinates = (temp2 >> 4) + (temp3 & 0xf0); // upper right
-;
-L0015:	lda     _temp2
-	lsr     a
-	lsr     a
-	lsr     a
-	lsr     a
-	sta     ptr1
-	lda     _temp3
-	and     #$F0
-	clc
-	adc     ptr1
-	sta     _coordinates
-;
-; if(c_map[coordinates]){
-;
-	ldy     _coordinates
-	lda     _c_map,y
-	beq     L0016
-;
-; ++collision_R;
-;
-	inc     _collision_R
-;
-; ++collision_U;
-;
-	inc     _collision_U
-;
-; if(temp4 >= 0xf0) return;
-;
-L0016:	lda     _temp4
-	cmp     #$F0
-	bcs     L000D
-;
-; coordinates = (temp1 >> 4) + (temp4 & 0xf0); // bottom left
-;
-	lda     _temp1
-	lsr     a
-	lsr     a
-	lsr     a
-	lsr     a
-	sta     ptr1
-	lda     _temp4
-	and     #$F0
-	clc
-	adc     ptr1
-	sta     _coordinates
-;
-; if(c_map[coordinates]){
-;
-	ldy     _coordinates
-	lda     _c_map,y
-	beq     L0017
-;
-; ++collision_L;
-;
-	inc     _collision_L
-;
-; ++collision_D;
-;
-	inc     _collision_D
-;
-; coordinates = (temp2 >> 4) + (temp4 & 0xf0); // bottom right
-;
-L0017:	lda     _temp2
-	lsr     a
-	lsr     a
-	lsr     a
-	lsr     a
-	sta     ptr1
-	lda     _temp4
-	and     #$F0
-	clc
-	adc     ptr1
-	sta     _coordinates
-;
-; if(c_map[coordinates]){
-;
-	ldy     _coordinates
-	lda     _c_map,y
-	beq     L000D
-;
-; ++collision_R;
-;
-	inc     _collision_R
-;
-; ++collision_D;
-;
-	inc     _collision_D
-;
-; }
-;
-L000D:	jmp     incsp2
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ coin_pickup (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_coin_pickup: near
-
-.segment	"CODE"
-
-;
-; coin_collision = check_collision(&GoodGuy1, &coin);
-;
-	lda     #<(_GoodGuy1)
-	ldx     #>(_GoodGuy1)
-	jsr     pushax
-	lda     #<(_coin)
-	ldx     #>(_coin)
-	jsr     _check_collision
-	sta     _coin_collision
-;
-; if (coin_collision) {
-;
-	lda     _coin_collision
-	beq     L0010
-;
-; if (GoodGuy1.x < 100) {
-;
-	lda     _GoodGuy1
-	cmp     #$64
-	bcs     L000D
-;
-; if (GoodGuy1.y < 100) {
-;
-	lda     _GoodGuy1+1
-	cmp     #$64
-	bcs     L000C
-;
-; coin.x = 50;
-;
-	lda     #$32
-	sta     _coin
-;
-; coin.y = 175;
-;
-	lda     #$AF
-;
-; else {
-;
-	jmp     L000B
-;
-; coin.x = 200;
-;
-L000C:	lda     #$C8
-	sta     _coin
-;
-; coin.y = 175;
-;
-	lda     #$AF
-;
-; else {
-;
-	jmp     L000B
-;
-; if (GoodGuy1.y < 100) {
-;
-L000D:	lda     _GoodGuy1+1
-	cmp     #$64
-	bcs     L000E
-;
-; coin.x = 50;
-;
-	lda     #$32
-;
-; else {
-;
-	jmp     L0011
-;
-; coin.x = 200;
-;
-L000E:	lda     #$C8
-L0011:	sta     _coin
-;
-; coin.y = 40;
-;
-	lda     #$28
-L000B:	sta     _coin+1
-;
-; if (numEnemies != maxEnemies) {
-;
-	lda     _numEnemies
-	cmp     #$05
-	beq     L000A
-;
-; numEnemies++;
-;
-	inc     _numEnemies
-;
-; } else {
-;
-	rts
-;
-; pal_col(0,0x0f);
-;
-L0010:	jsr     pusha
-	lda     #$0F
-	jmp     _pal_col
-;
-; }
-;
-L000A:	rts
-
-.endproc
 
 ; ---------------------------------------------------------------
 ; void __near__ show_title (void)
@@ -2028,6 +1430,61 @@ L0003:	rts
 .endproc
 
 ; ---------------------------------------------------------------
+; void __near__ fade_in (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_fade_in: near
+
+.segment	"CODE"
+
+;
+; for(vb=0; vb<=4; vb++) {
+;
+	jsr     decsp1
+	lda     #$00
+	tay
+L0006:	sta     (sp),y
+	cmp     #$05
+	bcs     L0003
+;
+; pal_bright(vb);
+;
+	lda     (sp),y
+	jsr     _pal_bright
+;
+; ppu_wait_frame();
+;
+	jsr     _ppu_wait_frame
+;
+; ppu_wait_frame();
+;
+	jsr     _ppu_wait_frame
+;
+; ppu_wait_frame();
+;
+	jsr     _ppu_wait_frame
+;
+; ppu_wait_frame();
+;
+	jsr     _ppu_wait_frame
+;
+; for(vb=0; vb<=4; vb++) {
+;
+	ldy     #$00
+	clc
+	lda     #$01
+	adc     (sp),y
+	jmp     L0006
+;
+; }
+;
+L0003:	jmp     incsp1
+
+.endproc
+
+; ---------------------------------------------------------------
 ; void __near__ fade_out (void)
 ; ---------------------------------------------------------------
 
@@ -2092,210 +1549,1368 @@ L0008:	jsr     _pal_bright
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ fade_in (void)
+; void __near__ load_room (void)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
 
-.proc	_fade_in: near
+.proc	_load_room: near
 
 .segment	"CODE"
 
 ;
-; for(vb=0; vb<=4; vb++) {
+; set_data_pointer(Rooms[0]);
 ;
-	jsr     decsp1
+	lda     _Rooms
+	ldx     _Rooms+1
+	jsr     _set_data_pointer
+;
+; set_mt_pointer(metatiles1);
+;
+	lda     #<(_metatiles1)
+	ldx     #>(_metatiles1)
+	jsr     _set_mt_pointer
+;
+; for(y=0; ;y+=0x20){
+;
 	lda     #$00
-	tay
-L0006:	sta     (sp),y
-	cmp     #$05
-	bcs     L0003
+L0014:	sta     _y
 ;
-; pal_bright(vb);
+; for(x=0; ;x+=0x20){
 ;
-	lda     (sp),y
-	jsr     _pal_bright
+	lda     #$00
+L0013:	sta     _x
 ;
-; ppu_wait_frame();
+; address = get_ppu_addr(0, x, y);
 ;
-	jsr     _ppu_wait_frame
+	jsr     decsp2
+	lda     #$00
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     _y
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
 ;
-; ppu_wait_frame();
+; index = (y & 0xf0) + (x >> 4);
 ;
-	jsr     _ppu_wait_frame
-;
-; ppu_wait_frame();
-;
-	jsr     _ppu_wait_frame
-;
-; ppu_wait_frame();
-;
-	jsr     _ppu_wait_frame
-;
-; for(vb=0; vb<=4; vb++) {
-;
-	ldy     #$00
+	lda     _y
+	and     #$F0
+	sta     ptr1
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
 	clc
+	adc     ptr1
+	sta     _index
+;
+; buffer_4_mt(address, index); // ppu_address, index to the data
+;
+	lda     _address
+	ldx     _address+1
+	jsr     pushax
+	lda     _index
+	jsr     _buffer_4_mt
+;
+; flush_vram_update2();
+;
+	jsr     _flush_vram_update2
+;
+; if (x == 0xe0) break;
+;
+	lda     _x
+	cmp     #$E0
+	beq     L0016
+;
+; for(x=0; ;x+=0x20){
+;
+	lda     #$20
+	clc
+	adc     _x
+	jmp     L0013
+;
+; if (y == 0xe0) break;
+;
+L0016:	lda     _y
+	cmp     #$E0
+	beq     L0003
+;
+; for(y=0; ;y+=0x20){
+;
+	lda     #$20
+	clc
+	adc     _y
+	jmp     L0014
+;
+; set_data_pointer(Rooms[1]);
+;
+L0003:	lda     _Rooms+2
+	ldx     _Rooms+2+1
+	jsr     _set_data_pointer
+;
+; for(y=0; ;y+=0x20){
+;
+	lda     #$00
+L0015:	sta     _y
+;
+; x = 0;
+;
+	lda     #$00
+	sta     _x
+;
+; address = get_ppu_addr(1, x, y);
+;
+	jsr     decsp2
 	lda     #$01
-	adc     (sp),y
-	jmp     L0006
+	tay
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     _y
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
 ;
-; }
+; index = (y & 0xf0);
 ;
-L0003:	jmp     incsp1
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ test_collision (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_test_collision: near
-
-.segment	"CODE"
-
+	lda     _y
+	and     #$F0
+	sta     _index
 ;
-; collision1 = check_collision(&GoodGuy1, &enemyList[0]);
+; buffer_4_mt(address, index); // ppu_address, index to the data
 ;
-	lda     #<(_GoodGuy1)
-	ldx     #>(_GoodGuy1)
+	lda     _address
+	ldx     _address+1
 	jsr     pushax
-	lda     #<(_enemyList)
-	ldx     #>(_enemyList)
-	jsr     _check_collision
-	sta     _collision1
+	lda     _index
+	jsr     _buffer_4_mt
 ;
-; collision2 = check_collision(&GoodGuy1, &enemyList[1]);
+; flush_vram_update2();
 ;
-	lda     #<(_GoodGuy1)
-	ldx     #>(_GoodGuy1)
-	jsr     pushax
-	lda     #<(_enemyList+4)
-	ldx     #>(_enemyList+4)
-	jsr     _check_collision
-	sta     _collision2
+	jsr     _flush_vram_update2
 ;
-; collision3 = check_collision(&GoodGuy1, &enemyList[2]);
+; if (y == 0xe0) break;
 ;
-	lda     #<(_GoodGuy1)
-	ldx     #>(_GoodGuy1)
-	jsr     pushax
-	lda     #<(_enemyList+8)
-	ldx     #>(_enemyList+8)
-	jsr     _check_collision
-	sta     _collision3
+	lda     _y
+	cmp     #$E0
+	beq     L000D
 ;
-; collision4 = check_collision(&GoodGuy1, &enemyList[3]);
+; for(y=0; ;y+=0x20){
 ;
-	lda     #<(_GoodGuy1)
-	ldx     #>(_GoodGuy1)
-	jsr     pushax
-	lda     #<(_enemyList+12)
-	ldx     #>(_enemyList+12)
-	jsr     _check_collision
-	sta     _collision4
+	lda     #$20
+	clc
+	adc     _y
+	jmp     L0015
 ;
-; collision5 = check_collision(&GoodGuy1, &enemyList[4]);
+; memcpy (c_map, room1, 240);
 ;
-	lda     #<(_GoodGuy1)
-	ldx     #>(_GoodGuy1)
-	jsr     pushax
-	lda     #<(_enemyList+16)
-	ldx     #>(_enemyList+16)
-	jsr     _check_collision
-	sta     _collision5
-;
-; if (numEnemies == 1) {
-;
-	lda     _numEnemies
-	cmp     #$01
-	bne     L001F
-;
-; if (collision1) playerDead = 1;
-;
-	lda     _collision1
-;
-; else playerDead = 0;
-;
-	jmp     L002D
-;
-; } else if (numEnemies == 2) {
-;
-L001F:	lda     _numEnemies
-	cmp     #$02
-	bne     L0023
-;
-; if (collision1 || collision2) playerDead = 1;
-;
-	lda     _collision1
-	bne     L002B
-	lda     _collision2
-;
-; else playerDead = 0;
-;
-	jmp     L002D
-;
-; } else if (numEnemies == 3) {
-;
-L0023:	lda     _numEnemies
-	cmp     #$03
-	bne     L0027
-;
-; if (collision1 || collision2 || collision3) playerDead = 1;
-;
-	lda     _collision1
-	bne     L002B
-	lda     _collision2
-	bne     L002B
-	lda     _collision3
-;
-; else playerDead = 0;
-;
-	jmp     L002D
-;
-; } else if (numEnemies == 4) {
-;
-L0027:	lda     _numEnemies
-	cmp     #$04
-	bne     L0012
-;
-; if (collision1 || collision2 || collision3 || collision4) playerDead = 1;
-;
-	lda     _collision1
-	bne     L002B
-	lda     _collision2
-	bne     L002B
-	lda     _collision3
-	bne     L002B
-	lda     _collision4
-;
-; else playerDead = 0;
-;
-	jmp     L002D
-;
-; if (collision1 || collision2 || collision3 || collision4 || collision5) playerDead = 1;
-;
-L0012:	lda     _collision1
-	bne     L002B
-	lda     _collision2
-	bne     L002B
-	lda     _collision3
-	bne     L002B
-	lda     _collision4
-	bne     L002B
-	lda     _collision5
-L002D:	beq     L001C
-L002B:	lda     #$01
-;
-; else playerDead = 0;
-;
-L001C:	sta     _playerDead
+L000D:	ldy     #$00
+L0011:	lda     _room1,y
+	sta     _c_map,y
+	iny
+	cpy     #$F0
+	bne     L0011
 ;
 ; }
 ;
 	rts
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ draw_sprites (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_draw_sprites: near
+
+.segment	"CODE"
+
+;
+; oam_clear();
+;
+	jsr     _oam_clear
+;
+; oam_meta_spr(high_byte(PlayerGuy.x), high_byte(PlayerGuy.y), sprPlayer);
+;
+	jsr     decsp2
+	lda     _PlayerGuy+1
+	ldy     #$01
+	sta     (sp),y
+	lda     _PlayerGuy+3
+	dey
+	sta     (sp),y
+	lda     #<(_sprPlayer)
+	ldx     #>(_sprPlayer)
+	jmp     _oam_meta_spr
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ movement (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_movement: near
+
+.segment	"CODE"
+
+;
+; old_x = PlayerGuy.x;
+;
+	lda     _PlayerGuy+1
+	sta     _old_x+1
+	lda     _PlayerGuy
+	sta     _old_x
+;
+; if(pad1 & PAD_LEFT){
+;
+	lda     _pad1
+	and     #$02
+	beq     L0037
+;
+; direction = LEFT;
+;
+	lda     #$00
+	sta     _direction
+;
+; if(PlayerGuy.x <= 0x100) {
+;
+	lda     _PlayerGuy+1
+	cmp     #$01
+	bne     L0004
+	lda     _PlayerGuy
+	cmp     #$01
+L0004:	bcs     L0003
+;
+; PlayerGuy.vel_x = 0;
+;
+	lda     #$00
+	sta     _PlayerGuy+4
+	sta     _PlayerGuy+4+1
+;
+; PlayerGuy.x = 0x100;
+;
+	ldx     #$01
+	sta     _PlayerGuy
+	stx     _PlayerGuy+1
+;
+; else if(PlayerGuy.x < 0x400) { // don't want to wrap around to the other side
+;
+	jmp     L000A
+L0003:	ldx     _PlayerGuy+1
+	cpx     #$04
+	bcs     L0006
+;
+; PlayerGuy.vel_x = -0x100;
+;
+	ldx     #$FF
+	lda     #$00
+;
+; else {
+;
+	jmp     L0039
+;
+; PlayerGuy.vel_x = -SPEED;
+;
+L0006:	ldx     #$FE
+;
+; else if (pad1 & PAD_RIGHT){
+;
+	jmp     L0044
+L0037:	lda     _pad1
+	ldx     #$00
+	and     #$01
+	beq     L0039
+;
+; direction = RIGHT;
+;
+	lda     #$01
+	sta     _direction
+;
+; PlayerGuy.vel_x = SPEED;
+;
+	inx
+L0044:	lda     #$80
+;
+; PlayerGuy.vel_x = 0;
+;
+L0039:	sta     _PlayerGuy+4
+	stx     _PlayerGuy+4+1
+;
+; PlayerGuy.x += PlayerGuy.vel_x;
+;
+L000A:	lda     _PlayerGuy+4
+	clc
+	adc     _PlayerGuy
+	sta     _PlayerGuy
+	lda     _PlayerGuy+4+1
+	adc     _PlayerGuy+1
+	sta     _PlayerGuy+1
+;
+; if((PlayerGuy.x < 0x100)||(PlayerGuy.x > 0xf800)) { // make sure no wrap around to the other side
+;
+	ldx     _PlayerGuy+1
+	cpx     #$01
+	bcc     L003A
+	lda     _PlayerGuy
+	cmp     #$01
+	lda     _PlayerGuy+1
+	sbc     #$F8
+	bcc     L003B
+;
+; PlayerGuy.x = 0x100;
+;
+L003A:	ldx     #$01
+	lda     #$00
+	sta     _PlayerGuy
+	stx     _PlayerGuy+1
+;
+; L_R_switch = 1; // shinks the y values in bg_coll, less problems with head / feet collisions
+;
+L003B:	lda     #$01
+	sta     _L_R_switch
+;
+; Generic.x = high_byte(PlayerGuy.x); // this is much faster than passing a pointer to PlayerGuy
+;
+	lda     _PlayerGuy+1
+	sta     _Generic
+;
+; Generic.y = high_byte(PlayerGuy.y);
+;
+	lda     _PlayerGuy+3
+	sta     _Generic+1
+;
+; Generic.width = HERO_WIDTH;
+;
+	lda     #$0D
+	sta     _Generic+2
+;
+; Generic.height = HERO_HEIGHT;
+;
+	sta     _Generic+3
+;
+; bg_collision();
+;
+	jsr     _bg_collision
+;
+; if(collision_R && collision_L){ // if both true, probably half stuck in a wall
+;
+	lda     _collision_R
+	beq     L000E
+	lda     _collision_L
+	beq     L000E
+;
+; PlayerGuy.x = old_x;
+;
+	lda     _old_x+1
+	sta     _PlayerGuy+1
+	lda     _old_x
+	sta     _PlayerGuy
+;
+; else if(collision_L) {
+;
+	jmp     L0015
+L000E:	lda     _collision_L
+	beq     L0013
+;
+; high_byte(PlayerGuy.x) = high_byte(PlayerGuy.x) - eject_L;
+;
+	lda     _PlayerGuy+1
+	sec
+	sbc     _eject_L
+;
+; else if(collision_R) {
+;
+	jmp     L0045
+L0013:	lda     _collision_R
+	beq     L0015
+;
+; high_byte(PlayerGuy.x) = high_byte(PlayerGuy.x) - eject_R;
+;
+	lda     _PlayerGuy+1
+	sec
+	sbc     _eject_R
+L0045:	sta     _PlayerGuy+1
+;
+; old_y = PlayerGuy.y; // didn't end up using the old value
+;
+L0015:	lda     _PlayerGuy+2+1
+	sta     _old_y+1
+	lda     _PlayerGuy+2
+	sta     _old_y
+;
+; if(pad1 & PAD_UP){
+;
+	lda     _pad1
+	and     #$08
+	beq     L003C
+;
+; if(PlayerGuy.y <= 0x100) {
+;
+	lda     _PlayerGuy+2+1
+	cmp     #$01
+	bne     L0018
+	lda     _PlayerGuy+2
+	cmp     #$01
+L0018:	bcs     L0017
+;
+; PlayerGuy.vel_y = 0;
+;
+	lda     #$00
+	sta     _PlayerGuy+6
+	sta     _PlayerGuy+6+1
+;
+; PlayerGuy.y = 0x100;
+;
+	ldx     #$01
+	sta     _PlayerGuy+2
+	stx     _PlayerGuy+2+1
+;
+; else if(PlayerGuy.y < 0x400) { // don't want to wrap around to the other side
+;
+	jmp     L0022
+L0017:	ldx     _PlayerGuy+2+1
+	cpx     #$04
+	bcs     L001A
+;
+; PlayerGuy.vel_y = -0x100;
+;
+	ldx     #$FF
+	lda     #$00
+;
+; else {
+;
+	jmp     L003E
+;
+; PlayerGuy.vel_y = -SPEED;
+;
+L001A:	ldx     #$FE
+;
+; else if (pad1 & PAD_DOWN) 
+;
+	jmp     L0046
+L003C:	lda     _pad1
+	ldx     #$00
+	and     #$04
+	beq     L003E
+;
+; if(PlayerGuy.y >= 0xe000) {
+;
+	lda     _PlayerGuy+2
+	cmp     #$00
+	lda     _PlayerGuy+2+1
+	sbc     #$E0
+	bcc     L001E
+;
+; PlayerGuy.vel_y = 0;
+;
+	txa
+	sta     _PlayerGuy+6
+	sta     _PlayerGuy+6+1
+;
+; PlayerGuy.y = 0xe000;
+;
+	ldx     #$E0
+	sta     _PlayerGuy+2
+	stx     _PlayerGuy+2+1
+;
+; else if(PlayerGuy.y > 0xdc00) { // don't want to wrap around to the other side
+;
+	jmp     L0022
+L001E:	lda     _PlayerGuy+2
+	cmp     #$01
+	lda     _PlayerGuy+2+1
+	sbc     #$DC
+	bcc     L0020
+;
+; PlayerGuy.vel_y = 0x100;
+;
+	inx
+	lda     #$00
+;
+; else {
+;
+	jmp     L003E
+;
+; PlayerGuy.vel_y = SPEED;
+;
+L0020:	inx
+L0046:	lda     #$80
+;
+; PlayerGuy.vel_y = 0;
+;
+L003E:	sta     _PlayerGuy+6
+	stx     _PlayerGuy+6+1
+;
+; PlayerGuy.y += PlayerGuy.vel_y;
+;
+L0022:	lda     _PlayerGuy+6
+	clc
+	adc     _PlayerGuy+2
+	sta     _PlayerGuy+2
+	lda     _PlayerGuy+6+1
+	adc     _PlayerGuy+2+1
+	sta     _PlayerGuy+2+1
+;
+; if ((PlayerGuy.y < 0x100)||(PlayerGuy.y > 0xf000)) { // make sure no wrap around to the other side
+;
+	ldx     _PlayerGuy+2+1
+	cpx     #$01
+	bcc     L003F
+	lda     _PlayerGuy+2
+	cmp     #$01
+	lda     _PlayerGuy+2+1
+	sbc     #$F0
+	bcs     L003F
+	lda     #$00
+	jmp     L0041
+;
+; PlayerGuy.y = 0x100;
+;
+L003F:	ldx     #$01
+	lda     #$00
+	sta     _PlayerGuy+2
+	stx     _PlayerGuy+2+1
+;
+; L_R_switch = 0; // shinks the y values in bg_coll, less problems with head / feet collisions
+;
+L0041:	sta     _L_R_switch
+;
+; Generic.x = high_byte(PlayerGuy.x); // this is much faster than passing a pointer to PlayerGuy
+;
+	lda     _PlayerGuy+1
+	sta     _Generic
+;
+; Generic.y = high_byte(PlayerGuy.y);
+;
+	lda     _PlayerGuy+3
+	sta     _Generic+1
+;
+; bg_collision();
+;
+	jsr     _bg_collision
+;
+; if(collision_U && collision_D){ // if both true, probably half stuck in a wall
+;
+	lda     _collision_U
+	beq     L0026
+	lda     _collision_D
+	beq     L0026
+;
+; PlayerGuy.y = old_y;
+;
+	lda     _old_y+1
+	sta     _PlayerGuy+2+1
+	lda     _old_y
+	sta     _PlayerGuy+2
+;
+; else if(collision_U) {
+;
+	jmp     L002D
+L0026:	lda     _collision_U
+	beq     L002B
+;
+; high_byte(PlayerGuy.y) = high_byte(PlayerGuy.y) - eject_U;
+;
+	lda     _PlayerGuy+3
+	sec
+	sbc     _eject_U
+;
+; else if(collision_D) {
+;
+	jmp     L0047
+L002B:	lda     _collision_D
+	beq     L002D
+;
+; high_byte(PlayerGuy.y) = high_byte(PlayerGuy.y) - eject_D;
+;
+	lda     _PlayerGuy+3
+	sec
+	sbc     _eject_D
+L0047:	sta     _PlayerGuy+3
+;
+; if((scroll_x & 0xff) < 4){
+;
+L002D:	lda     _scroll_x
+	cmp     #$04
+	bcs     L002E
+;
+; new_cmap(); //
+;
+	jsr     _new_cmap
+;
+; temp5 = PlayerGuy.x;
+;
+L002E:	lda     _PlayerGuy+1
+	sta     _temp5+1
+	lda     _PlayerGuy
+	sta     _temp5
+;
+; if (PlayerGuy.x > MAX_RIGHT){
+;
+	lda     _PlayerGuy
+	cmp     #$01
+	lda     _PlayerGuy+1
+	sbc     #$B0
+	bcc     L0030
+;
+; temp1 = (PlayerGuy.x - MAX_RIGHT) >> 8;
+;
+	lda     _PlayerGuy+1
+	sec
+	sbc     #$B0
+	sta     _temp1
+;
+; scroll_x += temp1;
+;
+	clc
+	adc     _scroll_x
+	sta     _scroll_x
+	lda     #$00
+	adc     _scroll_x+1
+	sta     _scroll_x+1
+;
+; high_byte(PlayerGuy.x) = high_byte(PlayerGuy.x) - temp1;
+;
+	lda     _PlayerGuy+1
+	sec
+	sbc     _temp1
+	sta     _PlayerGuy+1
+;
+; if(scroll_x >= MAX_SCROLL) {
+;
+L0030:	lda     _scroll_x
+	cmp     #$FF
+	lda     _scroll_x+1
+	sbc     #$01
+	bcc     L0032
+;
+; scroll_x = MAX_SCROLL; // stop scrolling right, end of level
+;
+	ldx     #$01
+	lda     #$FF
+	sta     _scroll_x
+	stx     _scroll_x+1
+;
+; PlayerGuy.x = temp5; // but allow the x position to go all the way right
+;
+	lda     _temp5+1
+	sta     _PlayerGuy+1
+	lda     _temp5
+	sta     _PlayerGuy
+;
+; if(high_byte(PlayerGuy.x) >= 0xf1) {
+;
+	lda     _PlayerGuy+1
+	cmp     #$F1
+	bcc     L0032
+;
+; PlayerGuy.x = 0xf100;
+;
+	ldx     #$F1
+	lda     #$00
+	sta     _PlayerGuy
+	stx     _PlayerGuy+1
+;
+; } 
+;
+L0032:	rts
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ bg_collision (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_bg_collision: near
+
+.segment	"CODE"
+
+;
+; collision_L = 0;
+;
+	lda     #$00
+	sta     _collision_L
+;
+; collision_R = 0;
+;
+	sta     _collision_R
+;
+; collision_U = 0;
+;
+	sta     _collision_U
+;
+; collision_D = 0;
+;
+	sta     _collision_D
+;
+; if(Generic.y >= 0xf0) return;
+;
+	lda     _Generic+1
+	cmp     #$F0
+	bcc     L000E
+;
+; }
+;
+	rts
+;
+; temp6 = temp5 = Generic.x + scroll_x; // upper left (temp6 = save for reuse)
+;
+L000E:	lda     _Generic
+	clc
+	adc     _scroll_x
+	pha
+	lda     #$00
+	adc     _scroll_x+1
+	tax
+	pla
+	sta     _temp5
+	stx     _temp5+1
+	sta     _temp6
+	stx     _temp6+1
+;
+; temp1 = temp5 & 0xff; // low byte x
+;
+	lda     _temp5
+	sta     _temp1
+;
+; temp2 = temp5 >> 8; // high byte x
+;
+	lda     _temp5+1
+	sta     _temp2
+;
+; eject_L = temp1 | 0xf0;
+;
+	lda     _temp1
+	ora     #$F0
+	sta     _eject_L
+;
+; temp3 = Generic.y; // y top
+;
+	lda     _Generic+1
+	sta     _temp3
+;
+; eject_U = temp3 | 0xf0;
+;
+	ora     #$F0
+	sta     _eject_U
+;
+; if(L_R_switch) temp3 += 2; // fix bug, walking through walls
+;
+	lda     _L_R_switch
+	beq     L0003
+	lda     #$02
+	clc
+	adc     _temp3
+	sta     _temp3
+;
+; bg_collision_sub();
+;
+L0003:	jsr     _bg_collision_sub
+;
+; if(collision){ // find a corner in the collision map
+;
+	lda     _collision
+	beq     L0004
+;
+; ++collision_L;
+;
+	inc     _collision_L
+;
+; ++collision_U;
+;
+	inc     _collision_U
+;
+; temp5 += Generic.width;
+;
+L0004:	lda     _Generic+2
+	clc
+	adc     _temp5
+	sta     _temp5
+	lda     #$00
+	adc     _temp5+1
+	sta     _temp5+1
+;
+; temp1 = temp5 & 0xff; // low byte x
+;
+	lda     _temp5
+	sta     _temp1
+;
+; temp2 = temp5 >> 8; // high byte x
+;
+	lda     _temp5+1
+	sta     _temp2
+;
+; eject_R = (temp1 + 1) & 0x0f;
+;
+	lda     _temp1
+	clc
+	adc     #$01
+	and     #$0F
+	sta     _eject_R
+;
+; bg_collision_sub();
+;
+	jsr     _bg_collision_sub
+;
+; if(collision){ // find a corner in the collision map
+;
+	lda     _collision
+	beq     L0006
+;
+; ++collision_R;
+;
+	inc     _collision_R
+;
+; ++collision_U;
+;
+	inc     _collision_U
+;
+; temp3 = Generic.y + Generic.height; //y bottom
+;
+L0006:	lda     _Generic+1
+	clc
+	adc     _Generic+3
+	sta     _temp3
+;
+; if(L_R_switch) temp3 -= 2; // fix bug, walking through walls
+;
+	lda     _L_R_switch
+	beq     L000D
+	lda     _temp3
+	sec
+	sbc     #$02
+	sta     _temp3
+;
+; eject_D = (temp3 + 1) & 0x0f;
+;
+L000D:	lda     _temp3
+	clc
+	adc     #$01
+	and     #$0F
+	sta     _eject_D
+;
+; if(temp3 >= 0xf0) return;
+;
+	lda     _temp3
+	cmp     #$F0
+	bcs     L000B
+;
+; bg_collision_sub();
+;
+	jsr     _bg_collision_sub
+;
+; if(collision){ // find a corner in the collision map
+;
+	lda     _collision
+	beq     L000A
+;
+; ++collision_R;
+;
+	inc     _collision_R
+;
+; ++collision_D;
+;
+	inc     _collision_D
+;
+; temp1 = temp6 & 0xff; // low byte x
+;
+L000A:	lda     _temp6
+	sta     _temp1
+;
+; temp2 = temp6 >> 8; // high byte x
+;
+	lda     _temp6+1
+	sta     _temp2
+;
+; bg_collision_sub();
+;
+	jsr     _bg_collision_sub
+;
+; if(collision){ // find a corner in the collision map
+;
+	lda     _collision
+	beq     L000B
+;
+; ++collision_L;
+;
+	inc     _collision_L
+;
+; ++collision_D;
+;
+	inc     _collision_D
+;
+; }
+;
+L000B:	rts
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ bg_collision_sub (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_bg_collision_sub: near
+
+.segment	"CODE"
+
+;
+; coordinates = (temp1 >> 4) + (temp3 & 0xf0);
+;
+	lda     _temp1
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	sta     ptr1
+	lda     _temp3
+	and     #$F0
+	clc
+	adc     ptr1
+	sta     _coordinates
+;
+; map = temp2&1; // high byte
+;
+	lda     _temp2
+	and     #$01
+	sta     _map
+;
+; if(!map){
+;
+	lda     _map
+	bne     L0002
+;
+; collision = c_map[coordinates];
+;
+	ldy     _coordinates
+	lda     _c_map,y
+;
+; else{
+;
+	jmp     L0007
+;
+; collision = c_map2[coordinates];
+;
+L0002:	ldy     _coordinates
+	lda     _c_map2,y
+L0007:	sta     _collision
+;
+; }
+;
+	rts
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ draw_screen_R (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_draw_screen_R: near
+
+.segment	"CODE"
+
+;
+; pseudo_scroll_x = scroll_x + 0x120;
+;
+	lda     _scroll_x
+	ldx     _scroll_x+1
+	clc
+	adc     #$20
+	bcc     L0002
+	inx
+L0002:	inx
+	sta     _pseudo_scroll_x
+	stx     _pseudo_scroll_x+1
+;
+; temp1 = pseudo_scroll_x >> 8;
+;
+	lda     _pseudo_scroll_x+1
+	sta     _temp1
+;
+; set_data_pointer(Rooms[temp1]);
+;
+	ldx     #$00
+	lda     _temp1
+	asl     a
+	bcc     L0012
+	inx
+	clc
+L0012:	adc     #<(_Rooms)
+	sta     ptr1
+	txa
+	adc     #>(_Rooms)
+	sta     ptr1+1
+	ldy     #$01
+	lda     (ptr1),y
+	tax
+	dey
+	lda     (ptr1),y
+	jsr     _set_data_pointer
+;
+; nt = temp1 & 1;
+;
+	lda     _temp1
+	and     #$01
+	sta     _nt
+;
+; x = pseudo_scroll_x & 0xff;
+;
+	lda     _pseudo_scroll_x
+	sta     _x
+;
+; switch(scroll_count){
+;
+	lda     _scroll_count
+;
+; }
+;
+	beq     L0005
+	cmp     #$01
+	beq     L0007
+	cmp     #$02
+	jeq     L000A
+	jmp     L000D
+;
+; address = get_ppu_addr(nt, x, 0);
+;
+L0005:	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	tya
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	sta     _index
+;
+; buffer_4_mt(address, index); // ppu_address, index to the data
+;
+	lda     _address
+	ldx     _address+1
+	jsr     pushax
+	lda     _index
+	jsr     _buffer_4_mt
+;
+; address = get_ppu_addr(nt, x, 0x20);
+;
+	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     #$20
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0x20 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     #$20
+;
+; break;
+;
+	jmp     L0017
+;
+; address = get_ppu_addr(nt, x, 0x40);
+;
+L0007:	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     #$40
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0x40 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     #$40
+	sta     _index
+;
+; buffer_4_mt(address, index); // ppu_address, index to the data
+;
+	lda     _address
+	ldx     _address+1
+	jsr     pushax
+	lda     _index
+	jsr     _buffer_4_mt
+;
+; address = get_ppu_addr(nt, x, 0x60);
+;
+	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     #$60
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0x60 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     #$60
+;
+; break;
+;
+	jmp     L0017
+;
+; address = get_ppu_addr(nt, x, 0x80);
+;
+L000A:	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     #$80
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0x80 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     #$80
+	sta     _index
+;
+; buffer_4_mt(address, index); // ppu_address, index to the data
+;
+	lda     _address
+	ldx     _address+1
+	jsr     pushax
+	lda     _index
+	jsr     _buffer_4_mt
+;
+; address = get_ppu_addr(nt, x, 0xa0);
+;
+	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     #$A0
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0xa0 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     #$A0
+;
+; break;
+;
+	jmp     L0017
+;
+; address = get_ppu_addr(nt, x, 0xc0);
+;
+L000D:	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     #$C0
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0xc0 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     #$C0
+	sta     _index
+;
+; buffer_4_mt(address, index); // ppu_address, index to the data
+;
+	lda     _address
+	ldx     _address+1
+	jsr     pushax
+	lda     _index
+	jsr     _buffer_4_mt
+;
+; address = get_ppu_addr(nt, x, 0xe0);
+;
+	jsr     decsp2
+	lda     _nt
+	ldy     #$01
+	sta     (sp),y
+	lda     _x
+	dey
+	sta     (sp),y
+	lda     #$E0
+	jsr     _get_ppu_addr
+	sta     _address
+	stx     _address+1
+;
+; index = 0xe0 + (x >> 4);
+;
+	lda     _x
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	clc
+	adc     #$E0
+L0017:	sta     _index
+;
+; buffer_4_mt(address, index); // ppu_address, index to the data
+;
+	lda     _address
+	ldx     _address+1
+	jsr     pushax
+	lda     _index
+	jsr     _buffer_4_mt
+;
+; ++scroll_count;
+;
+	inc     _scroll_count
+;
+; scroll_count &= 3; // mask off top bits, keep it 0-3
+;
+	lda     _scroll_count
+	and     #$03
+	sta     _scroll_count
+;
+; }
+;
+	rts
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ new_cmap (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_new_cmap: near
+
+.segment	"CODE"
+
+;
+; room = ((scroll_x >> 8) +1); //high byte = room, one to the right
+;
+	lda     _scroll_x+1
+	clc
+	adc     #$01
+	sta     _room
+;
+; map = room & 1; //even or odd?
+;
+	and     #$01
+	sta     _map
+;
+; if(!map){
+;
+	lda     _map
+	bne     L0003
+;
+; memcpy (c_map, Rooms[room], 240);
+;
+	lda     #<(_c_map)
+	ldx     #>(_c_map)
+;
+; else{
+;
+	jmp     L001C
+;
+; memcpy (c_map2, Rooms[room], 240);
+;
+L0003:	lda     #<(_c_map2)
+	ldx     #>(_c_map2)
+L001C:	jsr     pushax
+	ldx     #$00
+	lda     _room
+	asl     a
+	bcc     L0009
+	inx
+	clc
+L0009:	adc     #<(_Rooms)
+	sta     ptr1
+	txa
+	adc     #>(_Rooms)
+	sta     ptr1+1
+	ldy     #$01
+	lda     (ptr1),y
+	tax
+	dey
+	lda     (ptr1),y
+	jsr     pushax
+	ldx     #$00
+	lda     #$F0
+	jmp     _memcpy
 
 .endproc
 
@@ -2312,7 +2927,7 @@ L001C:	sta     _playerDead
 ;
 ; ppu_off(); // screen off
 ;
-L0002:	jsr     _ppu_off
+	jsr     _ppu_off
 ;
 ; pal_bg(palTitle);
 ;
@@ -2344,25 +2959,24 @@ L0002:	jsr     _ppu_off
 ;
 	jsr     _music_play
 ;
-; ppu_on_all(); 
+; load_room();
+;
+	jsr     _load_room
+;
+; scroll_y = 0xff;
+;
+	ldx     #$00
+	lda     #$FF
+	sta     _scroll_y
+	stx     _scroll_y+1
+;
+; set_scroll_y(scroll_y); // shift the bg down 1 pixel
+;
+	jsr     _set_scroll_y
+;
+; ppu_on_all();
 ;
 	jsr     _ppu_on_all
-;
-; fade_in();
-;
-	jsr     _fade_in
-;
-; show_title();
-;
-	jsr     _show_title
-;
-; fade_out();
-;
-	jsr     _fade_out
-;
-; draw_bg();
-;
-	jsr     _draw_bg
 ;
 ; fade_in();
 ;
@@ -2375,141 +2989,14 @@ L0002:	jsr     _ppu_off
 	adc     #$01
 	jsr     _music_play
 ;
-; GoodGuy1.x = 128;
+; ppu_wait_nmi();
 ;
-	lda     #$80
-	sta     _GoodGuy1
-;
-; GoodGuy1.y = 64;
-;
-	lda     #$40
-	sta     _GoodGuy1+1
-;
-; enemyList[0].x = 128;
-;
-	lda     #$80
-	sta     _enemyList
-;
-; enemyList[0].y = 168;
-;
-	lda     #$A8
-	sta     _enemyList+1
-;
-; for(i = 1; i < maxEnemies; i++) {
-;
-	lda     #$01
-	sta     _i
-L0015:	lda     _i
-	cmp     #$05
-	bcs     L0016
-;
-; enemyList[i].x = 120;
-;
-	ldx     #$00
-	lda     _i
-	jsr     aslax2
-	clc
-	adc     #<(_enemyList)
-	sta     ptr1
-	txa
-	adc     #>(_enemyList)
-	sta     ptr1+1
-	lda     #$78
-	ldy     #$00
-	sta     (ptr1),y
-;
-; enemyList[i].y = 120;
-;
-	ldx     #$00
-	lda     _i
-	jsr     aslax2
-	clc
-	adc     #<(_enemyList)
-	sta     ptr1
-	txa
-	adc     #>(_enemyList)
-	sta     ptr1+1
-	lda     #$78
-	iny
-	sta     (ptr1),y
-;
-; for(i = 1; i < maxEnemies; i++) {
-;
-	inc     _i
-	jmp     L0015
-;
-; coin.x = 100;
-;
-L0016:	lda     #$64
-	sta     _coin
-;
-; coin.y = 100;
-;
-	sta     _coin+1
-;
-; for(i = 0; i < maxEnemies; i++) {
-;
-	lda     #$00
-	sta     _i
-L0017:	lda     _i
-	cmp     #$05
-	bcs     L0018
-;
-; enemy_dx[i] = 0;
-;
-	ldx     #$00
-	lda     _i
-	asl     a
-	bcc     L0013
-	inx
-	clc
-L0013:	adc     #<(_enemy_dx)
-	sta     ptr1
-	txa
-	adc     #>(_enemy_dx)
-	sta     ptr1+1
-	lda     #$00
-	tay
-	sta     (ptr1),y
-	iny
-	sta     (ptr1),y
-;
-; enemy_dy[i] = 0;
-;
-	tax
-	lda     _i
-	asl     a
-	bcc     L0014
-	inx
-	clc
-L0014:	adc     #<(_enemy_dy)
-	sta     ptr1
-	txa
-	adc     #>(_enemy_dy)
-	sta     ptr1+1
-	lda     #$00
-	dey
-	sta     (ptr1),y
-	iny
-	sta     (ptr1),y
-;
-; for(i = 0; i < maxEnemies; i++) {
-;
-	inc     _i
-	jmp     L0017
-;
-; ppu_wait_nmi(); // wait till beginning of the frame
-;
-L000E:	jsr     _ppu_wait_nmi
+L0003:	jsr     _ppu_wait_nmi
 ;
 ; set_music_speed(8);
 ;
 	lda     #$08
 	jsr     _set_music_speed
-;
-; oam_clear();
-;
-	jsr     _oam_clear
 ;
 ; pad1 = pad_poll(0);
 ;
@@ -2517,60 +3004,33 @@ L000E:	jsr     _ppu_wait_nmi
 	jsr     _pad_poll
 	sta     _pad1
 ;
-; draw_sprites();
-;
-	jsr     _draw_sprites
-;
 ; movement();
 ;
 	jsr     _movement
 ;
-; coin_pickup();
+; set_scroll_x(scroll_x);
 ;
-	jsr     _coin_pickup
+	lda     _scroll_x
+	ldx     _scroll_x+1
+	jsr     _set_scroll_x
 ;
-; test_collision();
+; set_scroll_y(scroll_y);
 ;
-	jsr     _test_collision
+	lda     _scroll_y
+	ldx     _scroll_y+1
+	jsr     _set_scroll_y
 ;
-; while (playerDead == 0){
+; draw_screen_R();
 ;
-L0018:	lda     _playerDead
-	beq     L000E
+	jsr     _draw_screen_R
 ;
-; ppu_wait_frame();
+; draw_sprites();
 ;
-	jsr     _ppu_wait_frame
+	jsr     _draw_sprites
 ;
-; fade_out();
+; while (1) 
 ;
-	jsr     _fade_out
-;
-; playerDead = 0;
-;
-	lda     #$00
-	sta     _playerDead
-;
-; ppu_off();
-;
-	jsr     _ppu_off
-;
-; oam_clear();
-;
-	jsr     _oam_clear
-;
-; numEnemies = 1;
-;
-	lda     #$01
-	sta     _numEnemies
-;
-; fade_out();
-;
-	jsr     _fade_out
-;
-; while(1) {
-;
-	jmp     L0002
+	jmp     L0003
 
 .endproc
 

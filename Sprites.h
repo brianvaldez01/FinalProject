@@ -1,47 +1,4 @@
-unsigned char pad1;
-unsigned char pad1_new;
-unsigned char collision1;
-unsigned char collision2;
-unsigned char collision3;
-unsigned char collision4;
-unsigned char collision5;
-unsigned char coin_collision;
-unsigned char i;
-unsigned char numEnemies = 1;
-unsigned char collision_L;
-unsigned char collision_R;
-unsigned char collision_U;
-unsigned char collision_D;
-unsigned char playerDead = 0;
-unsigned char which_bg;
-const unsigned char * p_maps;
-unsigned char coordinates;
-unsigned char temp1;
-unsigned char temp2;
-unsigned char temp3;
-unsigned char temp4;
-unsigned char temp_x;
-unsigned char temp_y;
-unsigned char song;
-unsigned char c_map[240];
-
-#define MAX_SONGS 2
-enum {SONG_GAME, SONG_PAUSE};
-void change_song(void);
-
-
-
-#define FP_BITS 4;//
-
-
-
-
-#include "TILESETS/boop.c" // called c1
-
-
-const unsigned char * const All_Collision_Maps[] = {boop};
-
-// a 16x16 pixel metasprite
+// 16x16 pixel metasprites
 const unsigned char sprPlayer[]={
   0,-1,0x49,0,
   8,-1,0x4a,0,
@@ -65,11 +22,3 @@ const unsigned char sprCoin[]={
   8, 7,0x48,0,
   128
 };
-
-// PROTOTYPES
-void draw_bg(void);
-void draw_sprites(void);
-void movement(void);	
-void bg_collision(char * object);
-void check_start(void);
-void coin_pickup(void);

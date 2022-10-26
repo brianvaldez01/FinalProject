@@ -2,48 +2,69 @@
 #include "LIB/nesdoug.h"
 #include "TILESETS/beep.h"
 #include "Sprites.h"
+#include "game.h"
 
-
-#pragma bss-name(push, "ZEROPAGE")
-
-
-#pragma bss-name(push, "BSS")
-
-struct Assets {
-	unsigned char x;
-	unsigned char y;
-	unsigned char width;
-	unsigned char height;
-};
-
-struct Assets GoodGuy1 = {128,64,15,15};
-struct Assets BadGuy1 = {128,168,15,15};
-struct Assets BadGuy2 = {120,120,15,15};
-struct Assets BadGuy3 = {120,120,15,15};
-struct Assets BadGuy4 = {120,120,15,15};
-struct Assets BadGuy5 = {120,120,15,15};
-struct Assets BadGuy6 = {120,120,15,15};
-struct Assets coin = {100, 100, 7, 7};
-unsigned int collided = 0;
-
-// Max amount of enemies on our screen
-#define maxEnemies 5
-
-// List of enemies
-struct Assets enemyList[maxEnemies] = {{128,168,15,15}, {120,120,15,15}, {120,120,15,15}, {120,120,15,15}, {120,120,15,15}};
-
-// Enemy velocities
-int enemy_dx[maxEnemies];
-int enemy_dy[maxEnemies];
-
-
-static unsigned char wait;//
-static unsigned char frame_cnt;//
-static int iy,dy, Goodguy_dx, Goodguy_dy;//
+static unsigned char wait;
+static unsigned char frame_cnt;
+static int iy,dy;
 
 
 const unsigned char palTitle[]={ 0x0f,0x03,0x15,0x30,0x0f,0x01,0x21,0x31,0x0f,0x06,0x30,0x26,0x0f,0x09,0x19,0x29 };
 
+void main (void) {
+
+	ppu_off(); // screen off
+	
+	// load the palettes
+	pal_bg(palTitle);
+	pal_spr(palTitle);
+
+	// use the second set of tiles for sprites
+	// both bg and sprite are set to 0 by default
+	bank_spr(1);
+
+
+	set_vram_buffer();
+
+	song = 0;
+	music_play(song);
+
+	// Load the level
+	load_room();
+
+	// Shift thigs one pixel down
+	scroll_y = 0xff;
+	set_scroll_y(scroll_y); // shift the bg down 1 pixel
+
+	// Turn screen on again
+	ppu_on_all();
+
+	// Fade in
+	fade_in();
+
+	// Player level music
+	music_play(song+1);
+
+	while (1) 
+	{
+		// Wait till beginning of the frame
+		ppu_wait_nmi();
+
+		// the sprites are pushed from a buffer to the OAM during nmi
+		set_music_speed(8);
+
+		// Read first controller
+		pad1 = pad_poll(0);
+
+
+		movement();
+		// set scroll
+		set_scroll_x(scroll_x);
+		set_scroll_y(scroll_y);
+		draw_screen_R();
+		draw_sprites();
+	}	
+}
 
 // Shows title screen
 void show_title() {
@@ -86,6 +107,7 @@ iy=220<<FP_BITS;
 
 }
 
+// Function to fade out screen
 void fade_out() {
   char vb;
   for ( vb =4; vb!=0; vb--) {
@@ -101,6 +123,7 @@ void fade_out() {
   pal_bright(0);
   set_vram_update(NULL);
 }
+
 // Function to fade in screen
 void fade_in() {
   char vb;
@@ -115,323 +138,368 @@ void fade_in() {
   }
 }
 
-void draw_bg(void){
-	ppu_off(); // screen off
-	
-	p_maps = All_Collision_Maps[which_bg];
-	// copy the collision map to c_map
-	memcpy (c_map, p_maps, 240);
-	
-	// this sets a start position on the BG, top left of screen
-	vram_adr(NAMETABLE_A);
-	
-	// draw the tiles
-	for(temp_y = 0; temp_y < 15; ++temp_y){
-		for(temp_x = 0; temp_x < 16; ++temp_x){
-			temp1 = (temp_y << 4) + temp_x;
-
-			if(c_map[temp1]){
-				vram_put(0x10); // wall
-				vram_put(0x10);
-			}
-			else{
-				vram_put(0); // blank
-				vram_put(0);
-			}
+void load_room(void) {
+	set_data_pointer(Rooms[0]);
+	set_mt_pointer(metatiles1);
+	for(y=0; ;y+=0x20){
+		for(x=0; ;x+=0x20){
+			address = get_ppu_addr(0, x, y);
+			index = (y & 0xf0) + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			flush_vram_update2();
+			if (x == 0xe0) break;
 		}
-				// do twice
-		for(temp_x = 0; temp_x < 16; ++temp_x){
-			temp1 = (temp_y << 4) + temp_x;
-
-			if(c_map[temp1]){
-				vram_put(0x10); // wall
-				vram_put(0x10);
-			}
-			else{
-				vram_put(0); // blank
-				vram_put(0);
-			}
-		}
-
+		if (y == 0xe0) break;
 	}
-
-	ppu_on_all(); // turn on screen
+	
+	
+	
+	// a little bit in the next room
+	set_data_pointer(Rooms[1]);
+	for(y=0; ;y+=0x20){
+		x = 0;
+		address = get_ppu_addr(1, x, y);
+		index = (y & 0xf0);
+		buffer_4_mt(address, index); // ppu_address, index to the data
+		flush_vram_update2();
+		if (y == 0xe0) break;
+	}
+	
+	// copy the room to the collision map
+	// the second one should auto-load with the scrolling code
+	memcpy (c_map, room1, 240);
 }
 
 
-void draw_sprites(void){
+void draw_sprites(void) {
 	// clear all sprites from sprite buffer
 	oam_clear();
 	
-	// draw first 2 metasprites
-	oam_meta_spr(GoodGuy1.x, GoodGuy1.y, sprPlayer);
-	oam_meta_spr(enemyList[0].x, enemyList[0].y, sprGhost);
-
-	// draw rest of enemies
-	for(i = 1; i < numEnemies; i++) {
-		oam_meta_spr(enemyList[i].x, enemyList[i].y, sprGhost);
-	}
-
-	// draw coin
-	oam_meta_spr(coin.x, coin.y, sprCoin);
+	// draw player metasprite
+	// WOULD LIKE TO EDIT THIS LATER, BY CHANING THE PLAYER SPRITE SO THAT IT LOOKS LEFT WHEN HE MOVES LEFT, AND RIGHT WHEN HE MOVES RIGHT
+	// LIKE HAVE sprPlayerLeft and sprPlayerRight
+	if (direction == LEFT)
+		oam_meta_spr(high_byte(PlayerGuy.x), high_byte(PlayerGuy.y), sprPlayer);
+	else
+		oam_meta_spr(high_byte(PlayerGuy.x), high_byte(PlayerGuy.y), sprPlayer);
 }
 	
 	
-void movement(void){
+void movement(void) {
+// handle x
+
+	old_x = PlayerGuy.x;
+	
 	if(pad1 & PAD_LEFT){
-		GoodGuy1.x -= 1;
+		direction = LEFT;
+		if(PlayerGuy.x <= 0x100) {
+			PlayerGuy.vel_x = 0;
+			PlayerGuy.x = 0x100;
+		}
+		else if(PlayerGuy.x < 0x400) { // don't want to wrap around to the other side
+			PlayerGuy.vel_x = -0x100;
+		}
+		else {
+			PlayerGuy.vel_x = -SPEED;
+		}
 	}
+
 	else if (pad1 & PAD_RIGHT){
-		GoodGuy1.x += 1;
+		
+		direction = RIGHT;
+
+		PlayerGuy.vel_x = SPEED;
 	}
 	
-	bg_collision((char *)&GoodGuy1);
-	if(collision_R) GoodGuy1.x -= 1;
-	if(collision_L) GoodGuy1.x += 1;
+	else { // nothing pressed
+		PlayerGuy.vel_x = 0;
+	}
+	
+	PlayerGuy.x += PlayerGuy.vel_x;
+	
+	if((PlayerGuy.x < 0x100)||(PlayerGuy.x > 0xf800)) { // make sure no wrap around to the other side
+		PlayerGuy.x = 0x100;
+	} 
+	
+	L_R_switch = 1; // shinks the y values in bg_coll, less problems with head / feet collisions
+	
+	Generic.x = high_byte(PlayerGuy.x); // this is much faster than passing a pointer to PlayerGuy
+	Generic.y = high_byte(PlayerGuy.y);
+
+	Generic.width = HERO_WIDTH;
+	Generic.height = HERO_HEIGHT;
+
+	bg_collision();
+
+	if(collision_R && collision_L){ // if both true, probably half stuck in a wall
+		PlayerGuy.x = old_x;
+	}
+	
+	else if(collision_L) {
+		high_byte(PlayerGuy.x) = high_byte(PlayerGuy.x) - eject_L;
+		
+	}
+	
+	else if(collision_R) {
+		high_byte(PlayerGuy.x) = high_byte(PlayerGuy.x) - eject_R;
+	} 
+
+
+	
+// handle y
+	old_y = PlayerGuy.y; // didn't end up using the old value
 	
 	if(pad1 & PAD_UP){
-		GoodGuy1.y -= 1;
+		if(PlayerGuy.y <= 0x100) {
+			PlayerGuy.vel_y = 0;
+			PlayerGuy.y = 0x100;
+		}
+
+		else if(PlayerGuy.y < 0x400) { // don't want to wrap around to the other side
+			PlayerGuy.vel_y = -0x100;
+		}
+
+		else {
+			PlayerGuy.vel_y = -SPEED;
+		}
 	}
-	else if (pad1 & PAD_DOWN){
-		GoodGuy1.y += 1;
+
+	else if (pad1 & PAD_DOWN) 
+	{
+		if(PlayerGuy.y >= 0xe000) {
+			PlayerGuy.vel_y = 0;
+			PlayerGuy.y = 0xe000;
+		}
+
+		else if(PlayerGuy.y > 0xdc00) { // don't want to wrap around to the other side
+			PlayerGuy.vel_y = 0x100;
+		}
+
+		else {
+			PlayerGuy.vel_y = SPEED;
+		}
+	}
+
+	else { // nothing pressed
+		PlayerGuy.vel_y = 0;
 	}
 	
-	bg_collision((char *)&GoodGuy1);
-	if(collision_D) GoodGuy1.y -= 1;
-	if(collision_U) GoodGuy1.y += 1;
+	PlayerGuy.y += PlayerGuy.vel_y;
+	
+	if ((PlayerGuy.y < 0x100)||(PlayerGuy.y > 0xf000)) { // make sure no wrap around to the other side
+		PlayerGuy.y = 0x100;
+	} 
+	
+	L_R_switch = 0; // shinks the y values in bg_coll, less problems with head / feet collisions
+	
+	Generic.x = high_byte(PlayerGuy.x); // this is much faster than passing a pointer to PlayerGuy
+	Generic.y = high_byte(PlayerGuy.y);
 
-	for(i = 0; i < numEnemies; i++) {
-		bg_collision((char *)&enemyList[i]);
-		if(collision_R) enemyList[i].x -= 1;
-		if(collision_L) enemyList[i].x += 1;
-		bg_collision((char *)&enemyList[i]);
-		if(collision_D) enemyList[i].y -= 1;
-		if(collision_U) enemyList[i].y += 1;
+	//	Generic.width = HERO_WIDTH;
+	//	Generic.height = HERO_HEIGHT;
+
+	bg_collision();
+
+	if(collision_U && collision_D){ // if both true, probably half stuck in a wall
+		PlayerGuy.y = old_y;
 	}
 
-	Goodguy_dx = 0;//
-	Goodguy_dy = 0;//
-	GoodGuy1.x += Goodguy_dx;//
-	GoodGuy1.y += Goodguy_dy;//
-	enemy_dx[0] = (GoodGuy1.x - enemyList[0].x);
-	enemy_dy[0] = (GoodGuy1.y - enemyList[0].y);
-	enemyList[0].x += enemy_dx[0]/20;
-	enemyList[0].y += enemy_dy[0]/20;
-
-	for(i = 1; i < numEnemies; i++) {
-		enemy_dx[i] = (enemyList[i - 1].x - enemyList[i].x);
-		enemy_dy[i] = (enemyList[i - 1].y - enemyList[i].y);
-		enemyList[i].x += enemy_dx[i]/20;
-		enemyList[i].y += enemy_dy[i]/20;
+	else if(collision_U) {
+		high_byte(PlayerGuy.y) = high_byte(PlayerGuy.y) - eject_U;
+		
 	}
+
+	else if(collision_D) {
+		high_byte(PlayerGuy.y) = high_byte(PlayerGuy.y) - eject_D;
+	}
+	
+	
+	// do we need to load a new collision map? (scrolled into a new room)
+	if((scroll_x & 0xff) < 4){
+		new_cmap(); //
+	}
+	
+	// scroll
+	temp5 = PlayerGuy.x;
+	if (PlayerGuy.x > MAX_RIGHT){
+		temp1 = (PlayerGuy.x - MAX_RIGHT) >> 8;
+		scroll_x += temp1;
+		high_byte(PlayerGuy.x) = high_byte(PlayerGuy.x) - temp1;
+	}
+
+	if(scroll_x >= MAX_SCROLL) {
+		scroll_x = MAX_SCROLL; // stop scrolling right, end of level
+		PlayerGuy.x = temp5; // but allow the x position to go all the way right
+		if(high_byte(PlayerGuy.x) >= 0xf1) {
+			PlayerGuy.x = 0xf100;
+		}
+	}
+
 }	
 
 
 
-void bg_collision(char * object){
+void bg_collision(void) {
+	// note, !0 = collision
 	// sprite collision with backgrounds
-	// object expected to have first 4 bytes as x,y,width,height
-	// casting to char* so this function could work for any sized structs
+	// load the object's x,y,width,height to Generic, then call this
+	
+
 	collision_L = 0;
 	collision_R = 0;
 	collision_U = 0;
 	collision_D = 0;
 	
-	temp1 = object[0]; // left side
-	temp2 = temp1 + object[2]; // right side
-	temp3 = object[1]; // top side
-	temp4 = temp3 + object[3]; // bottom side
+	if(Generic.y >= 0xf0) return;
 	
+	temp6 = temp5 = Generic.x + scroll_x; // upper left (temp6 = save for reuse)
+	temp1 = temp5 & 0xff; // low byte x
+	temp2 = temp5 >> 8; // high byte x
+	
+	eject_L = temp1 | 0xf0;
+	
+	temp3 = Generic.y; // y top
+	
+	eject_U = temp3 | 0xf0;
+	
+	if(L_R_switch) temp3 += 2; // fix bug, walking through walls
+	
+	bg_collision_sub();
+	
+	if(collision){ // find a corner in the collision map
+		++collision_L;
+		++collision_U;
+	}
+	
+	// upper right
+	temp5 += Generic.width;
+	temp1 = temp5 & 0xff; // low byte x
+	temp2 = temp5 >> 8; // high byte x
+	
+	eject_R = (temp1 + 1) & 0x0f;
+	
+	// temp3 is unchanged
+	bg_collision_sub();
+	
+	if(collision){ // find a corner in the collision map
+		++collision_R;
+		++collision_U;
+	}
+	
+	
+	// again, lower
+	
+	// bottom right, x hasn't changed
+
+	temp3 = Generic.y + Generic.height; //y bottom
+	if(L_R_switch) temp3 -= 2; // fix bug, walking through walls
+	eject_D = (temp3 + 1) & 0x0f;
 	if(temp3 >= 0xf0) return;
-	// y out of range
 	
-	coordinates = (temp1 >> 4) + (temp3 & 0xf0); // upper left
-	if(c_map[coordinates]){ // find a corner in the collision map
-		++collision_L;
-		++collision_U;
-	}
+	bg_collision_sub();
 	
-	coordinates = (temp2 >> 4) + (temp3 & 0xf0); // upper right
-	if(c_map[coordinates]){
-		++collision_R;
-		++collision_U;
-	}
-	
-	if(temp4 >= 0xf0) return;
-	// y out of range
-	
-	coordinates = (temp1 >> 4) + (temp4 & 0xf0); // bottom left
-	if(c_map[coordinates]){
-		++collision_L;
-		++collision_D;
-	}
-	
-	coordinates = (temp2 >> 4) + (temp4 & 0xf0); // bottom right
-	if(c_map[coordinates]){
+	if(collision){ // find a corner in the collision map
 		++collision_R;
 		++collision_D;
 	}
-}
-
-
-
-void test_collision(void){
-
-	collision1 = check_collision(&GoodGuy1, &enemyList[0]);
-	collision2 = check_collision(&GoodGuy1, &enemyList[1]);
-	collision3 = check_collision(&GoodGuy1, &enemyList[2]);
-	collision4 = check_collision(&GoodGuy1, &enemyList[3]);
-	collision5 = check_collision(&GoodGuy1, &enemyList[4]);
-
-	if (numEnemies == 1) {
-		if (collision1) playerDead = 1;
-		else playerDead = 0;
-	} else if (numEnemies == 2) {
-		if (collision1 || collision2) playerDead = 1;
-		else playerDead = 0;
-	} else if (numEnemies == 3) {
-		if (collision1 || collision2 || collision3) playerDead = 1;
-		else playerDead = 0;
-	} else if (numEnemies == 4) {
-		if (collision1 || collision2 || collision3 || collision4) playerDead = 1;
-		else playerDead = 0;
-	} else {
-		if (collision1 || collision2 || collision3 || collision4 || collision5) playerDead = 1;
-		else playerDead = 0;
-	}
-}
-
-void coin_pickup(void) {
-	coin_collision = check_collision(&GoodGuy1, &coin);
-
-	if (coin_collision) {
-		// If player is in left side of screen
-		if (GoodGuy1.x < 100) {
-			// If player is on top half of screen
-				if (GoodGuy1.y < 100) {
-					coin.x = 50;
-					coin.y = 175;
-				}
-			// Else bottom half of screen
-				else {
-					coin.x = 200;
-					coin.y = 175;
-				}
-		} 
-		
-		// Else player is on the right side of screen
-		else {
-			// If player is on top half of screen
-			if (GoodGuy1.y < 100) {
-				coin.x = 50;
-				coin.y = 40;
-			}
-			// Else bottom half of screen
-			else {
-				coin.x = 200;
-				coin.y = 40;
-			}
-		}
-
-		// If we are not at max enemies
-		if (numEnemies != maxEnemies) {
-			// Add enemies
-			numEnemies++;
-		}
-		
-	} else {
-		// Do nothing, keep coin at the same spot
-		pal_col(0,0x0f);
-	}
-}
-
-void main (void) {
-
-	while(1) {
 	
-		ppu_off(); // screen off
-		
-		// load the palettes
-		pal_bg(palTitle);
-		pal_spr(palTitle);
-
-		// use the second set of tiles for sprites
-		// both bg and sprite are set to 0 by default
-		bank_spr(1);
-		set_vram_buffer();
+	// bottom left
+	temp1 = temp6 & 0xff; // low byte x
+	temp2 = temp6 >> 8; // high byte x
 	
-		song = 0;
-		music_play(song);
-		
-		// turn on screen
-		ppu_on_all(); 
-		//music_play(song);
+	//temp3, y is unchanged
 
-		
-		//load title screen
-		fade_in();
-		show_title();
-		fade_out();
-		
-		
-		//when show_title breaks, load level
-		draw_bg();
-		fade_in();
-		music_play(song+1);
-
-		// Initialize position of player, 1st enemy, and 1st coin
-		GoodGuy1.x = 128;
-		GoodGuy1.y = 64;
-		enemyList[0].x = 128;
-		enemyList[0].y = 168;
-		for(i = 1; i < maxEnemies; i++) {
-			enemyList[i].x = 120;
-			enemyList[i].y = 120;
-		}
-		coin.x = 100;
-		coin.y = 100;
-
-
-		// Initialize all enemy velocities to 0
-		for(i = 0; i < maxEnemies; i++) {
-			enemy_dx[i] = 0;
-			enemy_dy[i] = 0;
-		}
-
-		// Loop until player dies
-		
-		while (playerDead == 0){
-			ppu_wait_nmi(); // wait till beginning of the frame
-			// the sprites are pushed from a buffer to the OAM during nmi
-			set_music_speed(8);
-			// clear all sprites from sprite buffer
-			oam_clear();
-
-			//set everything up
-			pad1 = pad_poll(0);
-			draw_sprites();
-			movement();
-			coin_pickup();
-			test_collision();
-			}	
-
-			ppu_wait_frame();
-
-			// Once player dies, go back to title screen
-			fade_out();
-
-			playerDead = 0;
-
-			// Turn off Screen
-			ppu_off();
-
-			// Clear the sprites
-			oam_clear();
-
-			// Set numEnemies back to 1
-			numEnemies = 1;
-
-			// Fade out of screen
-			fade_out();
-		}
+	bg_collision_sub();
+	
+	if(collision){ // find a corner in the collision map
+		++collision_L;
+		++collision_D;
 	}
+}
+
+void bg_collision_sub(void){
+	coordinates = (temp1 >> 4) + (temp3 & 0xf0);
+	
+	map = temp2&1; // high byte
+
+	if(!map){
+		collision = c_map[coordinates];
+	}
+
+	else{
+		collision = c_map2[coordinates];
+	}
+}
+
+void draw_screen_R(void){
+	// scrolling to the right, draw metatiles as we go
+	pseudo_scroll_x = scroll_x + 0x120;
+	
+	temp1 = pseudo_scroll_x >> 8;
+	
+	set_data_pointer(Rooms[temp1]);
+	nt = temp1 & 1;
+	x = pseudo_scroll_x & 0xff;
+	
+	// important that the main loop clears the vram_buffer
+	
+	switch(scroll_count){
+		case 0:
+			address = get_ppu_addr(nt, x, 0);
+			index = 0 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			
+			address = get_ppu_addr(nt, x, 0x20);
+			index = 0x20 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			break;
+			
+		case 1:
+			address = get_ppu_addr(nt, x, 0x40);
+			index = 0x40 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			
+			address = get_ppu_addr(nt, x, 0x60);
+			index = 0x60 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			break;
+			
+		case 2:
+			address = get_ppu_addr(nt, x, 0x80);
+			index = 0x80 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			
+			address = get_ppu_addr(nt, x, 0xa0);
+			index = 0xa0 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			break;
+			
+		default:
+			address = get_ppu_addr(nt, x, 0xc0);
+			index = 0xc0 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			
+			address = get_ppu_addr(nt, x, 0xe0);
+			index = 0xe0 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+	}
+
+	
+	
+	++scroll_count;
+	scroll_count &= 3; // mask off top bits, keep it 0-3
+}
+
+// copy a new collision map to one of the 2 c_map arrays
+void new_cmap(void){
+	// copy a new collision map to one of the 2 c_map arrays
+	room = ((scroll_x >> 8) +1); //high byte = room, one to the right
+	
+	map = room & 1; //even or odd?
+	if(!map){
+		memcpy (c_map, Rooms[room], 240);
+	}
+	else{
+		memcpy (c_map2, Rooms[room], 240);
+	}
+}

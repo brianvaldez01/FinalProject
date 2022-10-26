@@ -11,66 +11,50 @@ static int iy,dy;
 
 const unsigned char palTitle[]={ 0x0f,0x03,0x15,0x30,0x0f,0x01,0x21,0x31,0x0f,0x06,0x30,0x26,0x0f,0x09,0x19,0x29 };
 
-void main (void) {
-	
-	 // load the pallets
-	 // use the second set of tiles for sprites
-	// both bg and sprite are set to 0 by default
-	pal_bg(palTitle);
-	pal_spr(palTitle);
-	
-	bank_spr(1);
-	set_vram_buffer();
-	
-	//show title;
-	show_title();
-	//turn on
-	ppu_on_all();
-	
-	//fade out and turn off
-	fade_out();
-	ppu_off();
-	fade_in();
-	
-	bank_spr(1);
-	set_vram_buffer();
-
-	// Load the level
-	load_room();
-
-	// Shift thigs one pixel down
-	scroll_y = 0xff;
-	set_scroll_y(scroll_y); // shift the bg down 1 pixel
-
-	// Turn screen on again
-	
-	ppu_on_all();
-	
-
-	// Player level music
-	music_play(song+1);
-
-	while (1) 
-	{
-		// Wait till beginning of the frame
-		ppu_wait_nmi();
-
-		// the sprites are pushed from a buffer to the OAM during nmi
-		set_music_speed(8);
-
-		// Read first controller
-		pad1 = pad_poll(0);
-
-
-		movement();
-		// set scroll
-		set_scroll_x(scroll_x);
-		set_scroll_y(scroll_y);
-		draw_screen_R();
-		draw_sprites();
-	}	
+// Function to fade out screen
+void fade_out() {
+  char vb;
+  for ( vb =4; vb!=0; vb--) {
+    // Set brightness value
+    pal_bright(vb);
+    // wait for 4/60 sec
+    ppu_wait_frame();
+    ppu_wait_frame();
+    ppu_wait_frame();
+    ppu_wait_frame();
+  }
+ 
+  pal_bright(0);
+  set_vram_update(NULL);
 }
 
+// Function to fade in screen
+void fade_in() {
+  char vb;
+  for(vb=0; vb<=4; vb++) {
+    // Set brighness value
+    pal_bright(vb);
+    // wait for 4/60 sec
+    ppu_wait_frame();
+    ppu_wait_frame();
+    ppu_wait_frame();
+    ppu_wait_frame();
+  }
+}
+
+//draw the player and enemy sprite
+void draw_sprites(void) {
+	// clear all sprites from sprite buffer
+	oam_clear();
+	
+	// draw player metasprite
+	// WOULD LIKE TO EDIT THIS LATER, BY CHANING THE PLAYER SPRITE SO THAT IT LOOKS LEFT WHEN HE MOVES LEFT, AND RIGHT WHEN HE MOVES RIGHT
+	// LIKE HAVE sprPlayerLeft and sprPlayerRight
+	if (direction == LEFT)
+		oam_meta_spr(high_byte(PlayerGuy.x), high_byte(PlayerGuy.y), sprPlayer);
+	else
+		oam_meta_spr(high_byte(PlayerGuy.x), high_byte(PlayerGuy.y), sprPlayer);
+}
 
 // Shows title screen
 void show_title() {
@@ -118,37 +102,8 @@ iy=220<<FP_BITS;
 
 }
 
-// Function to fade out screen
-void fade_out() {
-  char vb;
-  for ( vb =4; vb!=0; vb--) {
-    // Set brightness value
-    pal_bright(vb);
-    // wait for 4/60 sec
-    ppu_wait_frame();
-    ppu_wait_frame();
-    ppu_wait_frame();
-    ppu_wait_frame();
-  }
- 
-  pal_bright(0);
-  set_vram_update(NULL);
-}
 
-// Function to fade in screen
-void fade_in() {
-  char vb;
-  for(vb=0; vb<=4; vb++) {
-    // Set brighness value
-    pal_bright(vb);
-    // wait for 4/60 sec
-    ppu_wait_frame();
-    ppu_wait_frame();
-    ppu_wait_frame();
-    ppu_wait_frame();
-  }
-}
-
+//loads the room
 void load_room(void) {
 	set_data_pointer(Rooms[0]);
 	set_mt_pointer(metatiles1);
@@ -162,8 +117,6 @@ void load_room(void) {
 		}
 		if (y == 0xe0) break;
 	}
-	
-	
 	
 	// a little bit in the next room
 	set_data_pointer(Rooms[1]);
@@ -181,24 +134,8 @@ void load_room(void) {
 	memcpy (c_map, room1, 240);
 }
 
-
-void draw_sprites(void) {
-	// clear all sprites from sprite buffer
-	oam_clear();
-	
-	// draw player metasprite
-	// WOULD LIKE TO EDIT THIS LATER, BY CHANING THE PLAYER SPRITE SO THAT IT LOOKS LEFT WHEN HE MOVES LEFT, AND RIGHT WHEN HE MOVES RIGHT
-	// LIKE HAVE sprPlayerLeft and sprPlayerRight
-	if (direction == LEFT)
-		oam_meta_spr(high_byte(PlayerGuy.x), high_byte(PlayerGuy.y), sprPlayer);
-	else
-		oam_meta_spr(high_byte(PlayerGuy.x), high_byte(PlayerGuy.y), sprPlayer);
-}
-	
-	
 void movement(void) {
-// handle x
-
+	// handle x
 	old_x = PlayerGuy.x;
 	
 	if(pad1 & PAD_LEFT){
@@ -257,7 +194,7 @@ void movement(void) {
 
 
 	
-// handle y
+	// handle y
 	old_y = PlayerGuy.y; // didn't end up using the old value
 	
 	if(pad1 & PAD_UP){
@@ -348,7 +285,19 @@ void movement(void) {
 
 }	
 
+void bg_collision_sub(void){
+	coordinates = (temp1 >> 4) + (temp3 & 0xf0);
+	
+	map = temp2&1; // high byte
 
+	if(!map){
+		collision = c_map[coordinates];
+	}
+
+	else{
+		collision = c_map2[coordinates];
+	}
+}
 
 void bg_collision(void) {
 	// note, !0 = collision
@@ -428,20 +377,6 @@ void bg_collision(void) {
 	}
 }
 
-void bg_collision_sub(void){
-	coordinates = (temp1 >> 4) + (temp3 & 0xf0);
-	
-	map = temp2&1; // high byte
-
-	if(!map){
-		collision = c_map[coordinates];
-	}
-
-	else{
-		collision = c_map2[coordinates];
-	}
-}
-
 void draw_screen_R(void){
 	// scrolling to the right, draw metatiles as we go
 	pseudo_scroll_x = scroll_x + 0x120;
@@ -495,8 +430,6 @@ void draw_screen_R(void){
 			buffer_4_mt(address, index); // ppu_address, index to the data
 	}
 
-	
-	
 	++scroll_count;
 	scroll_count &= 3; // mask off top bits, keep it 0-3
 }
@@ -513,4 +446,64 @@ void new_cmap(void){
 	else{
 		memcpy (c_map2, Rooms[room], 240);
 	}
+}
+
+void main (void) {
+	
+	 // load the pallets
+	 // use the second set of tiles for sprites
+	// both bg and sprite are set to 0 by default
+	pal_bg(palTitle);
+	pal_spr(palTitle);
+	
+	bank_spr(1);
+	set_vram_buffer();
+	
+	//show title;
+	show_title();
+	//turn on
+	ppu_on_all();
+	
+	//fade out and turn off
+	fade_out();
+	ppu_off();
+	fade_in();
+	
+	bank_spr(1);
+	set_vram_buffer();
+
+	// Load the level
+	load_room();
+
+	// Shift thigs one pixel down
+	scroll_y = 0xff;
+	set_scroll_y(scroll_y); // shift the bg down 1 pixel
+
+	// Turn screen on again
+	
+	ppu_on_all();
+	
+
+	// Player level music
+	music_play(song+1);
+
+	while (1) 
+	{
+		// Wait till beginning of the frame
+		ppu_wait_nmi();
+
+		// the sprites are pushed from a buffer to the OAM during nmi
+		set_music_speed(8);
+
+		// Read first controller
+		pad1 = pad_poll(0);
+
+
+		movement();
+		// set scroll
+		set_scroll_x(scroll_x);
+		set_scroll_y(scroll_y);
+		draw_screen_R();
+		draw_sprites();
+	}	
 }

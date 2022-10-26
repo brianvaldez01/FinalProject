@@ -1,6 +1,6 @@
 #define SPEED 0x180
 #define MAX_RIGHT 0xb000
-#define JUMP_VEL -0x600
+#define JUMP_VEL -0x300
 #define GRAVITY 0x50
 
 
@@ -126,4 +126,4 @@ void bg_collision(void);
 void bg_collision_sub(void);
 void draw_screen_R(void);
 void new_cmap(void);
-void bg_collision_low(void);
+void bg_low(void);

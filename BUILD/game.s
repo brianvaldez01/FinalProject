@@ -1785,7 +1785,7 @@ L0011:	lda     _room1,y
 ;
 	lda     _pad1
 	and     #$02
-	beq     L0037
+	beq     L002A
 ;
 ; direction = LEFT;
 ;
@@ -1827,7 +1827,7 @@ L0003:	ldx     _PlayerGuy+1
 ;
 ; else {
 ;
-	jmp     L0039
+	jmp     L002C
 ;
 ; PlayerGuy.vel_x = -SPEED;
 ;
@@ -1835,11 +1835,11 @@ L0006:	ldx     #$FE
 ;
 ; else if (pad1 & PAD_RIGHT){
 ;
-	jmp     L0044
-L0037:	lda     _pad1
+	jmp     L0032
+L002A:	lda     _pad1
 	ldx     #$00
 	and     #$01
-	beq     L0039
+	beq     L002C
 ;
 ; direction = RIGHT;
 ;
@@ -1849,11 +1849,11 @@ L0037:	lda     _pad1
 ; PlayerGuy.vel_x = SPEED;
 ;
 	inx
-L0044:	lda     #$80
+L0032:	lda     #$80
 ;
 ; PlayerGuy.vel_x = 0;
 ;
-L0039:	sta     _PlayerGuy+4
+L002C:	sta     _PlayerGuy+4
 	stx     _PlayerGuy+4+1
 ;
 ; PlayerGuy.x += PlayerGuy.vel_x;
@@ -1870,23 +1870,23 @@ L000A:	lda     _PlayerGuy+4
 ;
 	ldx     _PlayerGuy+1
 	cpx     #$01
-	bcc     L003A
+	bcc     L002D
 	lda     _PlayerGuy
 	cmp     #$01
 	lda     _PlayerGuy+1
 	sbc     #$F8
-	bcc     L003B
+	bcc     L002E
 ;
 ; PlayerGuy.x = 0x100;
 ;
-L003A:	ldx     #$01
+L002D:	ldx     #$01
 	lda     #$00
 	sta     _PlayerGuy
 	stx     _PlayerGuy+1
 ;
 ; L_R_switch = 1; // shinks the y values in bg_coll, less problems with head / feet collisions
 ;
-L003B:	lda     #$01
+L002E:	lda     #$01
 	sta     _L_R_switch
 ;
 ; Generic.x = high_byte(PlayerGuy.x); // this is much faster than passing a pointer to PlayerGuy
@@ -1940,7 +1940,7 @@ L000E:	lda     _collision_L
 ;
 ; else if(collision_R) {
 ;
-	jmp     L0045
+	jmp     L0033
 L0013:	lda     _collision_R
 	beq     L0015
 ;
@@ -1949,121 +1949,41 @@ L0013:	lda     _collision_R
 	lda     _PlayerGuy+1
 	sec
 	sbc     _eject_R
-L0045:	sta     _PlayerGuy+1
+L0033:	sta     _PlayerGuy+1
 ;
-; old_y = PlayerGuy.y; // didn't end up using the old value
+; if(PlayerGuy.vel_y < 0x300){
 ;
-L0015:	lda     _PlayerGuy+2+1
-	sta     _old_y+1
-	lda     _PlayerGuy+2
-	sta     _old_y
-;
-; if(pad1 & PAD_UP){
-;
-	lda     _pad1
-	and     #$08
-	beq     L003C
-;
-; if(PlayerGuy.y <= 0x100) {
-;
-	lda     _PlayerGuy+2+1
-	cmp     #$01
-	bne     L0018
-	lda     _PlayerGuy+2
-	cmp     #$01
-L0018:	bcs     L0017
-;
-; PlayerGuy.vel_y = 0;
-;
-	lda     #$00
-	sta     _PlayerGuy+6
-	sta     _PlayerGuy+6+1
-;
-; PlayerGuy.y = 0x100;
-;
-	ldx     #$01
-	sta     _PlayerGuy+2
-	stx     _PlayerGuy+2+1
-;
-; else if(PlayerGuy.y < 0x400) { // don't want to wrap around to the other side
-;
-	jmp     L0022
-L0017:	ldx     _PlayerGuy+2+1
-	cpx     #$04
-	bcs     L001A
-;
-; PlayerGuy.vel_y = -0x100;
-;
-	ldx     #$FF
-	lda     #$00
-;
-; else {
-;
-	jmp     L003E
-;
-; PlayerGuy.vel_y = -SPEED;
-;
-L001A:	ldx     #$FE
-;
-; else if (pad1 & PAD_DOWN) 
-;
-	jmp     L0046
-L003C:	lda     _pad1
-	ldx     #$00
-	and     #$04
-	beq     L003E
-;
-; if(PlayerGuy.y >= 0xe000) {
-;
-	lda     _PlayerGuy+2
+L0015:	lda     _PlayerGuy+6
 	cmp     #$00
-	lda     _PlayerGuy+2+1
-	sbc     #$E0
-	bcc     L001E
+	lda     _PlayerGuy+6+1
+	sbc     #$03
+	bvc     L0017
+	eor     #$80
+L0017:	bpl     L0016
 ;
-; PlayerGuy.vel_y = 0;
+; PlayerGuy.vel_y += GRAVITY;
 ;
-	txa
+	lda     #$50
+	clc
+	adc     _PlayerGuy+6
 	sta     _PlayerGuy+6
-	sta     _PlayerGuy+6+1
+	bcc     L0019
+	inc     _PlayerGuy+6+1
 ;
-; PlayerGuy.y = 0xe000;
+; else{
 ;
-	ldx     #$E0
-	sta     _PlayerGuy+2
-	stx     _PlayerGuy+2+1
+	jmp     L0019
 ;
-; else if(PlayerGuy.y > 0xdc00) { // don't want to wrap around to the other side
+; PlayerGuy.vel_y = 0x300; 
 ;
-	jmp     L0022
-L001E:	lda     _PlayerGuy+2
-	cmp     #$01
-	lda     _PlayerGuy+2+1
-	sbc     #$DC
-	bcc     L0020
-;
-; PlayerGuy.vel_y = 0x100;
-;
-	inx
+L0016:	ldx     #$03
 	lda     #$00
-;
-; else {
-;
-	jmp     L003E
-;
-; PlayerGuy.vel_y = SPEED;
-;
-L0020:	inx
-L0046:	lda     #$80
-;
-; PlayerGuy.vel_y = 0;
-;
-L003E:	sta     _PlayerGuy+6
+	sta     _PlayerGuy+6
 	stx     _PlayerGuy+6+1
 ;
 ; PlayerGuy.y += PlayerGuy.vel_y;
 ;
-L0022:	lda     _PlayerGuy+6
+L0019:	lda     _PlayerGuy+6
 	clc
 	adc     _PlayerGuy+2
 	sta     _PlayerGuy+2
@@ -2071,31 +1991,12 @@ L0022:	lda     _PlayerGuy+6
 	adc     _PlayerGuy+2+1
 	sta     _PlayerGuy+2+1
 ;
-; if ((PlayerGuy.y < 0x100)||(PlayerGuy.y > 0xf000)) { // make sure no wrap around to the other side
+; L_R_switch = 0;
 ;
-	ldx     _PlayerGuy+2+1
-	cpx     #$01
-	bcc     L003F
-	lda     _PlayerGuy+2
-	cmp     #$01
-	lda     _PlayerGuy+2+1
-	sbc     #$F0
-	bcs     L003F
 	lda     #$00
-	jmp     L0041
+	sta     _L_R_switch
 ;
-; PlayerGuy.y = 0x100;
-;
-L003F:	ldx     #$01
-	lda     #$00
-	sta     _PlayerGuy+2
-	stx     _PlayerGuy+2+1
-;
-; L_R_switch = 0; // shinks the y values in bg_coll, less problems with head / feet collisions
-;
-L0041:	sta     _L_R_switch
-;
-; Generic.x = high_byte(PlayerGuy.x); // this is much faster than passing a pointer to PlayerGuy
+; Generic.x = high_byte(PlayerGuy.x); 
 ;
 	lda     _PlayerGuy+1
 	sta     _Generic
@@ -2109,50 +2010,87 @@ L0041:	sta     _L_R_switch
 ;
 	jsr     _bg_collision
 ;
-; if(collision_U && collision_D){ // if both true, probably half stuck in a wall
+; if(collision_U) {
 ;
 	lda     _collision_U
-	beq     L0026
-	lda     _collision_D
-	beq     L0026
-;
-; PlayerGuy.y = old_y;
-;
-	lda     _old_y+1
-	sta     _PlayerGuy+2+1
-	lda     _old_y
-	sta     _PlayerGuy+2
-;
-; else if(collision_U) {
-;
-	jmp     L002D
-L0026:	lda     _collision_U
-	beq     L002B
+	beq     L001A
 ;
 ; high_byte(PlayerGuy.y) = high_byte(PlayerGuy.y) - eject_U;
 ;
 	lda     _PlayerGuy+3
 	sec
 	sbc     _eject_U
+	sta     _PlayerGuy+3
 ;
 ; else if(collision_D) {
 ;
-	jmp     L0047
-L002B:	lda     _collision_D
-	beq     L002D
+	jmp     L0034
+L001A:	lda     _collision_D
+	beq     L002F
 ;
 ; high_byte(PlayerGuy.y) = high_byte(PlayerGuy.y) - eject_D;
 ;
 	lda     _PlayerGuy+3
 	sec
 	sbc     _eject_D
-L0047:	sta     _PlayerGuy+3
+	sta     _PlayerGuy+3
+;
+; PlayerGuy.y &= 0xff00;
+;
+	ldx     _PlayerGuy+2+1
+	lda     #$00
+	sta     _PlayerGuy+2
+	stx     _PlayerGuy+2+1
+;
+; if(PlayerGuy.vel_y > 0) {
+;
+	lda     _PlayerGuy+6
+	cmp     #$01
+	lda     _PlayerGuy+6+1
+	sbc     #$00
+	bvs     L001E
+	eor     #$80
+L001E:	bpl     L002F
+;
+; PlayerGuy.vel_y = 0;
+;
+L0034:	lda     #$00
+	sta     _PlayerGuy+6
+	sta     _PlayerGuy+6+1
+;
+; Generic.y = high_byte(PlayerGuy.y);
+;
+L002F:	lda     _PlayerGuy+3
+	sta     _Generic+1
+;
+; if(pad1 & PAD_A) {
+;
+	lda     _pad1
+	and     #$80
+	beq     L001F
+;
+; PlayerGuy.vel_y = JUMP_VEL;
+;
+	ldx     #$FD
+	lda     #$00
+	sta     _PlayerGuy+6
+	stx     _PlayerGuy+6+1
 ;
 ; if((scroll_x & 0xff) < 4){
 ;
-L002D:	lda     _scroll_x
+L001F:	lda     _scroll_x
 	cmp     #$04
-	bcs     L002E
+	bcs     L0020
+;
+; new_cmap();
+;
+	jsr     _new_cmap
+;
+; if((scroll_x & 0xff) < 4){
+;
+L0020:	lda     _scroll_x
+	cmp     #$04
+	bcs     L0022
 ;
 ; new_cmap(); //
 ;
@@ -2160,7 +2098,7 @@ L002D:	lda     _scroll_x
 ;
 ; temp5 = PlayerGuy.x;
 ;
-L002E:	lda     _PlayerGuy+1
+L0022:	lda     _PlayerGuy+1
 	sta     _temp5+1
 	lda     _PlayerGuy
 	sta     _temp5
@@ -2171,7 +2109,7 @@ L002E:	lda     _PlayerGuy+1
 	cmp     #$01
 	lda     _PlayerGuy+1
 	sbc     #$B0
-	bcc     L0030
+	bcc     L0024
 ;
 ; temp1 = (PlayerGuy.x - MAX_RIGHT) >> 8;
 ;
@@ -2198,11 +2136,11 @@ L002E:	lda     _PlayerGuy+1
 ;
 ; if(scroll_x >= MAX_SCROLL) {
 ;
-L0030:	lda     _scroll_x
+L0024:	lda     _scroll_x
 	cmp     #$FF
 	lda     _scroll_x+1
 	sbc     #$01
-	bcc     L0032
+	bcc     L0026
 ;
 ; scroll_x = MAX_SCROLL; // stop scrolling right, end of level
 ;
@@ -2222,7 +2160,7 @@ L0030:	lda     _scroll_x
 ;
 	lda     _PlayerGuy+1
 	cmp     #$F1
-	bcc     L0032
+	bcc     L0026
 ;
 ; PlayerGuy.x = 0xf100;
 ;
@@ -2233,7 +2171,7 @@ L0030:	lda     _scroll_x
 ;
 ; } 
 ;
-L0032:	rts
+L0026:	rts
 
 .endproc
 

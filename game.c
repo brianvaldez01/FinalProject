@@ -102,7 +102,6 @@ iy=220<<FP_BITS;
 
 }
 
-
 //loads the room
 void load_room(void) {
 	set_data_pointer(Rooms[0]);
@@ -135,6 +134,7 @@ void load_room(void) {
 }
 
 void movement(void) {
+	
 	// handle x
 	old_x = PlayerGuy.x;
 	
@@ -192,75 +192,43 @@ void movement(void) {
 		high_byte(PlayerGuy.x) = high_byte(PlayerGuy.x) - eject_R;
 	} 
 
-
-	
 	// handle y
-	old_y = PlayerGuy.y; // didn't end up using the old value
-	
-	if(pad1 & PAD_UP){
-		if(PlayerGuy.y <= 0x100) {
-			PlayerGuy.vel_y = 0;
-			PlayerGuy.y = 0x100;
-		}
-
-		else if(PlayerGuy.y < 0x400) { // don't want to wrap around to the other side
-			PlayerGuy.vel_y = -0x100;
-		}
-
-		else {
-			PlayerGuy.vel_y = -SPEED;
-		}
+	if(PlayerGuy.vel_y < 0x300){
+		PlayerGuy.vel_y += GRAVITY;
 	}
-
-	else if (pad1 & PAD_DOWN) 
-	{
-		if(PlayerGuy.y >= 0xe000) {
-			PlayerGuy.vel_y = 0;
-			PlayerGuy.y = 0xe000;
-		}
-
-		else if(PlayerGuy.y > 0xdc00) { // don't want to wrap around to the other side
-			PlayerGuy.vel_y = 0x100;
-		}
-
-		else {
-			PlayerGuy.vel_y = SPEED;
-		}
+	else{
+		PlayerGuy.vel_y = 0x300; 
 	}
-
-	else { // nothing pressed
-		PlayerGuy.vel_y = 0;
-	}
-	
 	PlayerGuy.y += PlayerGuy.vel_y;
 	
-	if ((PlayerGuy.y < 0x100)||(PlayerGuy.y > 0xf000)) { // make sure no wrap around to the other side
-		PlayerGuy.y = 0x100;
-	} 
-	
-	L_R_switch = 0; // shinks the y values in bg_coll, less problems with head / feet collisions
-	
-	Generic.x = high_byte(PlayerGuy.x); // this is much faster than passing a pointer to PlayerGuy
+	L_R_switch = 0;
+	Generic.x = high_byte(PlayerGuy.x); 
 	Generic.y = high_byte(PlayerGuy.y);
-
-	//	Generic.width = HERO_WIDTH;
-	//	Generic.height = HERO_HEIGHT;
-
 	bg_collision();
-
-	if(collision_U && collision_D){ // if both true, probably half stuck in a wall
-		PlayerGuy.y = old_y;
-	}
-
-	else if(collision_U) {
+	
+	if(collision_U) {
 		high_byte(PlayerGuy.y) = high_byte(PlayerGuy.y) - eject_U;
-		
+		PlayerGuy.vel_y = 0;
 	}
-
 	else if(collision_D) {
 		high_byte(PlayerGuy.y) = high_byte(PlayerGuy.y) - eject_D;
+		PlayerGuy.y &= 0xff00;
+		if(PlayerGuy.vel_y > 0) {
+			PlayerGuy.vel_y = 0;
+		}
 	}
+	//jumping section
+	Generic.y = high_byte(PlayerGuy.y);
+
+		if(pad1 & PAD_A) {
+			PlayerGuy.vel_y = JUMP_VEL;
+		}
+		
 	
+	// do we need to load a new collision map? (scrolled into a new room)
+	if((scroll_x & 0xff) < 4){
+		new_cmap();
+	}
 	
 	// do we need to load a new collision map? (scrolled into a new room)
 	if((scroll_x & 0xff) < 4){
@@ -282,10 +250,7 @@ void movement(void) {
 			PlayerGuy.x = 0xf100;
 		}
 	}
-
 }	
-
-
 
 void draw_screen_R(void){
 	// scrolling to the right, draw metatiles as we go
@@ -362,8 +327,6 @@ void bg_collision(void) {
 	// note, !0 = collision
 	// sprite collision with backgrounds
 	// load the object's x,y,width,height to Generic, then call this
-	
-
 	collision_L = 0;
 	collision_R = 0;
 	collision_U = 0;
@@ -435,7 +398,6 @@ void bg_collision(void) {
 		++collision_D;
 	}
 }
-
 
 // copy a new collision map to one of the 2 c_map arrays
 void new_cmap(void){

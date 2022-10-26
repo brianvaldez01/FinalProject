@@ -285,6 +285,65 @@ void movement(void) {
 
 }	
 
+
+
+void draw_screen_R(void){
+	// scrolling to the right, draw metatiles as we go
+	pseudo_scroll_x = scroll_x + 0x120;
+	
+	temp1 = pseudo_scroll_x >> 8;
+	
+	set_data_pointer(Rooms[temp1]);
+	nt = temp1 & 1;
+	x = pseudo_scroll_x & 0xff;
+	
+	// important that the main loop clears the vram_buffer
+	
+	switch(scroll_count){
+		case 0:
+			address = get_ppu_addr(nt, x, 0);
+			index = 0 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			
+			address = get_ppu_addr(nt, x, 0x20);
+			index = 0x20 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			break;
+			
+		case 1:
+			address = get_ppu_addr(nt, x, 0x40);
+			index = 0x40 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			
+			address = get_ppu_addr(nt, x, 0x60);
+			index = 0x60 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			break;
+			
+		case 2:
+			address = get_ppu_addr(nt, x, 0x80);
+			index = 0x80 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			
+			address = get_ppu_addr(nt, x, 0xa0);
+			index = 0xa0 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			break;
+			
+		default:
+			address = get_ppu_addr(nt, x, 0xc0);
+			index = 0xc0 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+			
+			address = get_ppu_addr(nt, x, 0xe0);
+			index = 0xe0 + (x >> 4);
+			buffer_4_mt(address, index); // ppu_address, index to the data
+	}
+
+	++scroll_count;
+	scroll_count &= 3; // mask off top bits, keep it 0-3
+}
+
 void bg_collision_sub(void){
 	coordinates = (temp1 >> 4) + (temp3 & 0xf0);
 	
@@ -377,62 +436,6 @@ void bg_collision(void) {
 	}
 }
 
-void draw_screen_R(void){
-	// scrolling to the right, draw metatiles as we go
-	pseudo_scroll_x = scroll_x + 0x120;
-	
-	temp1 = pseudo_scroll_x >> 8;
-	
-	set_data_pointer(Rooms[temp1]);
-	nt = temp1 & 1;
-	x = pseudo_scroll_x & 0xff;
-	
-	// important that the main loop clears the vram_buffer
-	
-	switch(scroll_count){
-		case 0:
-			address = get_ppu_addr(nt, x, 0);
-			index = 0 + (x >> 4);
-			buffer_4_mt(address, index); // ppu_address, index to the data
-			
-			address = get_ppu_addr(nt, x, 0x20);
-			index = 0x20 + (x >> 4);
-			buffer_4_mt(address, index); // ppu_address, index to the data
-			break;
-			
-		case 1:
-			address = get_ppu_addr(nt, x, 0x40);
-			index = 0x40 + (x >> 4);
-			buffer_4_mt(address, index); // ppu_address, index to the data
-			
-			address = get_ppu_addr(nt, x, 0x60);
-			index = 0x60 + (x >> 4);
-			buffer_4_mt(address, index); // ppu_address, index to the data
-			break;
-			
-		case 2:
-			address = get_ppu_addr(nt, x, 0x80);
-			index = 0x80 + (x >> 4);
-			buffer_4_mt(address, index); // ppu_address, index to the data
-			
-			address = get_ppu_addr(nt, x, 0xa0);
-			index = 0xa0 + (x >> 4);
-			buffer_4_mt(address, index); // ppu_address, index to the data
-			break;
-			
-		default:
-			address = get_ppu_addr(nt, x, 0xc0);
-			index = 0xc0 + (x >> 4);
-			buffer_4_mt(address, index); // ppu_address, index to the data
-			
-			address = get_ppu_addr(nt, x, 0xe0);
-			index = 0xe0 + (x >> 4);
-			buffer_4_mt(address, index); // ppu_address, index to the data
-	}
-
-	++scroll_count;
-	scroll_count &= 3; // mask off top bits, keep it 0-3
-}
 
 // copy a new collision map to one of the 2 c_map arrays
 void new_cmap(void){

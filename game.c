@@ -54,6 +54,8 @@ void draw_sprites(void) {
 		oam_meta_spr(high_byte(PlayerGuy.x), high_byte(PlayerGuy.y), sprPlayer);
 	else
 		oam_meta_spr(high_byte(PlayerGuy.x), high_byte(PlayerGuy.y), sprPlayer);
+
+		oam_meta_spr(700, 130, sprCoin); // draw coin
 }
 
 // Shows title screen
@@ -413,6 +415,13 @@ void new_cmap(void){
 	}
 }
 
+void win_check(void) {
+	
+}
+//	if( abs(VictoryCoin.x - PlayerGuy.x) < 16 && abs(VictoryCoin.y - PlayerGuy.y) < 16)
+//		PlayerGuy.y = PlayerGuy.y;
+//}
+
 void main (void) {
 	
 	 // load the pallets
@@ -463,7 +472,7 @@ void main (void) {
 		// Read first controller
 		pad1 = pad_poll(0);
 
-
+		win_check();
 		movement();
 		// set scroll
 		set_scroll_x(scroll_x);

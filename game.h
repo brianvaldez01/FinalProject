@@ -70,6 +70,15 @@ struct Player {
   signed int vel_y;
 };
 
+struct Coin {
+  unsigned int x;
+  unsigned int y;
+  signed int vel_x;
+  signed int vel_y;
+};
+
+struct Coin VictoryCoin = {0x1000,0xc600}; // starting position
+
 struct Player PlayerGuy = {0x1000,0xc200}; // starting position
 // the width and height should be 1 less than the dimensions (14x14)
 // note, I'm using the top left as the 0,0 on x,y

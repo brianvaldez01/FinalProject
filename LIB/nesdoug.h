@@ -26,7 +26,7 @@ void __fastcall__ multi_vram_buffer_vert(const char * data, unsigned char len, i
 // to push multiple writes as one sequential vertical write to the vram_buffer
 
 
-// void clear_vram_buffer(void);
+void clear_vram_buffer(void);
 // removed, it should clear itself
 
 

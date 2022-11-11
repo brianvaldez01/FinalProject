@@ -11,6 +11,10 @@ static int iy,dy;
 
 
 const unsigned char palTitle[]={ 0x0f,0x03,0x15,0x30,0x0f,0x01,0x21,0x31,0x0f,0x06,0x30,0x26,0x0f,0x09,0x19,0x29 };
+const unsigned char palLevel[16]={ 0x0f,0x00,0x10,0x30,0x0f,0x06,0x26,0x31,0x0f,0x30,0x16,0x12,0x0f,0x10,0x28,0x38 };
+const unsigned char palSprite[16]={ 0x0f,0x00,0x10,0x30,0x0f,0x01,0x21,0x31,0x0f,0x37,0x15,0x12,0x0f,0x18,0x28,0x38 };
+
+
 
 // Function to fade out screen
 void fade_out() {
@@ -57,11 +61,11 @@ void draw_sprites(void) {
 	// LIKE HAVE sprPlayerLeft and sprPlayerRight
 	if (direction == LEFT)
 	{
-		oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayer);
+		oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayerLeft);
 	}
 	else
 	{
-		oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayer);
+		oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayerRight);
 	}
 
 
@@ -103,7 +107,10 @@ void draw_sprites(void) {
 		if(temp_x > 0xf0) continue;
 
 		if(temp_y < 0xf0) {
-			oam_meta_spr(temp_x, temp_y, sprEnemy);
+			if (high_byte(PlayerGuy.x) > temp_x)
+				oam_meta_spr(temp_x, temp_y, sprEnemyRight);
+			else
+				oam_meta_spr(temp_x, temp_y, sprEnemyLeft);
 		}
 	}
 
@@ -292,6 +299,7 @@ void movement(void) {
 	if(collision_D) {
 		if(pad1_new & PAD_A) {
 			PlayerGuy.vel_y = JUMP_VEL; // JUMP
+			sfx_play(SFX_JUMP, 0);
 			short_jump_count = 1;
 		}
 	}
@@ -628,6 +636,7 @@ void sprite_collisions(void) {
 			Generic2.y = coin_y[index];
 			if(check_collision(&Generic, &Generic2)) {
 				coin_y[index] = TURN_OFF;
+				sfx_play(SFX_COIN, 0);
 				++coins;
 			}
 		}
@@ -642,6 +651,7 @@ void sprite_collisions(void) {
 			Generic2.y = star_y[index];
 			if(check_collision(&Generic, &Generic2)) {
 				star_y[index] = TURN_OFF;
+				sfx_play(SFX_STAR, 0);
 				++level_up;
 			}
 		}
@@ -656,6 +666,7 @@ void sprite_collisions(void) {
 			Generic2.y = enemy_y[index];
 			if(check_collision(&Generic, &Generic2)){
 				enemy_y[index] = TURN_OFF;
+				sfx_play(SFX_NOISE, 0);
 				if(coins) {
 					--coins;
 					if (coins > 0x80) coins = 0;
@@ -819,7 +830,7 @@ void main (void) {
 	// use the second set of tiles for sprites
 	// both bg and sprite are set to 0 by default
 	pal_bg(palTitle);
-	pal_spr(palTitle);
+	pal_spr(palSprite);
 	bank_spr(1);
 
 	set_vram_buffer();
@@ -853,6 +864,7 @@ void main (void) {
 				{ 
 					pal_fade_to(4, 0);
 					ppu_off();
+					pal_bg(palLevel);
 					load_room();
 					game_mode = MODE_GAME;
 					music_play(song+1);

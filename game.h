@@ -97,14 +97,14 @@ struct Player PlayerGuy; // starting position
 // the width and height should be 1 less than the dimensions (14x14)
 // note, I'm using the top left as the 0,0 on x,y
 
-#define HERO_WIDTH 13
+#define HERO_WIDTH 10
 #define HERO_HEIGHT 13
 
 
 // Enemy Things
 #define MAX_ENEMY 16
-#define ENEMY_WIDTH 13
-#define ENEMY_HEIGHT 13
+#define ENEMY_WIDTH 14
+#define ENEMY_HEIGHT 10
 unsigned char enemy_x[MAX_ENEMY];
 unsigned char enemy_y[MAX_ENEMY];
 unsigned char enemy_active[MAX_ENEMY];
@@ -151,6 +151,7 @@ unsigned char c_map2[240];
 // Music Things
 #define MAX_SONGS 2
 enum {SONG_GAME, SONG_PAUSE};
+enum {SFX_JUMP, SFX_COIN, SFX_NOISE, SFX_STAR};
 void change_song(void);
 
 // PROTOTYPES

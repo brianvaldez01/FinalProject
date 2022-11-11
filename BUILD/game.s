@@ -24,6 +24,7 @@
 	.import		_oam_meta_spr
 	.import		_music_play
 	.import		_music_stop
+	.import		_sfx_play
 	.import		_pad_poll
 	.import		_bank_spr
 	.import		_set_vram_update
@@ -46,8 +47,10 @@
 	.import		_buffer_4_mt
 	.import		_flush_vram_update2
 	.export		_title_screen
-	.export		_sprPlayer
-	.export		_sprEnemy
+	.export		_sprPlayerRight
+	.export		_sprPlayerLeft
+	.export		_sprEnemyRight
+	.export		_sprEnemyLeft
 	.export		_sprStar
 	.export		_sprCoin
 	.export		_sprCoinsScore
@@ -171,6 +174,8 @@
 	.export		_Levels_list
 	.export		_Level_offsets
 	.export		_palTitle
+	.export		_palLevel
+	.export		_palSprite
 	.export		_main
 
 .segment	"DATA"
@@ -477,77 +482,113 @@ _title_screen:
 	.byte	$00
 	.byte	$02
 	.byte	$00
-_sprPlayer:
+_sprPlayerRight:
 	.byte	$00
 	.byte	$FF
 	.byte	$49
-	.byte	$00
+	.byte	$02
 	.byte	$08
 	.byte	$FF
 	.byte	$4A
-	.byte	$00
+	.byte	$02
 	.byte	$00
 	.byte	$07
 	.byte	$4B
-	.byte	$00
+	.byte	$02
 	.byte	$08
 	.byte	$07
 	.byte	$4C
-	.byte	$00
+	.byte	$02
 	.byte	$80
-_sprEnemy:
+_sprPlayerLeft:
+	.byte	$00
+	.byte	$FF
+	.byte	$59
+	.byte	$02
+	.byte	$08
+	.byte	$FF
+	.byte	$5A
+	.byte	$02
+	.byte	$00
+	.byte	$07
+	.byte	$5B
+	.byte	$02
+	.byte	$08
+	.byte	$07
+	.byte	$5C
+	.byte	$02
+	.byte	$80
+_sprEnemyRight:
 	.byte	$00
 	.byte	$FF
 	.byte	$4D
-	.byte	$00
+	.byte	$01
 	.byte	$08
 	.byte	$FF
 	.byte	$4E
-	.byte	$00
+	.byte	$01
 	.byte	$00
 	.byte	$07
 	.byte	$4F
-	.byte	$00
+	.byte	$01
 	.byte	$08
 	.byte	$07
 	.byte	$50
+	.byte	$01
+	.byte	$80
+_sprEnemyLeft:
 	.byte	$00
+	.byte	$FF
+	.byte	$52
+	.byte	$01
+	.byte	$08
+	.byte	$FF
+	.byte	$53
+	.byte	$01
+	.byte	$00
+	.byte	$07
+	.byte	$54
+	.byte	$01
+	.byte	$08
+	.byte	$07
+	.byte	$55
+	.byte	$01
 	.byte	$80
 _sprStar:
 	.byte	$00
 	.byte	$FF
 	.byte	$9A
-	.byte	$00
+	.byte	$03
 	.byte	$08
 	.byte	$FF
 	.byte	$9B
-	.byte	$00
+	.byte	$03
 	.byte	$00
 	.byte	$07
 	.byte	$9C
-	.byte	$00
+	.byte	$03
 	.byte	$08
 	.byte	$07
 	.byte	$9D
-	.byte	$00
+	.byte	$03
 	.byte	$80
 _sprCoin:
 	.byte	$00
 	.byte	$FF
 	.byte	$45
-	.byte	$00
+	.byte	$03
 	.byte	$08
 	.byte	$FF
 	.byte	$46
-	.byte	$00
+	.byte	$03
 	.byte	$00
 	.byte	$07
 	.byte	$47
-	.byte	$00
+	.byte	$03
 	.byte	$08
 	.byte	$07
 	.byte	$48
-	.byte	$00
+	.byte	$03
 	.byte	$80
 _sprCoinsScore:
 	.byte	$00
@@ -759,38 +800,38 @@ _Coins_list:
 	.addr	_level_2_coins
 	.addr	_level_3_coins
 _level_1_enemies:
-	.byte	$D0
+	.byte	$D5
 	.byte	$00
 	.byte	$D0
-	.byte	$D0
+	.byte	$D5
 	.byte	$01
 	.byte	$80
-	.byte	$D0
+	.byte	$D5
 	.byte	$02
 	.byte	$70
 	.byte	$FF
 _level_2_enemies:
-	.byte	$D0
+	.byte	$D5
 	.byte	$00
 	.byte	$90
-	.byte	$D0
+	.byte	$D5
 	.byte	$01
 	.byte	$A0
-	.byte	$D0
+	.byte	$D5
 	.byte	$02
 	.byte	$30
-	.byte	$D0
+	.byte	$D5
 	.byte	$02
 	.byte	$A0
 	.byte	$FF
 _level_3_enemies:
-	.byte	$D0
+	.byte	$D5
 	.byte	$00
 	.byte	$B0
-	.byte	$D0
+	.byte	$D5
 	.byte	$02
 	.byte	$20
-	.byte	$D0
+	.byte	$D5
 	.byte	$02
 	.byte	$A0
 	.byte	$FF
@@ -3043,6 +3084,40 @@ _palTitle:
 	.byte	$09
 	.byte	$19
 	.byte	$29
+_palLevel:
+	.byte	$0F
+	.byte	$00
+	.byte	$10
+	.byte	$30
+	.byte	$0F
+	.byte	$06
+	.byte	$26
+	.byte	$31
+	.byte	$0F
+	.byte	$30
+	.byte	$16
+	.byte	$12
+	.byte	$0F
+	.byte	$10
+	.byte	$28
+	.byte	$38
+_palSprite:
+	.byte	$0F
+	.byte	$00
+	.byte	$10
+	.byte	$30
+	.byte	$0F
+	.byte	$01
+	.byte	$21
+	.byte	$31
+	.byte	$0F
+	.byte	$37
+	.byte	$15
+	.byte	$12
+	.byte	$0F
+	.byte	$18
+	.byte	$28
+	.byte	$38
 
 .segment	"BSS"
 
@@ -3649,35 +3724,56 @@ L001B:	adc     #<(_Levels_list)
 ; if(temp_x > 0xfc) temp_x = 1;
 ;
 	cmp     #$FD
-	bcc     L002D
+	bcc     L0030
 	lda     #$01
 	sta     _temp_x
 ;
 ; if(temp_x == 0) temp_x = 1;
 ;
-L002D:	lda     _temp_x
-	bne     L002E
+L0030:	lda     _temp_x
+	bne     L0031
 	lda     #$01
 	sta     _temp_x
 ;
-; oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayer);
+; if (direction == LEFT)
 ;
-L002E:	jsr     decsp2
+L0031:	lda     _direction
+	bne     L0004
+;
+; oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayerLeft);
+;
+	jsr     decsp2
 	lda     _temp_x
 	ldy     #$01
 	sta     (sp),y
 	lda     _PlayerGuy+3
 	dey
 	sta     (sp),y
-	lda     #<(_sprPlayer)
-	ldx     #>(_sprPlayer)
-	jsr     _oam_meta_spr
+	lda     #<(_sprPlayerLeft)
+	ldx     #>(_sprPlayerLeft)
+;
+; else
+;
+	jmp     L002E
+;
+; oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayerRight);
+;
+L0004:	jsr     decsp2
+	lda     _temp_x
+	ldy     #$01
+	sta     (sp),y
+	lda     _PlayerGuy+3
+	dey
+	sta     (sp),y
+	lda     #<(_sprPlayerRight)
+	ldx     #>(_sprPlayerRight)
+L002E:	jsr     _oam_meta_spr
 ;
 ; for(index = 0; index < MAX_COINS; ++index){ 
 ;
 	lda     #$00
 	sta     _index
-L002F:	lda     _index
+L0032:	lda     _index
 	cmp     #$10
 	bcs     L0007
 ;
@@ -3690,7 +3786,7 @@ L002F:	lda     _index
 ; if(temp_y == TURN_OFF) continue;
 ;
 	cmp     #$FF
-	beq     L0030
+	beq     L0033
 ;
 ; if(get_frame_count() & 8) ++temp_y; // bounce the coin
 ;
@@ -3703,7 +3799,7 @@ L002F:	lda     _index
 ;
 L000C:	ldy     _index
 	lda     _coin_active,y
-	beq     L0030
+	beq     L0033
 ;
 ; temp_x = coin_x[index];
 ;
@@ -3714,13 +3810,13 @@ L000C:	ldy     _index
 ; if(temp_x > 0xf0) continue;
 ;
 	cmp     #$F1
-	bcs     L0030
+	bcs     L0033
 ;
 ; if(temp_y < 0xf0) {
 ;
 	lda     _temp_y
 	cmp     #$F0
-	bcs     L0030
+	bcs     L0033
 ;
 ; oam_meta_spr(temp_x, temp_y, sprCoin);
 ;
@@ -3737,8 +3833,8 @@ L000C:	ldy     _index
 ;
 ; for(index = 0; index < MAX_COINS; ++index){ 
 ;
-L0030:	inc     _index
-	jmp     L002F
+L0033:	inc     _index
+	jmp     L0032
 ;
 ; offset = get_frame_count() & 3;
 ;
@@ -3758,9 +3854,9 @@ L0007:	jsr     _get_frame_count
 ;
 	lda     #$00
 	sta     _index
-L0031:	lda     _index
+L0034:	lda     _index
 	cmp     #$10
-	bcs     L0033
+	bcs     L0036
 ;
 ; index2 = shuffle_array[offset];
 ;
@@ -3781,13 +3877,13 @@ L0031:	lda     _index
 ; if(temp_y == TURN_OFF) continue;
 ;
 	cmp     #$FF
-	beq     L0032
+	beq     L0035
 ;
 ; if(!enemy_active[index]) continue;
 ;
 	ldy     _index
 	lda     _enemy_active,y
-	beq     L0032
+	beq     L0035
 ;
 ; temp_x = enemy_x[index];
 ;
@@ -3798,20 +3894,27 @@ L0031:	lda     _index
 ; if(temp_x == 0) continue;
 ;
 	lda     _temp_x
-	beq     L0032
+	beq     L0035
 ;
 ; if(temp_x > 0xf0) continue;
 ;
 	cmp     #$F1
-	bcs     L0032
+	bcs     L0035
 ;
 ; if(temp_y < 0xf0) {
 ;
 	lda     _temp_y
 	cmp     #$F0
-	bcs     L0032
+	bcs     L0035
 ;
-; oam_meta_spr(temp_x, temp_y, sprEnemy);
+; if (high_byte(PlayerGuy.x) > temp_x)
+;
+	lda     _PlayerGuy+1
+	cmp     _temp_x
+	bcc     L001F
+	beq     L001F
+;
+; oam_meta_spr(temp_x, temp_y, sprEnemyRight);
 ;
 	jsr     decsp2
 	lda     _temp_x
@@ -3820,22 +3923,38 @@ L0031:	lda     _index
 	lda     _temp_y
 	dey
 	sta     (sp),y
-	lda     #<(_sprEnemy)
-	ldx     #>(_sprEnemy)
-	jsr     _oam_meta_spr
+	lda     #<(_sprEnemyRight)
+	ldx     #>(_sprEnemyRight)
+;
+; else
+;
+	jmp     L002F
+;
+; oam_meta_spr(temp_x, temp_y, sprEnemyLeft);
+;
+L001F:	jsr     decsp2
+	lda     _temp_x
+	ldy     #$01
+	sta     (sp),y
+	lda     _temp_y
+	dey
+	sta     (sp),y
+	lda     #<(_sprEnemyLeft)
+	ldx     #>(_sprEnemyLeft)
+L002F:	jsr     _oam_meta_spr
 ;
 ; for(index = 0; index < MAX_ENEMY; ++index) {
 ;
-L0032:	inc     _index
-	jmp     L0031
+L0035:	inc     _index
+	jmp     L0034
 ;
 ; for(index = 0; index < MAX_STARS; ++index) {
 ;
-L0033:	lda     #$00
+L0036:	lda     #$00
 	sta     _index
-L0034:	lda     _index
+L0037:	lda     _index
 	cmp     #$02
-	bcs     L0020
+	bcs     L0022
 ;
 ; temp_y = star_y[index];
 ;
@@ -3846,13 +3965,13 @@ L0034:	lda     _index
 ; if(temp_y == TURN_OFF) continue;
 ;
 	cmp     #$FF
-	beq     L0035
+	beq     L0038
 ;
 ; if (!star_active[index]) continue;
 ;
 	ldy     _index
 	lda     _star_active,y
-	beq     L0035
+	beq     L0038
 ;
 ; temp_x = star_x[index];
 ;
@@ -3863,13 +3982,13 @@ L0034:	lda     _index
 ; if(temp_x > 0xf0) continue;
 ;
 	cmp     #$F1
-	bcs     L0035
+	bcs     L0038
 ;
 ; if(temp_y < 0xf0) {
 ;
 	lda     _temp_y
 	cmp     #$F0
-	bcs     L0035
+	bcs     L0038
 ;
 ; oam_meta_spr(temp_x, temp_y, sprStar);
 ;
@@ -3886,12 +4005,12 @@ L0034:	lda     _index
 ;
 ; for(index = 0; index < MAX_STARS; ++index) {
 ;
-L0035:	inc     _index
-	jmp     L0034
+L0038:	inc     _index
+	jmp     L0037
 ;
 ; oam_meta_spr(16,16, sprCoinsScore);
 ;
-L0020:	jsr     decsp2
+L0022:	jsr     decsp2
 	lda     #$10
 	ldy     #$01
 	sta     (sp),y
@@ -4091,11 +4210,12 @@ L003A:	lda     #$01
 ;
 ; Generic.width = HERO_WIDTH;
 ;
-	lda     #$0D
+	lda     #$0A
 	sta     _Generic+2
 ;
 ; Generic.height = HERO_HEIGHT;
 ;
+	lda     #$0D
 	sta     _Generic+3
 ;
 ; bg_collision();
@@ -4274,6 +4394,11 @@ L003B:	lda     _PlayerGuy+3
 	lda     #$00
 	sta     _PlayerGuy+6
 	stx     _PlayerGuy+6+1
+;
+; sfx_play(SFX_JUMP, 0);
+;
+	jsr     pusha
+	jsr     _sfx_play
 ;
 ; short_jump_count = 1;
 ;
@@ -5648,11 +5773,12 @@ L0013:	rts
 ;
 ; Generic.width = HERO_WIDTH;
 ;
-	lda     #$0D
+	lda     #$0A
 	sta     _Generic+2
 ;
 ; Generic.height = HERO_HEIGHT;
 ;
+	lda     #$0D
 	sta     _Generic+3
 ;
 ; Generic2.width = COIN_WIDTH;
@@ -5707,6 +5833,13 @@ L0023:	lda     _index
 	ldy     _index
 	lda     #$FF
 	sta     _coin_y,y
+;
+; sfx_play(SFX_COIN, 0);
+;
+	lda     #$01
+	jsr     pusha
+	lda     #$00
+	jsr     _sfx_play
 ;
 ; ++coins;
 ;
@@ -5769,6 +5902,13 @@ L0026:	lda     _index
 	lda     #$FF
 	sta     _star_y,y
 ;
+; sfx_play(SFX_STAR, 0);
+;
+	lda     #$03
+	jsr     pusha
+	lda     #$00
+	jsr     _sfx_play
+;
 ; ++level_up;
 ;
 	inc     _level_up
@@ -5780,11 +5920,12 @@ L0027:	inc     _index
 ;
 ; Generic2.width = ENEMY_WIDTH;
 ;
-L0028:	lda     #$0D
+L0028:	lda     #$0E
 	sta     _Generic2+2
 ;
 ; Generic2.height = ENEMY_HEIGHT;
 ;
+	lda     #$0A
 	sta     _Generic2+3
 ;
 ; for(index = 0; index < MAX_ENEMY; ++index){
@@ -5799,7 +5940,7 @@ L0029:	lda     _index
 ;
 	ldy     _index
 	lda     _enemy_active,y
-	beq     L002B
+	beq     L002A
 ;
 ; Generic2.x = enemy_x[index];
 ;
@@ -5822,7 +5963,7 @@ L0029:	lda     _index
 	ldx     #>(_Generic2)
 	jsr     _check_collision
 	tax
-	beq     L002B
+	beq     L002A
 ;
 ; enemy_y[index] = TURN_OFF;
 ;
@@ -5830,10 +5971,17 @@ L0029:	lda     _index
 	lda     #$FF
 	sta     _enemy_y,y
 ;
+; sfx_play(SFX_NOISE, 0);
+;
+	lda     #$02
+	jsr     pusha
+	lda     #$00
+	jsr     _sfx_play
+;
 ; if(coins) {
 ;
 	lda     _coins
-	beq     L002A
+	beq     L0020
 ;
 ; --coins;
 ;
@@ -5843,21 +5991,21 @@ L0029:	lda     _index
 ;
 	lda     _coins
 	cmp     #$81
-	bcc     L002B
+	bcc     L002A
 	lda     #$00
 	sta     _coins
 ;
 ; } else {
 ;
-	jmp     L002B
+	jmp     L002A
 ;
 ; ++death;
 ;
-L002A:	inc     _death
+L0020:	inc     _death
 ;
 ; for(index = 0; index < MAX_ENEMY; ++index){
 ;
-L002B:	inc     _index
+L002A:	inc     _index
 	jmp     L0029
 ;
 ; }
@@ -6490,10 +6638,10 @@ L002B:	rts
 	ldx     #>(_palTitle)
 	jsr     _pal_bg
 ;
-; pal_spr(palTitle);
+; pal_spr(palSprite);
 ;
-	lda     #<(_palTitle)
-	ldx     #>(_palTitle)
+	lda     #<(_palSprite)
+	ldx     #>(_palSprite)
 	jsr     _pal_spr
 ;
 ; bank_spr(1);
@@ -6566,6 +6714,12 @@ L0008:	jsr     _ppu_wait_frame
 ; ppu_off();
 ;
 	jsr     _ppu_off
+;
+; pal_bg(palLevel);
+;
+	lda     #<(_palLevel)
+	ldx     #>(_palLevel)
+	jsr     _pal_bg
 ;
 ; load_room();
 ;

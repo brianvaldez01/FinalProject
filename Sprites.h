@@ -1,33 +1,49 @@
 // 16x16 pixel metasprites
-const unsigned char sprPlayer[]={
-  0,-1,0x49,0,
-  8,-1,0x4a,0,
-  0, 7,0x4b,0,
-  8, 7,0x4c,0,
+const unsigned char sprPlayerRight[]={
+  0,-1,0x49,2,
+  8,-1,0x4a,2,
+  0, 7,0x4b,2,
+  8, 7,0x4c,2,
   128
 };
 
-const unsigned char sprEnemy[]={
-  0,-1,0x4d,0,
-  8,-1,0x4e,0,
-  0, 7,0x4f,0,
-  8, 7,0x50,0,
+const unsigned char sprPlayerLeft[]={
+  0,-1,0x59,2,
+  8,-1,0x5a,2,
+  0, 7,0x5b,2,
+  8, 7,0x5c,2,
+  128
+};
+
+const unsigned char sprEnemyRight[]={
+  0,-1,0x4d,1,
+  8,-1,0x4e,1,
+  0, 7,0x4f,1,
+  8, 7,0x50,1,
+  128
+};
+
+const unsigned char sprEnemyLeft[]={
+  0,-1,0x52,1,
+  8,-1,0x53,1,
+  0, 7,0x54,1,
+  8, 7,0x55,1,
   128
 };
 
 const unsigned char sprStar[]={
-  0,-1,0x9A,0,
-  8,-1,0x9B,0,
-  0, 7,0x9C,0,
-  8, 7,0x9D,0,
+  0,-1,0x9A,3,
+  8,-1,0x9B,3,
+  0, 7,0x9C,3,
+  8, 7,0x9D,3,
   128
 };
 
 const unsigned char sprCoin[]={
-  0,-1,0x45,0,
-  8,-1,0x46,0,
-  0, 7,0x47,0,
-  8, 7,0x48,0,
+  0,-1,0x45,3,
+  8,-1,0x46,3,
+  0, 7,0x47,3,
+  8, 7,0x48,3,
   128
 };
 

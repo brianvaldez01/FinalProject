@@ -724,30 +724,18 @@ _shuffle_array:
 	.byte	$02
 	.byte	$00
 _level_1_coins:
-	.byte	$60
-	.byte	$00
-	.byte	$10
-	.byte	$A0
-	.byte	$00
-	.byte	$E0
-	.byte	$D0
-	.byte	$01
-	.byte	$10
-	.byte	$A0
-	.byte	$01
-	.byte	$B0
-	.byte	$40
-	.byte	$01
-	.byte	$E0
-	.byte	$40
-	.byte	$02
-	.byte	$30
 	.byte	$70
+	.byte	$00
+	.byte	$00
+	.byte	$40
+	.byte	$00
+	.byte	$B0
+	.byte	$60
+	.byte	$01
+	.byte	$40
+	.byte	$60
 	.byte	$02
-	.byte	$A0
-	.byte	$D0
-	.byte	$02
-	.byte	$C0
+	.byte	$E0
 	.byte	$FF
 _level_2_coins:
 	.byte	$80
@@ -800,15 +788,12 @@ _Coins_list:
 	.addr	_level_2_coins
 	.addr	_level_3_coins
 _level_1_enemies:
-	.byte	$D5
-	.byte	$00
-	.byte	$D0
-	.byte	$D5
+	.byte	$D4
 	.byte	$01
-	.byte	$80
-	.byte	$D5
-	.byte	$02
-	.byte	$70
+	.byte	$60
+	.byte	$D4
+	.byte	$01
+	.byte	$B0
 	.byte	$FF
 _level_2_enemies:
 	.byte	$D5
@@ -840,7 +825,7 @@ _Enemy_list:
 	.addr	_level_2_enemies
 	.addr	_level_3_enemies
 _level_1_stars:
-	.byte	$D0
+	.byte	$B0
 	.byte	$02
 	.byte	$E0
 	.byte	$FF
@@ -863,15 +848,69 @@ _metatiles1:
 	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$00
+	.byte	$10
+	.byte	$10
+	.byte	$10
+	.byte	$10
+	.byte	$03
+	.byte	$B7
+	.byte	$B8
+	.byte	$C7
+	.byte	$C8
+	.byte	$00
+	.byte	$40
+	.byte	$41
+	.byte	$42
+	.byte	$43
+	.byte	$00
+	.byte	$B0
+	.byte	$B0
+	.byte	$C0
+	.byte	$C0
 	.byte	$01
-	.byte	$10
-	.byte	$10
-	.byte	$10
-	.byte	$10
+	.byte	$C0
+	.byte	$C0
+	.byte	$C0
+	.byte	$C0
 	.byte	$01
+	.byte	$B2
+	.byte	$B2
+	.byte	$C2
+	.byte	$C2
+	.byte	$01
+	.byte	$C2
+	.byte	$C2
+	.byte	$C2
+	.byte	$C2
+	.byte	$01
+	.byte	$44
+	.byte	$44
+	.byte	$44
+	.byte	$44
+	.byte	$00
+	.byte	$B4
+	.byte	$B5
+	.byte	$C4
+	.byte	$C5
+	.byte	$00
+	.byte	$BA
+	.byte	$BB
+	.byte	$00
+	.byte	$00
+	.byte	$03
 _is_solid:
 	.byte	$00
 	.byte	$40
+	.byte	$40
+	.byte	$40
+	.byte	$20
+	.byte	$20
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$60
+	.byte	$80
 _Level1_0:
 	.byte	$00
 	.byte	$00
@@ -905,23 +944,6 @@ _Level1_0:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -936,8 +958,6 @@ _Level1_0:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -952,28 +972,20 @@ _Level1_0:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$09
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -985,9 +997,13 @@ _Level1_0:
 	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$01
 	.byte	$01
 	.byte	$01
+	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -997,11 +1013,9 @@ _Level1_0:
 	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$0A
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1016,22 +1030,18 @@ _Level1_0:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$01
+	.byte	$01
 	.byte	$01
 	.byte	$01
 	.byte	$00
@@ -1048,10 +1058,6 @@ _Level1_0:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1062,10 +1068,6 @@ _Level1_0:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1077,11 +1079,10 @@ _Level1_0:
 	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$0A
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1096,23 +1097,61 @@ _Level1_0:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$01
+	.byte	$04
+	.byte	$04
 	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$09
+	.byte	$09
+	.byte	$09
 	.byte	$01
+	.byte	$05
+	.byte	$05
 	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
 _Level1_1:
 	.byte	$00
 	.byte	$00
@@ -1146,23 +1185,6 @@ _Level1_1:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1177,8 +1199,6 @@ _Level1_1:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1193,19 +1213,29 @@ _Level1_1:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
+	.byte	$00
+	.byte	$09
+	.byte	$09
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$01
 	.byte	$01
 	.byte	$01
@@ -1213,36 +1243,41 @@ _Level1_1:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$00
 	.byte	$01
 	.byte	$01
+	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$01
+	.byte	$01
+	.byte	$00
 	.byte	$01
 	.byte	$01
 	.byte	$00
+	.byte	$0A
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1253,17 +1288,13 @@ _Level1_1:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1273,15 +1304,15 @@ _Level1_1:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$0A
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$0A
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1289,12 +1320,7 @@ _Level1_1:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1304,56 +1330,69 @@ _Level1_1:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$09
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
+	.byte	$00
 	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$00
+	.byte	$0A
+	.byte	$0A
+	.byte	$0A
+	.byte	$00
+	.byte	$01
 	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
+	.byte	$00
+	.byte	$00
 	.byte	$01
 	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
 _Level1_2:
 	.byte	$00
 	.byte	$00
@@ -1387,23 +1426,6 @@ _Level1_2:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1418,24 +1440,17 @@ _Level1_2:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1443,19 +1458,11 @@ _Level1_2:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1466,8 +1473,6 @@ _Level1_2:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1480,28 +1485,24 @@ _Level1_2:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
-	.byte	$01
-	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$09
 	.byte	$00
 	.byte	$00
 	.byte	$00
@@ -1512,89 +1513,127 @@ _Level1_2:
 	.byte	$00
 	.byte	$00
 	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$01
 	.byte	$00
 	.byte	$01
+	.byte	$00
 	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
 	.byte	$01
 	.byte	$01
 	.byte	$01
-	.byte	$00
-	.byte	$00
+	.byte	$01
 	.byte	$01
 	.byte	$01
 	.byte	$00
 	.byte	$00
+	.byte	$0A
 	.byte	$00
-	.byte	$01
-	.byte	$01
 	.byte	$00
-	.byte	$01
-	.byte	$01
+	.byte	$0A
 	.byte	$00
+	.byte	$00
 	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
 	.byte	$00
-	.byte	$01
+	.byte	$00
+	.byte	$00
 	.byte	$00
+	.byte	$00
 	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
 	.byte	$00
-	.byte	$01
 	.byte	$00
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
-	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$01
+	.byte	$00
+	.byte	$0A
+	.byte	$00
+	.byte	$0A
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
 	.byte	$01
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$09
+	.byte	$09
+	.byte	$09
+	.byte	$09
+	.byte	$09
+	.byte	$09
+	.byte	$09
+	.byte	$09
 	.byte	$01
+	.byte	$09
+	.byte	$09
+	.byte	$09
+	.byte	$09
+	.byte	$09
+	.byte	$09
+	.byte	$09
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
+	.byte	$02
 _Level1_list:
 	.addr	_Level1_0
 	.addr	_Level1_1
@@ -3090,17 +3129,17 @@ _palLevel:
 	.byte	$10
 	.byte	$30
 	.byte	$0F
-	.byte	$06
-	.byte	$26
-	.byte	$31
+	.byte	$30
+	.byte	$11
+	.byte	$16
 	.byte	$0F
 	.byte	$30
+	.byte	$11
 	.byte	$16
-	.byte	$12
 	.byte	$0F
-	.byte	$10
-	.byte	$28
-	.byte	$38
+	.byte	$17
+	.byte	$19
+	.byte	$29
 _palSprite:
 	.byte	$0F
 	.byte	$00
@@ -3668,16 +3707,16 @@ L001B:	adc     #<(_Levels_list)
 ;
 	jsr     _sprite_obj_init
 ;
-; PlayerGuy.x = 0x4000;
+; PlayerGuy.x = 0x3000;
 ;
-	ldx     #$40
+	ldx     #$30
 	lda     #$00
 	sta     _PlayerGuy
 	stx     _PlayerGuy+1
 ;
-; PlayerGuy.y = 0xb400;
+; PlayerGuy.y = 0xc400;
 ;
-	ldx     #$B4
+	ldx     #$C4
 	sta     _PlayerGuy+2
 	stx     _PlayerGuy+2+1
 ;
@@ -4597,7 +4636,7 @@ L0031:	rts
 ;
 	lda     _Generic+1
 	cmp     #$F0
-	bcc     L0017
+	bcc     L001F
 ;
 ; }
 ;
@@ -4605,7 +4644,7 @@ L0031:	rts
 ;
 ; temp6 = temp5 = Generic.x + scroll_x; // upper left (temp6 = save for reuse)
 ;
-L0017:	lda     _Generic
+L001F:	lda     _Generic
 	clc
 	adc     _scroll_x
 	pha
@@ -4661,7 +4700,7 @@ L0003:	jsr     _bg_collision_sub
 ;
 	lda     _collision
 	and     #$40
-	beq     L0011
+	beq     L0015
 ;
 ; ++collision_L;
 ;
@@ -4671,9 +4710,19 @@ L0003:	jsr     _bg_collision_sub
 ;
 	inc     _collision_U
 ;
+; if(collision & COL_DEATH) {
+;
+L0015:	lda     _collision
+	and     #$20
+	beq     L0016
+;
+; ++death;
+;
+	inc     _death
+;
 ; temp5 += Generic.width;
 ;
-L0011:	lda     _Generic+2
+L0016:	lda     _Generic+2
 	clc
 	adc     _temp5
 	sta     _temp5
@@ -4707,7 +4756,7 @@ L0011:	lda     _Generic+2
 ;
 	lda     _collision
 	and     #$40
-	beq     L0012
+	beq     L0017
 ;
 ; ++collision_R;
 ;
@@ -4717,9 +4766,19 @@ L0011:	lda     _Generic+2
 ;
 	inc     _collision_U
 ;
+; if(collision & COL_DEATH) {
+;
+L0017:	lda     _collision
+	and     #$20
+	beq     L0018
+;
+; ++death;
+;
+	inc     _death
+;
 ; temp3 = Generic.y + Generic.height; //y bottom
 ;
-L0012:	lda     _Generic+1
+L0018:	lda     _Generic+1
 	clc
 	adc     _Generic+3
 	sta     _temp3
@@ -4727,7 +4786,7 @@ L0012:	lda     _Generic+1
 ; if(L_R_switch) temp3 -= 2; // fix bug, walking through walls
 ;
 	lda     _L_R_switch
-	beq     L0013
+	beq     L0019
 	lda     _temp3
 	sec
 	sbc     #$02
@@ -4735,7 +4794,7 @@ L0012:	lda     _Generic+1
 ;
 ; eject_D = (temp3 + 1) & 0x0f;
 ;
-L0013:	lda     _temp3
+L0019:	lda     _temp3
 	clc
 	adc     #$01
 	and     #$0F
@@ -4745,7 +4804,7 @@ L0013:	lda     _temp3
 ;
 	lda     _temp3
 	cmp     #$F0
-	bcs     L000E
+	bcs     L0012
 ;
 ; bg_collision_sub();
 ;
@@ -4755,7 +4814,7 @@ L0013:	lda     _temp3
 ;
 	lda     _collision
 	and     #$40
-	beq     L0014
+	beq     L001A
 ;
 ; ++collision_R;
 ;
@@ -4763,17 +4822,27 @@ L0013:	lda     _temp3
 ;
 ; if(collision & (COL_DOWN|COL_ALL)){ // find a corner in the collision map
 ;
-L0014:	lda     _collision
+L001A:	lda     _collision
 	and     #$C0
-	beq     L000B
+	beq     L001B
 ;
 ; ++collision_D;
 ;
 	inc     _collision_D
 ;
+; if(collision & COL_DEATH) {
+;
+L001B:	lda     _collision
+	and     #$20
+	beq     L000E
+;
+; ++death;
+;
+	inc     _death
+;
 ; temp1 = temp6 & 0xff; // low byte x
 ;
-L000B:	lda     _temp6
+L000E:	lda     _temp6
 	sta     _temp1
 ;
 ; temp2 = temp6 >> 8; // high byte x
@@ -4789,7 +4858,7 @@ L000B:	lda     _temp6
 ;
 	lda     _collision
 	and     #$40
-	beq     L0015
+	beq     L001C
 ;
 ; ++collision_L;
 ;
@@ -4797,30 +4866,40 @@ L000B:	lda     _temp6
 ;
 ; if(collision & (COL_DOWN|COL_ALL)){ // find a corner in the collision map
 ;
-L0015:	lda     _collision
+L001C:	lda     _collision
 	and     #$C0
-	beq     L0016
+	beq     L001D
 ;
 ; ++collision_D;
 ;
 	inc     _collision_D
 ;
+; if(collision & COL_DEATH) {
+;
+L001D:	lda     _collision
+	and     #$20
+	beq     L001E
+;
+; ++death;
+;
+	inc     _death
+;
 ; if((temp3 & 0x0f) > 3) collision_D = 0; // for platforms, only collide with the top 3 pixels
 ;
-L0016:	lda     _temp3
+L001E:	lda     _temp3
 	and     #$0F
 	cmp     #$04
 	lda     #$00
 	sbc     #$00
-	bvs     L000F
+	bvs     L0013
 	eor     #$80
-L000F:	bpl     L000E
+L0013:	bpl     L0012
 	lda     #$00
 	sta     _collision_D
 ;
 ; }
 ;
-L000E:	rts
+L0012:	rts
 
 .endproc
 

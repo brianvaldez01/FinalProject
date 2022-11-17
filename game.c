@@ -11,9 +11,8 @@ static int iy,dy;
 
 
 const unsigned char palTitle[]={ 0x0f,0x03,0x15,0x30,0x0f,0x01,0x21,0x31,0x0f,0x06,0x30,0x26,0x0f,0x09,0x19,0x29 };
-const unsigned char palLevel[16]={ 0x0f,0x00,0x10,0x30,0x0f,0x06,0x26,0x31,0x0f,0x30,0x16,0x12,0x0f,0x10,0x28,0x38 };
+const unsigned char palLevel[16]={ 0x0f,0x00,0x10,0x30,0x0f,0x30,0x11,0x16,0x0f,0x30,0x11,0x16,0x0f,0x17,0x19,0x29 };
 const unsigned char palSprite[16]={ 0x0f,0x00,0x10,0x30,0x0f,0x01,0x21,0x31,0x0f,0x37,0x15,0x12,0x0f,0x18,0x28,0x38 };
-
 
 
 // Function to fade out screen
@@ -198,8 +197,8 @@ void load_room(void) {
 	
 
 	sprite_obj_init();
-	PlayerGuy.x = 0x4000;
-	PlayerGuy.y = 0xb400;
+	PlayerGuy.x = 0x3000;
+	PlayerGuy.y = 0xc400;
 	PlayerGuy.vel_x = 0;
 	PlayerGuy.vel_y = 0;
 
@@ -551,6 +550,10 @@ void bg_collision(void) {
 		++collision_L;
 		++collision_U;
 	}
+
+	if(collision & COL_DEATH) {
+		++death;
+	}
 	
 	// upper right
 	temp5 += Generic.width;
@@ -567,6 +570,9 @@ void bg_collision(void) {
 		++collision_U;
 	}
 	
+	if(collision & COL_DEATH) {
+		++death;
+	}
 	
 	// again, lower
 	
@@ -585,6 +591,10 @@ void bg_collision(void) {
 	if(collision & (COL_DOWN|COL_ALL)){ // find a corner in the collision map
 		++collision_D;
 	}
+
+	if(collision & COL_DEATH) {
+		++death;
+	}
 	
 	// bottom left
 	temp1 = temp6 & 0xff; // low byte x
@@ -599,6 +609,10 @@ void bg_collision(void) {
 	}
 	if(collision & (COL_DOWN|COL_ALL)){ // find a corner in the collision map
 		++collision_D;
+	}
+
+	if(collision & COL_DEATH) {
+		++death;
 	}
 
 	if((temp3 & 0x0f) > 3) collision_D = 0; // for platforms, only collide with the top 3 pixels

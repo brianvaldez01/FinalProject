@@ -2,14 +2,10 @@
 //y = TURN_OFF end of list
 // Enemies, Coins, and Star Locations
 const unsigned char level_1_coins[]={
-	0x60, 0, 0x10,
-	0xa0, 0, 0xe0,
-	0xd0, 1, 0x10,
-	0xa0, 1, 0xb0,
-	0x40, 1, 0xe0,
-	0x40, 2, 0x30,
-	0x70, 2, 0xa0,
-	0xd0, 2, 0xc0,
+	0x70, 0, 0x00,
+	0x40, 0, 0xb0,
+	0x60, 1, 0x40,
+	0x60, 2, 0xe0,
 	TURN_OFF
 };
 
@@ -44,9 +40,8 @@ const unsigned char * const Coins_list[]={
 //y, room, x
 //y = TURN_OFF end of list
 const unsigned char level_1_enemies[]={
-	0xd5, 0, 0xd0,
-	0xd5, 1, 0x80,
-	0xd5, 2, 0x70,
+	0xd4, 1, 0x60,
+	0xd4, 1, 0xb0,
 	TURN_OFF
 };
 
@@ -73,7 +68,7 @@ const unsigned char * const Enemy_list[]={
 
 // Stars Things
 const unsigned char level_1_stars[]={
-	0xd0, 2, 0xe0,
+	0xb0, 2, 0xe0,
 	TURN_OFF
 };
 
@@ -99,18 +94,37 @@ const unsigned char * const Stars_list[]={
 // 51 maximum # of metatiles = 255 bytes
 
 const unsigned char metatiles1[]={
-	0, 0, 0, 0,  1,
-	16, 16, 16, 16,  1
+	0, 0, 0, 0,  0,
+	16, 16, 16, 16,  3,
+	183, 184, 199, 200,  0,
+	64, 65, 66, 67,  0,
+	176, 176, 192, 192,  1,
+	192, 192, 192, 192,  1,
+	178, 178, 194, 194,  1,
+	194, 194, 194, 194,  1,
+	68, 68, 68, 68,  0,
+	180, 181, 196, 197,  0,
+	186, 187, 0, 0,  3
 };
 
 
 #define COL_DOWN 0x80
 #define COL_ALL 0x40
+#define COL_DEATH 0x120
 
 // Using metatiles 1, define whether collidable or not
 const unsigned char is_solid[]={
 	0,
-	COL_ALL
+	COL_ALL,
+	COL_ALL,
+	COL_ALL,
+	COL_DEATH,
+	COL_DEATH,
+	0,
+	0,
+	0,
+	COL_DEATH | COL_ALL,
+	COL_DOWN
 };
 
 

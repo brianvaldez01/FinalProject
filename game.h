@@ -66,6 +66,8 @@ unsigned char bright;
 unsigned char bright_count;
 unsigned char death;
 unsigned char timer;
+unsigned char running;
+unsigned char run_anim = 0;
 unsigned char enemy_frames; //in case of skipped frames
 unsigned char map_loaded; //only load it once
 unsigned char short_jump_count;
@@ -97,7 +99,7 @@ struct Player PlayerGuy; // starting position
 // the width and height should be 1 less than the dimensions (14x14)
 // note, I'm using the top left as the 0,0 on x,y
 
-#define HERO_WIDTH 10
+#define HERO_WIDTH 5
 #define HERO_HEIGHT 13
 
 

@@ -1,17 +1,39 @@
 // 16x16 pixel metasprites
-const unsigned char sprPlayerRight[]={
+
+// 8 x 16
+const unsigned char sprPlayerStandRight[]={
   0,-1,0x49,2,
-  8,-1,0x4a,2,
-  0, 7,0x4b,2,
-  8, 7,0x4c,2,
+  0,7,0x4a,2,
   128
 };
 
-const unsigned char sprPlayerLeft[]={
+const unsigned char sprPlayerWalkRight1[]={
+  0,-1,0x4b,2,
+  0,7,0x4c,2,
+  128
+};
+
+const unsigned char sprPlayerWalkRight2[]={
+  0,-1,0x5d,2,
+  0,7,0x5e,2,
+  128
+};
+
+const unsigned char sprPlayerStandLeft[]={
   0,-1,0x59,2,
-  8,-1,0x5a,2,
-  0, 7,0x5b,2,
-  8, 7,0x5c,2,
+  0,7,0x5a,2,
+  128
+};
+
+const unsigned char sprPlayerWalkLeft1[]={
+  0,-1,0x5b,2,
+  0,7,0x5c,2,
+  128
+};
+
+const unsigned char sprPlayerWalkLeft2[]={
+  0,-1,0x57,2,
+  0,7,0x58,2,
   128
 };
 

@@ -56,15 +56,34 @@ void draw_sprites(void) {
 	if(temp_x == 0) temp_x = 1;
 	
 	// draw player metasprite
-	// WOULD LIKE TO EDIT THIS LATER, BY CHANING THE PLAYER SPRITE SO THAT IT LOOKS LEFT WHEN HE MOVES LEFT, AND RIGHT WHEN HE MOVES RIGHT
-	// LIKE HAVE sprPlayerLeft and sprPlayerRight
 	if (direction == LEFT)
 	{
-		oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayerLeft);
+		if (running) {
+			if (run_anim == 0) {
+				oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayerWalkLeft1);
+				run_anim = 1;
+			} else {
+				oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayerWalkLeft2);
+				run_anim = 0;
+			}
+		} else {
+			oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayerStandLeft);
+		}
 	}
+
 	else
 	{
-		oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayerRight);
+		if (running) {
+			if (run_anim == 0) {
+				oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayerWalkRight1);
+				run_anim = 1;
+			} else {
+				oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayerWalkRight2);	
+				run_anim = 0;
+			}
+		} else {
+			oam_meta_spr(temp_x, high_byte(PlayerGuy.y), sprPlayerStandRight);
+		}
 	}
 
 
@@ -212,6 +231,7 @@ void movement(void) {
 	
 	if(pad1 & PAD_LEFT){
 		direction = LEFT;
+		running = 1;
 		if(PlayerGuy.x <= 0x100) {
 			PlayerGuy.vel_x = 0;
 			PlayerGuy.x = 0x100;
@@ -227,12 +247,13 @@ void movement(void) {
 	else if (pad1 & PAD_RIGHT){
 		
 		direction = RIGHT;
-
+		running = 1;
 		PlayerGuy.vel_x = SPEED;
 	}
 	
 	else { // nothing pressed
 		PlayerGuy.vel_x = 0;
+		running = 0;
 	}
 	
 	PlayerGuy.x += PlayerGuy.vel_x;
@@ -552,6 +573,7 @@ void bg_collision(void) {
 	}
 
 	if(collision & COL_DEATH) {
+		sfx_play(SFX_NOISE, 0);
 		++death;
 	}
 	
@@ -571,6 +593,7 @@ void bg_collision(void) {
 	}
 	
 	if(collision & COL_DEATH) {
+		sfx_play(SFX_NOISE, 0);
 		++death;
 	}
 	
@@ -593,6 +616,7 @@ void bg_collision(void) {
 	}
 
 	if(collision & COL_DEATH) {
+		sfx_play(SFX_NOISE, 0);
 		++death;
 	}
 	
@@ -612,6 +636,7 @@ void bg_collision(void) {
 	}
 
 	if(collision & COL_DEATH) {
+		sfx_play(SFX_NOISE, 0);
 		++death;
 	}
 

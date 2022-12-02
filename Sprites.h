@@ -78,6 +78,15 @@ const unsigned char sprCoinsScore[]={
 	128
 };
 
+const unsigned char sprLivesScore[]={
+  0, 0, 0x2c, 3,
+  8, 0, 0x29, 3,
+  16, 0, 0x36, 3,
+  24, 0, 0x25, 3,
+  32, 0, 0x33, 3,
+  128
+};
+
 const unsigned char youText[]={
   0,  0,0x39,3,
   8,  0,0x2f,3,

@@ -21,6 +21,7 @@ unsigned char temp3;
 unsigned char temp4;
 unsigned int temp5;
 unsigned int temp6;
+unsigned int temp7;
 unsigned char eject_L;
 unsigned char eject_R;
 unsigned char eject_U;
@@ -58,7 +59,7 @@ enum {MODE_TITLE, MODE_GAME, MODE_END, MODE_GAME_OVER, MODE_SWITCH};
 // Gameplay Things
 unsigned char coins = 0;
 const unsigned char * pointer;
-unsigned char lives;
+unsigned char lives = 3;
 unsigned char level;
 unsigned char offset;
 unsigned char level_up;
@@ -71,6 +72,8 @@ unsigned char run_anim = 0;
 unsigned char enemy_frames; //in case of skipped frames
 unsigned char map_loaded; //only load it once
 unsigned char short_jump_count;
+unsigned int old_jump_x;
+unsigned int old_jump_y;
 
 #pragma bss-name(push, "BSS")
 
@@ -156,6 +159,8 @@ enum {SONG_GAME, SONG_PAUSE};
 enum {SFX_JUMP, SFX_COIN, SFX_NOISE, SFX_STAR};
 void change_song(void);
 
+const unsigned char text[]="COINS:00  LIVES:0  LEVEL:0";
+
 // PROTOTYPES
 void show_title(void);
 void fade_in(void);
@@ -175,3 +180,4 @@ void enemy_moves(void);
 void sprite_collisions(void);
 void check_spr_objects(void);
 void sprite_obj_init(void);
+void set_sprite_zero(void);

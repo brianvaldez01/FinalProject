@@ -93,7 +93,9 @@ void draw_sprites(void) {
 
 		if(temp_y == TURN_OFF) continue;
 
-		if(get_frame_count() & 8) ++temp_y; // bounce the coin
+		if(get_frame_count() & 8) {
+			++temp_y; // bounce the coin
+		}
 		if(!coin_active[index]) continue;
 
 		temp_x = coin_x[index];
@@ -150,14 +152,21 @@ void draw_sprites(void) {
 	}
 	
 	
-	// Draw "coins" at the top in sprites
-	oam_meta_spr(16,16, sprCoinsScore);
+	// Draw "coins" at the top of screen
+	oam_meta_spr(16,8, sprCoinsScore);
 
 	// Amount of coins
 	temp1 = (coins / 10) + 0x10;
 	temp2 = (coins % 10) + 0x10;
-	oam_spr(64,16,temp1,3);
-	oam_spr(72,16,temp2,3);
+	oam_spr(64,8,temp1,3);
+	oam_spr(72,8,temp2,3);
+
+	// Draw "lives" at the top of screen
+	oam_meta_spr(16,20, sprLivesScore);
+
+	// Amount of lives
+	temp1 = lives + 0x10;
+	oam_spr(64,20,temp1,3);
 }
 
 // Shows title screen
@@ -183,7 +192,7 @@ void load_room(void) {
 	offset = Level_offsets[level];
 
 	set_data_pointer(Levels_list[offset]);
-	set_mt_pointer(metatiles1);
+	set_mt_pointer(metatiles);
 	for(y=0; ;y+=0x20){
 		for(x=0; ;x+=0x20){
 			address = get_ppu_addr(0, x, y);
@@ -327,11 +336,21 @@ void movement(void) {
 
 	// Allows shorter jumps
 	if(short_jump_count){
+		if (collision_D) {
+			old_jump_x = PlayerGuy.x;
+			old_jump_y = PlayerGuy.y;
+		}
+
 		++short_jump_count;
 		if(short_jump_count > 30) short_jump_count = 0;
 	}
 
 	if((short_jump_count) && ((pad1 & PAD_A) == 0) && (PlayerGuy.vel_y < -0x200)){
+		if (collision_D) {
+			old_jump_x = PlayerGuy.x;
+			old_jump_y = PlayerGuy.y;
+		}
+
 		PlayerGuy.vel_y = -0x200;
 		short_jump_count = 0;
 	}
@@ -707,8 +726,15 @@ void sprite_collisions(void) {
 				enemy_y[index] = TURN_OFF;
 				sfx_play(SFX_NOISE, 0);
 				if(coins) {
-					--coins;
+					coins = coins - 3;
 					if (coins > 0x80) coins = 0;
+				} 
+
+				
+				
+				if (lives) {
+					lives = lives - 1;
+					if (lives > 0x80) lives = 0;
 				} else {
 					++death;
 				}
@@ -958,7 +984,6 @@ void main (void) {
 			set_scroll_x(scroll_x);
 			draw_screen_R();
 			draw_sprites();
-
 
 			// Go to next level or player death
 			if (level_up) {

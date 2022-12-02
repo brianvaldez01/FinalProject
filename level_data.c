@@ -10,24 +10,17 @@ const unsigned char level_1_coins[]={
 };
 
 const unsigned char level_2_coins[]={
-	0x80, 0, 0x10,
-	0x40, 0, 0x60,
-	0x90, 0, 0x80,
-	0x80, 0, 0xe0,
-	0x50, 1, 0x30,
-	0xa0, 1, 0xb0,
-	0x60, 2, 0x10,
-	0x80, 2, 0xe0,
+	0x30, 0, 0x40, 
+	0x60, 1, 0x20,
+	0xd0, 2, 0x20,
+	0x30, 2, 0x80,
 	TURN_OFF
 };
 
 const unsigned char level_3_coins[]={
-	0x40, 0, 0x10,
-	0x70, 0, 0x10,
-	0x70, 0, 0xe0,
-	0x90, 1, 0x20,
-	0x30, 1, 0x40,
-	0x30, 1, 0xe0,
+	0x30, 0, 0x20,
+	0x30, 2, 0x20,
+	0xd0, 2, 0xe0,
 	TURN_OFF
 };
 
@@ -40,23 +33,17 @@ const unsigned char * const Coins_list[]={
 //y, room, x
 //y = TURN_OFF end of list
 const unsigned char level_1_enemies[]={
-	0xd4, 1, 0x60,
+	0xd4, 1, 0x58,
 	0xd4, 1, 0xb0,
 	TURN_OFF
 };
 
 const unsigned char level_2_enemies[]={
-	0xd5, 0, 0x90,
-	0xd5, 1, 0xa0,
-	0xd5, 2, 0x30,
-	0xd5, 2, 0xa0,
 	TURN_OFF
 };
 
 const unsigned char level_3_enemies[]={
-	0xd5, 0, 0xb0,
-	0xd5, 2, 0x20,
-	0xd5, 2, 0xa0,
+	0xd4, 1, 0x10,
 	TURN_OFF
 };
 
@@ -73,12 +60,12 @@ const unsigned char level_1_stars[]={
 };
 
 const unsigned char level_2_stars[]={
-	0x30, 2, 0xe0,
+	0x30, 2, 0xc0,
 	TURN_OFF
 };
 
 const unsigned char level_3_stars[]={
-	0x30, 2, 0x10,
+	0x30, 2, 0xd0,
 	TURN_OFF
 };
 
@@ -93,8 +80,8 @@ const unsigned char * const Stars_list[]={
 // T means top, B means bottom, L left,R right
 // 51 maximum # of metatiles = 255 bytes
 
-const unsigned char metatiles1[]={
-	0, 0, 0, 0,  0,
+const unsigned char metatiles[]={
+	0, 0, 0, 0,  3,
 	16, 16, 16, 16,  3,
 	183, 184, 199, 200,  0,
 	64, 65, 66, 67,  0,
@@ -104,6 +91,11 @@ const unsigned char metatiles1[]={
 	194, 194, 194, 194,  1,
 	68, 68, 68, 68,  0,
 	180, 181, 196, 197,  0,
+	228, 229, 244, 245,  0,
+	231, 232, 247, 248,  0,
+	234, 235, 250, 251,  0,
+	188, 189, 204, 205,  0,
+	190, 191, 206, 207,  0,
 	186, 187, 0, 0,  3
 };
 
@@ -112,7 +104,7 @@ const unsigned char metatiles1[]={
 #define COL_ALL 0x40
 #define COL_DEATH 0x120
 
-// Using metatiles 1, define whether collidable or not
+// Using metatiles, define whether collidable or not
 const unsigned char is_solid[]={
 	0,
 	COL_ALL,
@@ -124,6 +116,11 @@ const unsigned char is_solid[]={
 	0,
 	0,
 	COL_DEATH | COL_ALL,
+	COL_DEATH | COL_ALL,
+	COL_DEATH | COL_ALL,
+	COL_DEATH | COL_ALL,
+	0,
+	0,
 	COL_DOWN
 };
 

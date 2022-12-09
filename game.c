@@ -593,7 +593,13 @@ void bg_collision(void) {
 
 	if(collision & COL_DEATH) {
 		sfx_play(SFX_NOISE, 0);
-		++death;
+		if (lives) {
+			lives = lives - 1;
+			if (lives > 0x80) lives = 0;
+			++lifedeath;
+		} else {
+			++death;
+		}
 	}
 	
 	// upper right
@@ -613,7 +619,13 @@ void bg_collision(void) {
 	
 	if(collision & COL_DEATH) {
 		sfx_play(SFX_NOISE, 0);
-		++death;
+		if (lives) {
+			lives = lives - 1;
+			if (lives > 0x80) lives = 0;
+			++lifedeath;
+		} else {
+			++death;
+		}
 	}
 	
 	// again, lower
@@ -636,7 +648,13 @@ void bg_collision(void) {
 
 	if(collision & COL_DEATH) {
 		sfx_play(SFX_NOISE, 0);
-		++death;
+		if (lives) {
+			lives = lives - 1;
+			if (lives > 0x80) lives = 0;
+			++lifedeath;
+		} else {
+			++death;
+		}
 	}
 	
 	// bottom left
@@ -656,7 +674,13 @@ void bg_collision(void) {
 
 	if(collision & COL_DEATH) {
 		sfx_play(SFX_NOISE, 0);
-		++death;
+		if (lives) {
+			lives = lives - 1;
+			if (lives > 0x80) lives = 0;
+			++lifedeath;
+		} else {
+			++death;
+		}
 	}
 
 	if((temp3 & 0x0f) > 3) collision_D = 0; // for platforms, only collide with the top 3 pixels
@@ -735,6 +759,7 @@ void sprite_collisions(void) {
 				if (lives) {
 					lives = lives - 1;
 					if (lives > 0x80) lives = 0;
+					++lifedeath;
 				} else {
 					++death;
 				}
@@ -969,7 +994,7 @@ void main (void) {
 			ppu_wait_nmi();
 
 			// the sprites are pushed from a buffer to the OAM during nmi
-			set_music_speed(8);
+			set_music_speed(6);
 
 			// Read first controller
 			pad1 = pad_poll(0);
@@ -992,7 +1017,16 @@ void main (void) {
 				bright = 4;
 				bright_count = 0;
 				++level;
-			} else if (death) {
+			} else if(lifedeath) {
+				game_mode = MODE_SWITCH;
+				lifedeath = 0;
+				if(coins) {
+					coins = coins - 5;
+					if (coins > 0x80) coins = 0;
+				} 
+				bright = 4;
+				bright_count = 0;
+			 } else if (death) {
 				death = 0;
 				bright = 0;
 				scroll_x = 0;

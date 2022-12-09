@@ -60,6 +60,7 @@ enum {MODE_TITLE, MODE_GAME, MODE_END, MODE_GAME_OVER, MODE_SWITCH};
 unsigned char coins = 0;
 const unsigned char * pointer;
 unsigned char lives = 3;
+unsigned char lifedeath;
 unsigned char level;
 unsigned char offset;
 unsigned char level_up;

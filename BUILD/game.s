@@ -103,6 +103,7 @@
 	.export		_coins
 	.export		_pointer
 	.export		_lives
+	.export		_lifedeath
 	.export		_level
 	.export		_offset
 	.export		_level_up
@@ -3294,6 +3295,8 @@ _game_mode:
 	.res	1,$00
 _pointer:
 	.res	2,$00
+_lifedeath:
+	.res	1,$00
 _level:
 	.res	1,$00
 _offset:
@@ -4904,7 +4907,7 @@ L0033:	rts
 ;
 	lda     _Generic+1
 	cmp     #$F0
-	bcc     L001F
+	bcc     L0033
 ;
 ; }
 ;
@@ -4912,7 +4915,7 @@ L0033:	rts
 ;
 ; temp6 = temp5 = Generic.x + scroll_x; // upper left (temp6 = save for reuse)
 ;
-L001F:	lda     _Generic
+L0033:	lda     _Generic
 	clc
 	adc     _scroll_x
 	pha
@@ -4968,7 +4971,7 @@ L0003:	jsr     _bg_collision_sub
 ;
 	lda     _collision
 	and     #$40
-	beq     L0015
+	beq     L0025
 ;
 ; ++collision_L;
 ;
@@ -4980,9 +4983,9 @@ L0003:	jsr     _bg_collision_sub
 ;
 ; if(collision & COL_DEATH) {
 ;
-L0015:	lda     _collision
+L0025:	lda     _collision
 	and     #$20
-	beq     L0016
+	beq     L0027
 ;
 ; sfx_play(SFX_NOISE, 0);
 ;
@@ -4991,13 +4994,39 @@ L0015:	lda     _collision
 	lda     #$00
 	jsr     _sfx_play
 ;
+; if (lives) {
+;
+	lda     _lives
+	beq     L0006
+;
+; lives = lives - 1;
+;
+	sec
+	sbc     #$01
+	sta     _lives
+;
+; if (lives > 0x80) lives = 0;
+;
+	cmp     #$81
+	bcc     L0026
+	lda     #$00
+	sta     _lives
+;
+; ++lifedeath;
+;
+L0026:	inc     _lifedeath
+;
+; } else {
+;
+	jmp     L0027
+;
 ; ++death;
 ;
-	inc     _death
+L0006:	inc     _death
 ;
 ; temp5 += Generic.width;
 ;
-L0016:	lda     _Generic+2
+L0027:	lda     _Generic+2
 	clc
 	adc     _temp5
 	sta     _temp5
@@ -5031,7 +5060,7 @@ L0016:	lda     _Generic+2
 ;
 	lda     _collision
 	and     #$40
-	beq     L0017
+	beq     L0028
 ;
 ; ++collision_R;
 ;
@@ -5043,9 +5072,9 @@ L0016:	lda     _Generic+2
 ;
 ; if(collision & COL_DEATH) {
 ;
-L0017:	lda     _collision
+L0028:	lda     _collision
 	and     #$20
-	beq     L0018
+	beq     L002A
 ;
 ; sfx_play(SFX_NOISE, 0);
 ;
@@ -5054,13 +5083,39 @@ L0017:	lda     _collision
 	lda     #$00
 	jsr     _sfx_play
 ;
+; if (lives) {
+;
+	lda     _lives
+	beq     L000D
+;
+; lives = lives - 1;
+;
+	sec
+	sbc     #$01
+	sta     _lives
+;
+; if (lives > 0x80) lives = 0;
+;
+	cmp     #$81
+	bcc     L0029
+	lda     #$00
+	sta     _lives
+;
+; ++lifedeath;
+;
+L0029:	inc     _lifedeath
+;
+; } else {
+;
+	jmp     L002A
+;
 ; ++death;
 ;
-	inc     _death
+L000D:	inc     _death
 ;
 ; temp3 = Generic.y + Generic.height; //y bottom
 ;
-L0018:	lda     _Generic+1
+L002A:	lda     _Generic+1
 	clc
 	adc     _Generic+3
 	sta     _temp3
@@ -5068,7 +5123,7 @@ L0018:	lda     _Generic+1
 ; if(L_R_switch) temp3 -= 2; // fix bug, walking through walls
 ;
 	lda     _L_R_switch
-	beq     L0019
+	beq     L002B
 	lda     _temp3
 	sec
 	sbc     #$02
@@ -5076,7 +5131,7 @@ L0018:	lda     _Generic+1
 ;
 ; eject_D = (temp3 + 1) & 0x0f;
 ;
-L0019:	lda     _temp3
+L002B:	lda     _temp3
 	clc
 	adc     #$01
 	and     #$0F
@@ -5086,17 +5141,21 @@ L0019:	lda     _temp3
 ;
 	lda     _temp3
 	cmp     #$F0
-	bcs     L0012
+	bcc     L0034
+;
+; }
+;
+	rts
 ;
 ; bg_collision_sub();
 ;
-	jsr     _bg_collision_sub
+L0034:	jsr     _bg_collision_sub
 ;
 ; if(collision & COL_ALL){ // find a corner in the collision map
 ;
 	lda     _collision
 	and     #$40
-	beq     L001A
+	beq     L002C
 ;
 ; ++collision_R;
 ;
@@ -5104,9 +5163,9 @@ L0019:	lda     _temp3
 ;
 ; if(collision & (COL_DOWN|COL_ALL)){ // find a corner in the collision map
 ;
-L001A:	lda     _collision
+L002C:	lda     _collision
 	and     #$C0
-	beq     L001B
+	beq     L002D
 ;
 ; ++collision_D;
 ;
@@ -5114,9 +5173,9 @@ L001A:	lda     _collision
 ;
 ; if(collision & COL_DEATH) {
 ;
-L001B:	lda     _collision
+L002D:	lda     _collision
 	and     #$20
-	beq     L000E
+	beq     L001A
 ;
 ; sfx_play(SFX_NOISE, 0);
 ;
@@ -5125,13 +5184,39 @@ L001B:	lda     _collision
 	lda     #$00
 	jsr     _sfx_play
 ;
+; if (lives) {
+;
+	lda     _lives
+	beq     L0017
+;
+; lives = lives - 1;
+;
+	sec
+	sbc     #$01
+	sta     _lives
+;
+; if (lives > 0x80) lives = 0;
+;
+	cmp     #$81
+	bcc     L002E
+	lda     #$00
+	sta     _lives
+;
+; ++lifedeath;
+;
+L002E:	inc     _lifedeath
+;
+; } else {
+;
+	jmp     L001A
+;
 ; ++death;
 ;
-	inc     _death
+L0017:	inc     _death
 ;
 ; temp1 = temp6 & 0xff; // low byte x
 ;
-L000E:	lda     _temp6
+L001A:	lda     _temp6
 	sta     _temp1
 ;
 ; temp2 = temp6 >> 8; // high byte x
@@ -5147,7 +5232,7 @@ L000E:	lda     _temp6
 ;
 	lda     _collision
 	and     #$40
-	beq     L001C
+	beq     L002F
 ;
 ; ++collision_L;
 ;
@@ -5155,9 +5240,9 @@ L000E:	lda     _temp6
 ;
 ; if(collision & (COL_DOWN|COL_ALL)){ // find a corner in the collision map
 ;
-L001C:	lda     _collision
+L002F:	lda     _collision
 	and     #$C0
-	beq     L001D
+	beq     L0030
 ;
 ; ++collision_D;
 ;
@@ -5165,9 +5250,9 @@ L001C:	lda     _collision
 ;
 ; if(collision & COL_DEATH) {
 ;
-L001D:	lda     _collision
+L0030:	lda     _collision
 	and     #$20
-	beq     L001E
+	beq     L0032
 ;
 ; sfx_play(SFX_NOISE, 0);
 ;
@@ -5176,26 +5261,52 @@ L001D:	lda     _collision
 	lda     #$00
 	jsr     _sfx_play
 ;
+; if (lives) {
+;
+	lda     _lives
+	beq     L001E
+;
+; lives = lives - 1;
+;
+	sec
+	sbc     #$01
+	sta     _lives
+;
+; if (lives > 0x80) lives = 0;
+;
+	cmp     #$81
+	bcc     L0031
+	lda     #$00
+	sta     _lives
+;
+; ++lifedeath;
+;
+L0031:	inc     _lifedeath
+;
+; } else {
+;
+	jmp     L0032
+;
 ; ++death;
 ;
-	inc     _death
+L001E:	inc     _death
 ;
 ; if((temp3 & 0x0f) > 3) collision_D = 0; // for platforms, only collide with the top 3 pixels
 ;
-L001E:	lda     _temp3
+L0032:	lda     _temp3
 	and     #$0F
 	cmp     #$04
 	lda     #$00
 	sbc     #$00
-	bvs     L0013
+	bvs     L0023
 	eor     #$80
-L0013:	bpl     L0012
+L0023:	bpl     L0022
 	lda     #$00
 	sta     _collision_D
 ;
 ; }
 ;
-L0012:	rts
+L0022:	rts
 
 .endproc
 
@@ -6315,7 +6426,7 @@ L002D:	lda     _index
 ;
 	ldy     _index
 	lda     _enemy_active,y
-	beq     L002E
+	beq     L002F
 ;
 ; Generic2.x = enemy_x[index];
 ;
@@ -6338,7 +6449,7 @@ L002D:	lda     _index
 	ldx     #>(_Generic2)
 	jsr     _check_collision
 	tax
-	beq     L002E
+	beq     L002F
 ;
 ; enemy_y[index] = TURN_OFF;
 ;
@@ -6389,9 +6500,13 @@ L0022:	lda     _lives
 	lda     #$00
 	sta     _lives
 ;
+; ++lifedeath;
+;
+L002E:	inc     _lifedeath
+;
 ; } else {
 ;
-	jmp     L002E
+	jmp     L002F
 ;
 ; ++death;
 ;
@@ -6399,7 +6514,7 @@ L0023:	inc     _death
 ;
 ; for(index = 0; index < MAX_ENEMY; ++index){
 ;
-L002E:	inc     _index
+L002F:	inc     _index
 	jmp     L002D
 ;
 ; }
@@ -7075,7 +7190,7 @@ L002B:	rts
 ;
 ; while(game_mode == MODE_TITLE) {
 ;
-	jmp     L002B
+	jmp     L0030
 ;
 ; ppu_wait_frame();
 ;
@@ -7153,7 +7268,7 @@ L0008:	jsr     _ppu_wait_frame
 ;
 ; break;
 ;
-	jmp     L002B
+	jmp     L0030
 ;
 ; iy+=dy;
 ;
@@ -7205,11 +7320,11 @@ L000E:	lda     #$0A
 	jsr     pusha
 	lda     _frame_cnt
 	and     #$20
-	beq     L0029
+	beq     L002E
 	lda     #$0F
-	jmp     L002A
-L0029:	lda     #$20
-L002A:	jsr     _pal_col
+	jmp     L002F
+L002E:	lda     #$20
+L002F:	jsr     _pal_col
 ;
 ; ++frame_cnt;
 ;
@@ -7221,20 +7336,20 @@ L002A:	jsr     _pal_col
 ;
 ; while(game_mode == MODE_TITLE) {
 ;
-L002B:	lda     _game_mode
+L0030:	lda     _game_mode
 	jeq     L0008
 ;
 ; while (game_mode == MODE_GAME) 
 ;
-	jmp     L002C
+	jmp     L0032
 ;
 ; ppu_wait_nmi();
 ;
 L0012:	jsr     _ppu_wait_nmi
 ;
-; set_music_speed(8);
+; set_music_speed(6);
 ;
-	lda     #$08
+	lda     #$06
 	jsr     _set_music_speed
 ;
 ; pad1 = pad_poll(0);
@@ -7304,11 +7419,55 @@ L0012:	jsr     _ppu_wait_nmi
 ;
 	inc     _level
 ;
+; } else if(lifedeath) {
+;
+	jmp     L0032
+L0015:	lda     _lifedeath
+	beq     L0017
+;
+; game_mode = MODE_SWITCH;
+;
+	lda     #$04
+	sta     _game_mode
+;
+; lifedeath = 0;
+;
+	lda     #$00
+	sta     _lifedeath
+;
+; if(coins) {
+;
+	lda     _coins
+	beq     L0031
+;
+; coins = coins - 5;
+;
+	sec
+	sbc     #$05
+	sta     _coins
+;
+; if (coins > 0x80) coins = 0;
+;
+	cmp     #$81
+	bcc     L0031
+	lda     #$00
+	sta     _coins
+;
+; bright = 4;
+;
+L0031:	lda     #$04
+	sta     _bright
+;
+; bright_count = 0;
+;
+	lda     #$00
+	sta     _bright_count
+;
 ; } else if (death) {
 ;
-	jmp     L002C
-L0015:	lda     _death
-	beq     L002C
+	jmp     L0032
+L0017:	lda     _death
+	beq     L0032
 ;
 ; death = 0;
 ;
@@ -7371,17 +7530,17 @@ L0015:	lda     _death
 ;
 ; while (game_mode == MODE_GAME) 
 ;
-L002C:	lda     _game_mode
+L0032:	lda     _game_mode
 	cmp     #$01
 	jeq     L0012
 ;
 ; while (game_mode == MODE_SWITCH) {
 ;
-	jmp     L002E
+	jmp     L0034
 ;
 ; ppu_wait_nmi();
 ;
-L0018:	jsr     _ppu_wait_nmi
+L001D:	jsr     _ppu_wait_nmi
 ;
 ; ++bright_count;
 ;
@@ -7391,7 +7550,7 @@ L0018:	jsr     _ppu_wait_nmi
 ;
 	lda     _bright_count
 	cmp     #$10
-	bcc     L001C
+	bcc     L0021
 ;
 ; bright_count = 0;
 ;
@@ -7406,12 +7565,12 @@ L0018:	jsr     _ppu_wait_nmi
 ;
 	lda     _bright
 	cmp     #$FF
-	beq     L001C
+	beq     L0021
 	jsr     _pal_bright
 ;
 ; set_scroll_x(scroll_x);
 ;
-L001C:	lda     _scroll_x
+L0021:	lda     _scroll_x
 	ldx     _scroll_x+1
 	jsr     _set_scroll_x
 ;
@@ -7419,7 +7578,7 @@ L001C:	lda     _scroll_x
 ;
 	lda     _bright
 	cmp     #$FF
-	bne     L002E
+	bne     L0034
 ;
 ; ppu_off();
 ;
@@ -7444,7 +7603,7 @@ L001C:	lda     _scroll_x
 ;
 	lda     _level
 	cmp     #$03
-	bcs     L002D
+	bcs     L0033
 ;
 ; load_room();
 ;
@@ -7457,11 +7616,11 @@ L001C:	lda     _scroll_x
 ;
 ; else { // set end of game. Did we win?
 ;
-	jmp     L0032
+	jmp     L0038
 ;
 ; game_mode = MODE_END;
 ;
-L002D:	lda     #$02
+L0033:	lda     #$02
 	sta     _game_mode
 ;
 ; vram_adr(NAMETABLE_A);
@@ -7479,7 +7638,7 @@ L002D:	lda     #$02
 ;
 ; ppu_on_all();
 ;
-L0032:	jsr     _ppu_on_all
+L0038:	jsr     _ppu_on_all
 ;
 ; pal_bright(4);
 ;
@@ -7488,17 +7647,17 @@ L0032:	jsr     _ppu_on_all
 ;
 ; while (game_mode == MODE_SWITCH) {
 ;
-L002E:	lda     _game_mode
+L0034:	lda     _game_mode
 	cmp     #$04
-	beq     L0018
+	beq     L001D
 ;
 ; while (game_mode == MODE_END) { 
 ;
-	jmp     L002F
+	jmp     L0035
 ;
 ; ppu_wait_nmi();
 ;
-L0020:	jsr     _ppu_wait_nmi
+L0025:	jsr     _ppu_wait_nmi
 ;
 ; temp1 = (coins / 10) + 0x10;
 ;
@@ -7601,17 +7760,17 @@ L0020:	jsr     _ppu_wait_nmi
 ;
 ; while (game_mode == MODE_END) { 
 ;
-L002F:	lda     _game_mode
+L0035:	lda     _game_mode
 	cmp     #$02
-	jeq     L0020
+	jeq     L0025
 ;
 ; while (game_mode == MODE_GAME_OVER) {
 ;
-	jmp     L0030
+	jmp     L0036
 ;
 ; ppu_wait_nmi();
 ;
-L0025:	jsr     _ppu_wait_nmi
+L002A:	jsr     _ppu_wait_nmi
 ;
 ; oam_meta_spr(90, 100, youText);
 ;
@@ -7651,13 +7810,13 @@ L0025:	jsr     _ppu_wait_nmi
 ;
 ; while (game_mode == MODE_GAME_OVER) {
 ;
-L0030:	lda     _game_mode
+L0036:	lda     _game_mode
 	cmp     #$03
-	beq     L0025
+	beq     L002A
 ;
 ; while(1) {
 ;
-	jmp     L002B
+	jmp     L0030
 
 .endproc
 

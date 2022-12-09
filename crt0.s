@@ -262,7 +262,7 @@ detectNTSC:
 
 music_data:
 ;	.include "music.s"
-	.include "MUSIC/TestMusic3.s"
+	.include "MUSIC/TestMusic.s"
 
 
 

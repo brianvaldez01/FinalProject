@@ -46,7 +46,7 @@
 	.import		_set_mt_pointer
 	.import		_buffer_4_mt
 	.import		_flush_vram_update2
-	.export		_title_screen
+	.export		_title
 	.export		_sprPlayerStandRight
 	.export		_sprPlayerWalkRight1
 	.export		_sprPlayerWalkRight2
@@ -201,254 +201,510 @@ _run_anim:
 
 .segment	"RODATA"
 
-_title_screen:
-	.byte	$02
+_title:
+	.byte	$01
 	.byte	$00
-	.byte	$02
-	.byte	$81
-	.byte	$40
-	.byte	$41
-	.byte	$40
-	.byte	$41
-	.byte	$40
-	.byte	$41
+	.byte	$01
+	.byte	$1F
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$E4
+	.byte	$E5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
+	.byte	$F4
+	.byte	$F5
 	.byte	$00
-	.byte	$40
-	.byte	$41
-	.byte	$40
-	.byte	$41
+	.byte	$01
+	.byte	$21
+	.byte	$3B
+	.byte	$3C
+	.byte	$3B
+	.byte	$3C
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
 	.byte	$00
-	.byte	$40
-	.byte	$41
-	.byte	$40
-	.byte	$41
-	.byte	$40
-	.byte	$41
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
-	.byte	$40
-	.byte	$41
-	.byte	$40
-	.byte	$41
-	.byte	$40
-	.byte	$41
+	.byte	$01
+	.byte	$03
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
-	.byte	$02
+	.byte	$3B
+	.byte	$3C
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
 	.byte	$04
-	.byte	$42
-	.byte	$43
-	.byte	$42
-	.byte	$43
-	.byte	$42
-	.byte	$43
+	.byte	$3D
+	.byte	$3E
+	.byte	$3D
+	.byte	$3E
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
-	.byte	$42
-	.byte	$43
-	.byte	$42
-	.byte	$43
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
 	.byte	$00
-	.byte	$42
-	.byte	$43
-	.byte	$42
-	.byte	$43
-	.byte	$42
-	.byte	$43
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$3B
+	.byte	$3C
+	.byte	$3B
+	.byte	$3C
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
-	.byte	$42
-	.byte	$43
-	.byte	$42
-	.byte	$43
-	.byte	$42
-	.byte	$43
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
+	.byte	$05
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
 	.byte	$02
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$3D
+	.byte	$3E
+	.byte	$3D
+	.byte	$3E
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
+	.byte	$05
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
 	.byte	$06
-	.byte	$40
-	.byte	$41
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
+	.byte	$01
 	.byte	$02
-	.byte	$02
-	.byte	$40
-	.byte	$41
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
+	.byte	$06
+	.byte	$3B
+	.byte	$3C
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
 	.byte	$02
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
 	.byte	$03
-	.byte	$40
-	.byte	$41
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
+	.byte	$06
+	.byte	$3D
+	.byte	$3E
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
 	.byte	$02
+	.byte	$3B
+	.byte	$3C
+	.byte	$3B
+	.byte	$3C
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
+	.byte	$03
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
+	.byte	$08
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$3D
+	.byte	$3E
+	.byte	$3D
+	.byte	$3E
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
+	.byte	$03
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
+	.byte	$28
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
+	.byte	$03
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
+	.byte	$02
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
+	.byte	$03
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
 	.byte	$07
-	.byte	$40
-	.byte	$41
+	.byte	$3D
+	.byte	$3E
+	.byte	$3B
+	.byte	$3C
+	.byte	$3B
+	.byte	$3C
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
+	.byte	$01
 	.byte	$02
-	.byte	$08
-	.byte	$42
-	.byte	$43
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
+	.byte	$01
 	.byte	$02
-	.byte	$02
-	.byte	$42
-	.byte	$43
+	.byte	$3D
+	.byte	$3E
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$42
-	.byte	$43
 	.byte	$00
-	.byte	$02
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
 	.byte	$07
-	.byte	$42
-	.byte	$43
+	.byte	$3B
+	.byte	$3C
+	.byte	$3D
+	.byte	$3E
+	.byte	$3D
+	.byte	$3E
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
-	.byte	$02
-	.byte	$08
-	.byte	$40
-	.byte	$41
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$40
-	.byte	$41
-	.byte	$40
-	.byte	$41
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
 	.byte	$00
-	.byte	$40
-	.byte	$41
-	.byte	$40
-	.byte	$41
-	.byte	$40
-	.byte	$41
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$40
-	.byte	$41
-	.byte	$00
-	.byte	$02
-	.byte	$08
-	.byte	$42
-	.byte	$43
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$42
-	.byte	$43
-	.byte	$42
-	.byte	$43
+	.byte	$3B
+	.byte	$3C
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
 	.byte	$00
-	.byte	$42
-	.byte	$43
-	.byte	$42
-	.byte	$43
-	.byte	$42
-	.byte	$43
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$42
-	.byte	$43
-	.byte	$00
-	.byte	$02
-	.byte	$08
-	.byte	$40
-	.byte	$41
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$40
-	.byte	$41
-	.byte	$00
-	.byte	$02
+	.byte	$01
 	.byte	$07
-	.byte	$40
-	.byte	$41
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
-	.byte	$02
-	.byte	$03
-	.byte	$40
-	.byte	$41
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
-	.byte	$02
-	.byte	$08
-	.byte	$42
-	.byte	$43
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$42
-	.byte	$43
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
-	.byte	$02
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
 	.byte	$07
-	.byte	$42
-	.byte	$43
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
-	.byte	$02
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$3B
+	.byte	$3C
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
+	.byte	$07
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
 	.byte	$03
-	.byte	$42
-	.byte	$43
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
-	.byte	$02
-	.byte	$08
-	.byte	$40
-	.byte	$41
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$40
-	.byte	$41
-	.byte	$40
-	.byte	$41
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
 	.byte	$00
-	.byte	$40
-	.byte	$41
-	.byte	$40
-	.byte	$41
-	.byte	$40
-	.byte	$41
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
-	.byte	$02
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$00
+	.byte	$3B
+	.byte	$3C
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
+	.byte	$07
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
 	.byte	$03
-	.byte	$40
-	.byte	$41
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
-	.byte	$02
-	.byte	$08
-	.byte	$42
-	.byte	$43
-	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$42
-	.byte	$43
-	.byte	$42
-	.byte	$43
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
 	.byte	$00
-	.byte	$42
-	.byte	$43
-	.byte	$42
-	.byte	$43
-	.byte	$42
-	.byte	$43
+	.byte	$3B
+	.byte	$3C
 	.byte	$00
-	.byte	$02
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$3B
+	.byte	$3C
+	.byte	$00
+	.byte	$01
+	.byte	$07
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
 	.byte	$03
-	.byte	$42
-	.byte	$43
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
-	.byte	$02
-	.byte	$FE
+	.byte	$3D
+	.byte	$3E
 	.byte	$00
-	.byte	$02
-	.byte	$2D
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
+	.byte	$03
+	.byte	$3D
+	.byte	$3E
+	.byte	$00
+	.byte	$01
+	.byte	$4D
 	.byte	$30
 	.byte	$32
 	.byte	$25
@@ -462,41 +718,117 @@ _title_screen:
 	.byte	$32
 	.byte	$34
 	.byte	$00
-	.byte	$02
-	.byte	$D3
-	.byte	$04
-	.byte	$15
+	.byte	$01
+	.byte	$69
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$B4
+	.byte	$B5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$C4
+	.byte	$C5
+	.byte	$00
+	.byte	$01
+	.byte	$27
+	.byte	$44
+	.byte	$55
+	.byte	$00
+	.byte	$00
+	.byte	$55
+	.byte	$55
+	.byte	$00
 	.byte	$00
 	.byte	$44
 	.byte	$15
-	.byte	$C1
 	.byte	$00
-	.byte	$02
-	.byte	$02
-	.byte	$11
 	.byte	$00
-	.byte	$04
+	.byte	$15
 	.byte	$45
-	.byte	$DD
 	.byte	$00
-	.byte	$02
-	.byte	$02
 	.byte	$01
-	.byte	$00
 	.byte	$04
+	.byte	$55
+	.byte	$55
+	.byte	$00
+	.byte	$01
 	.byte	$05
-	.byte	$0D
+	.byte	$55
+	.byte	$55
 	.byte	$00
-	.byte	$02
-	.byte	$0B
-	.byte	$A0
-	.byte	$02
-	.byte	$02
+	.byte	$01
+	.byte	$04
+	.byte	$80
+	.byte	$A5
+	.byte	$A5
+	.byte	$20
 	.byte	$00
-	.byte	$02
-	.byte	$11
+	.byte	$01
+	.byte	$03
+	.byte	$0A
+	.byte	$01
+	.byte	$03
 	.byte	$00
-	.byte	$02
+	.byte	$01
+	.byte	$08
+	.byte	$00
+	.byte	$01
 	.byte	$00
 _sprPlayerStandRight:
 	.byte	$00
@@ -3403,10 +3735,10 @@ _dy:
 	lda     #$00
 	jsr     _vram_adr
 ;
-; vram_unrle(title_screen);
+; vram_unrle(title);
 ;
-	lda     #<(_title_screen)
-	ldx     #>(_title_screen)
+	lda     #<(_title)
+	ldx     #>(_title)
 	jsr     _vram_unrle
 ;
 ; music_play(song);
@@ -4482,7 +4814,7 @@ L003B:	lda     #$01
 ;
 ; Generic.width = HERO_WIDTH;
 ;
-	lda     #$05
+	lda     #$06
 	sta     _Generic+2
 ;
 ; Generic.height = HERO_HEIGHT;
@@ -4907,7 +5239,7 @@ L0033:	rts
 ;
 	lda     _Generic+1
 	cmp     #$F0
-	bcc     L0033
+	bcc     L004B
 ;
 ; }
 ;
@@ -4915,7 +5247,7 @@ L0033:	rts
 ;
 ; temp6 = temp5 = Generic.x + scroll_x; // upper left (temp6 = save for reuse)
 ;
-L0033:	lda     _Generic
+L004B:	lda     _Generic
 	clc
 	adc     _scroll_x
 	pha
@@ -4971,7 +5303,7 @@ L0003:	jsr     _bg_collision_sub
 ;
 	lda     _collision
 	and     #$40
-	beq     L0025
+	beq     L0039
 ;
 ; ++collision_L;
 ;
@@ -4983,9 +5315,9 @@ L0003:	jsr     _bg_collision_sub
 ;
 ; if(collision & COL_DEATH) {
 ;
-L0025:	lda     _collision
+L0039:	lda     _collision
 	and     #$20
-	beq     L0027
+	beq     L003C
 ;
 ; sfx_play(SFX_NOISE, 0);
 ;
@@ -4994,10 +5326,21 @@ L0025:	lda     _collision
 	lda     #$00
 	jsr     _sfx_play
 ;
-; if (lives) {
+; if (lifedeath) {
+;
+	lda     _lifedeath
+	beq     L0006
+;
+; if (lives == 0) ++death;
 ;
 	lda     _lives
-	beq     L0006
+	bne     L003C
+;
+; else if (lives) {
+;
+	jmp     L003B
+L0006:	lda     _lives
+	beq     L0009
 ;
 ; lives = lives - 1;
 ;
@@ -5005,28 +5348,34 @@ L0025:	lda     _collision
 	sbc     #$01
 	sta     _lives
 ;
-; if (lives > 0x80) lives = 0;
+; if (lives == 0) ++death;
 ;
-	cmp     #$81
-	bcc     L0026
-	lda     #$00
-	sta     _lives
+	lda     _lives
+	bne     L003A
+	inc     _death
 ;
 ; ++lifedeath;
 ;
-L0026:	inc     _lifedeath
+L003A:	inc     _lifedeath
 ;
 ; } else {
 ;
-	jmp     L0027
+	jmp     L003C
+;
+; if (lives > 0x80) ++death;
+;
+L0009:	lda     _lives
+	cmp     #$81
+	bcc     L003B
+	inc     _death
 ;
 ; ++death;
 ;
-L0006:	inc     _death
+L003B:	inc     _death
 ;
 ; temp5 += Generic.width;
 ;
-L0027:	lda     _Generic+2
+L003C:	lda     _Generic+2
 	clc
 	adc     _temp5
 	sta     _temp5
@@ -5060,7 +5409,7 @@ L0027:	lda     _Generic+2
 ;
 	lda     _collision
 	and     #$40
-	beq     L0028
+	beq     L003D
 ;
 ; ++collision_R;
 ;
@@ -5072,9 +5421,9 @@ L0027:	lda     _Generic+2
 ;
 ; if(collision & COL_DEATH) {
 ;
-L0028:	lda     _collision
+L003D:	lda     _collision
 	and     #$20
-	beq     L002A
+	beq     L0040
 ;
 ; sfx_play(SFX_NOISE, 0);
 ;
@@ -5083,10 +5432,21 @@ L0028:	lda     _collision
 	lda     #$00
 	jsr     _sfx_play
 ;
-; if (lives) {
+; if (lifedeath) {
+;
+	lda     _lifedeath
+	beq     L0011
+;
+; if (lives == 0) ++death;
 ;
 	lda     _lives
-	beq     L000D
+	bne     L0040
+;
+; else if (lives) {
+;
+	jmp     L003F
+L0011:	lda     _lives
+	beq     L0014
 ;
 ; lives = lives - 1;
 ;
@@ -5094,28 +5454,34 @@ L0028:	lda     _collision
 	sbc     #$01
 	sta     _lives
 ;
-; if (lives > 0x80) lives = 0;
+; if (lives == 0) ++death;
 ;
-	cmp     #$81
-	bcc     L0029
-	lda     #$00
-	sta     _lives
+	lda     _lives
+	bne     L003E
+	inc     _death
 ;
 ; ++lifedeath;
 ;
-L0029:	inc     _lifedeath
+L003E:	inc     _lifedeath
 ;
 ; } else {
 ;
-	jmp     L002A
+	jmp     L0040
+;
+; if (lives > 0x80) ++death;
+;
+L0014:	lda     _lives
+	cmp     #$81
+	bcc     L003F
+	inc     _death
 ;
 ; ++death;
 ;
-L000D:	inc     _death
+L003F:	inc     _death
 ;
 ; temp3 = Generic.y + Generic.height; //y bottom
 ;
-L002A:	lda     _Generic+1
+L0040:	lda     _Generic+1
 	clc
 	adc     _Generic+3
 	sta     _temp3
@@ -5123,7 +5489,7 @@ L002A:	lda     _Generic+1
 ; if(L_R_switch) temp3 -= 2; // fix bug, walking through walls
 ;
 	lda     _L_R_switch
-	beq     L002B
+	beq     L0041
 	lda     _temp3
 	sec
 	sbc     #$02
@@ -5131,7 +5497,7 @@ L002A:	lda     _Generic+1
 ;
 ; eject_D = (temp3 + 1) & 0x0f;
 ;
-L002B:	lda     _temp3
+L0041:	lda     _temp3
 	clc
 	adc     #$01
 	and     #$0F
@@ -5141,7 +5507,7 @@ L002B:	lda     _temp3
 ;
 	lda     _temp3
 	cmp     #$F0
-	bcc     L0034
+	bcc     L004C
 ;
 ; }
 ;
@@ -5149,13 +5515,13 @@ L002B:	lda     _temp3
 ;
 ; bg_collision_sub();
 ;
-L0034:	jsr     _bg_collision_sub
+L004C:	jsr     _bg_collision_sub
 ;
 ; if(collision & COL_ALL){ // find a corner in the collision map
 ;
 	lda     _collision
 	and     #$40
-	beq     L002C
+	beq     L0042
 ;
 ; ++collision_R;
 ;
@@ -5163,9 +5529,9 @@ L0034:	jsr     _bg_collision_sub
 ;
 ; if(collision & (COL_DOWN|COL_ALL)){ // find a corner in the collision map
 ;
-L002C:	lda     _collision
+L0042:	lda     _collision
 	and     #$C0
-	beq     L002D
+	beq     L0043
 ;
 ; ++collision_D;
 ;
@@ -5173,9 +5539,9 @@ L002C:	lda     _collision
 ;
 ; if(collision & COL_DEATH) {
 ;
-L002D:	lda     _collision
+L0043:	lda     _collision
 	and     #$20
-	beq     L001A
+	beq     L0025
 ;
 ; sfx_play(SFX_NOISE, 0);
 ;
@@ -5184,10 +5550,21 @@ L002D:	lda     _collision
 	lda     #$00
 	jsr     _sfx_play
 ;
-; if (lives) {
+; if (lifedeath) {
+;
+	lda     _lifedeath
+	beq     L001F
+;
+; if (lives == 0) ++death;
 ;
 	lda     _lives
-	beq     L0017
+	bne     L0025
+;
+; else if (lives) {
+;
+	jmp     L0045
+L001F:	lda     _lives
+	beq     L0022
 ;
 ; lives = lives - 1;
 ;
@@ -5195,28 +5572,34 @@ L002D:	lda     _collision
 	sbc     #$01
 	sta     _lives
 ;
-; if (lives > 0x80) lives = 0;
+; if (lives == 0) ++death;
 ;
-	cmp     #$81
-	bcc     L002E
-	lda     #$00
-	sta     _lives
+	lda     _lives
+	bne     L0044
+	inc     _death
 ;
 ; ++lifedeath;
 ;
-L002E:	inc     _lifedeath
+L0044:	inc     _lifedeath
 ;
 ; } else {
 ;
-	jmp     L001A
+	jmp     L0025
+;
+; if (lives > 0x80) ++death;
+;
+L0022:	lda     _lives
+	cmp     #$81
+	bcc     L0045
+	inc     _death
 ;
 ; ++death;
 ;
-L0017:	inc     _death
+L0045:	inc     _death
 ;
 ; temp1 = temp6 & 0xff; // low byte x
 ;
-L001A:	lda     _temp6
+L0025:	lda     _temp6
 	sta     _temp1
 ;
 ; temp2 = temp6 >> 8; // high byte x
@@ -5232,7 +5615,7 @@ L001A:	lda     _temp6
 ;
 	lda     _collision
 	and     #$40
-	beq     L002F
+	beq     L0046
 ;
 ; ++collision_L;
 ;
@@ -5240,9 +5623,9 @@ L001A:	lda     _temp6
 ;
 ; if(collision & (COL_DOWN|COL_ALL)){ // find a corner in the collision map
 ;
-L002F:	lda     _collision
+L0046:	lda     _collision
 	and     #$C0
-	beq     L0030
+	beq     L0047
 ;
 ; ++collision_D;
 ;
@@ -5250,9 +5633,9 @@ L002F:	lda     _collision
 ;
 ; if(collision & COL_DEATH) {
 ;
-L0030:	lda     _collision
+L0047:	lda     _collision
 	and     #$20
-	beq     L0032
+	beq     L004A
 ;
 ; sfx_play(SFX_NOISE, 0);
 ;
@@ -5261,10 +5644,21 @@ L0030:	lda     _collision
 	lda     #$00
 	jsr     _sfx_play
 ;
-; if (lives) {
+; if (lifedeath) {
+;
+	lda     _lifedeath
+	beq     L002A
+;
+; if (lives == 0) ++death;
 ;
 	lda     _lives
-	beq     L001E
+	bne     L004A
+;
+; else if (lives) {
+;
+	jmp     L0049
+L002A:	lda     _lives
+	beq     L002D
 ;
 ; lives = lives - 1;
 ;
@@ -5272,41 +5666,47 @@ L0030:	lda     _collision
 	sbc     #$01
 	sta     _lives
 ;
-; if (lives > 0x80) lives = 0;
+; if (lives == 0) ++death;
 ;
-	cmp     #$81
-	bcc     L0031
-	lda     #$00
-	sta     _lives
+	lda     _lives
+	bne     L0048
+	inc     _death
 ;
 ; ++lifedeath;
 ;
-L0031:	inc     _lifedeath
+L0048:	inc     _lifedeath
 ;
 ; } else {
 ;
-	jmp     L0032
+	jmp     L004A
+;
+; if (lives > 0x80) ++death;
+;
+L002D:	lda     _lives
+	cmp     #$81
+	bcc     L0049
+	inc     _death
 ;
 ; ++death;
 ;
-L001E:	inc     _death
+L0049:	inc     _death
 ;
 ; if((temp3 & 0x0f) > 3) collision_D = 0; // for platforms, only collide with the top 3 pixels
 ;
-L0032:	lda     _temp3
+L004A:	lda     _temp3
 	and     #$0F
 	cmp     #$04
 	lda     #$00
 	sbc     #$00
-	bvs     L0023
+	bvs     L0033
 	eor     #$80
-L0023:	bpl     L0022
+L0033:	bpl     L0032
 	lda     #$00
 	sta     _collision_D
 ;
 ; }
 ;
-L0022:	rts
+L0032:	rts
 
 .endproc
 
@@ -6259,7 +6659,7 @@ L0013:	rts
 ;
 ; Generic.width = HERO_WIDTH;
 ;
-	lda     #$05
+	lda     #$06
 	sta     _Generic+2
 ;
 ; Generic.height = HERO_HEIGHT;
@@ -6281,15 +6681,15 @@ L0013:	rts
 ;
 	lda     #$00
 	sta     _index
-L0027:	lda     _index
+L002B:	lda     _index
 	cmp     #$10
-	bcs     L0029
+	bcs     L002D
 ;
 ; if(coin_active[index]){
 ;
 	ldy     _index
 	lda     _coin_active,y
-	beq     L0028
+	beq     L002C
 ;
 ; Generic2.x = coin_x[index];
 ;
@@ -6312,7 +6712,7 @@ L0027:	lda     _index
 	ldx     #>(_Generic2)
 	jsr     _check_collision
 	tax
-	beq     L0028
+	beq     L002C
 ;
 ; coin_y[index] = TURN_OFF;
 ;
@@ -6333,12 +6733,12 @@ L0027:	lda     _index
 ;
 ; for(index = 0; index < MAX_COINS; ++index){
 ;
-L0028:	inc     _index
-	jmp     L0027
+L002C:	inc     _index
+	jmp     L002B
 ;
 ; Generic2.width = STAR_WIDTH;
 ;
-L0029:	lda     #$0D
+L002D:	lda     #$0D
 	sta     _Generic2+2
 ;
 ; Generic2.height = STAR_HEIGHT;
@@ -6349,15 +6749,15 @@ L0029:	lda     #$0D
 ;
 	lda     #$00
 	sta     _index
-L002A:	lda     _index
+L002E:	lda     _index
 	cmp     #$02
-	bcs     L002C
+	bcs     L0030
 ;
 ; if(star_active[index]){
 ;
 	ldy     _index
 	lda     _star_active,y
-	beq     L002B
+	beq     L002F
 ;
 ; Generic2.x = star_x[index];
 ;
@@ -6380,7 +6780,7 @@ L002A:	lda     _index
 	ldx     #>(_Generic2)
 	jsr     _check_collision
 	tax
-	beq     L002B
+	beq     L002F
 ;
 ; star_y[index] = TURN_OFF;
 ;
@@ -6401,12 +6801,12 @@ L002A:	lda     _index
 ;
 ; for(index = 0; index < MAX_STARS; ++index){
 ;
-L002B:	inc     _index
-	jmp     L002A
+L002F:	inc     _index
+	jmp     L002E
 ;
 ; Generic2.width = ENEMY_WIDTH;
 ;
-L002C:	lda     #$0E
+L0030:	lda     #$0E
 	sta     _Generic2+2
 ;
 ; Generic2.height = ENEMY_HEIGHT;
@@ -6418,15 +6818,19 @@ L002C:	lda     #$0E
 ;
 	lda     #$00
 	sta     _index
-L002D:	lda     _index
+L0031:	lda     _index
 	cmp     #$10
-	bcs     L0017
+	bcc     L0034
+;
+; }
+;
+	rts
 ;
 ; if(enemy_active[index]){
 ;
-	ldy     _index
+L0034:	ldy     _index
 	lda     _enemy_active,y
-	beq     L002F
+	beq     L0033
 ;
 ; Generic2.x = enemy_x[index];
 ;
@@ -6449,7 +6853,7 @@ L002D:	lda     _index
 	ldx     #>(_Generic2)
 	jsr     _check_collision
 	tax
-	beq     L002F
+	beq     L0033
 ;
 ; enemy_y[index] = TURN_OFF;
 ;
@@ -6482,10 +6886,21 @@ L002D:	lda     _index
 	lda     #$00
 	sta     _coins
 ;
-; if (lives) {
+; if(lifedeath) {
 ;
-L0022:	lda     _lives
+L0022:	lda     _lifedeath
 	beq     L0023
+;
+; if (lives == 0) ++death;
+;
+	lda     _lives
+	bne     L0033
+;
+; else if (lives) {
+;
+	jmp     L0026
+L0023:	lda     _lives
+	beq     L0026
 ;
 ; lives = lives - 1;
 ;
@@ -6493,33 +6908,28 @@ L0022:	lda     _lives
 	sbc     #$01
 	sta     _lives
 ;
-; if (lives > 0x80) lives = 0;
+; if (lives == 0) ++death;
 ;
-	cmp     #$81
-	bcc     L002E
-	lda     #$00
-	sta     _lives
+	lda     _lives
+	bne     L0032
+	inc     _death
 ;
 ; ++lifedeath;
 ;
-L002E:	inc     _lifedeath
+L0032:	inc     _lifedeath
 ;
 ; } else {
 ;
-	jmp     L002F
+	jmp     L0033
 ;
 ; ++death;
 ;
-L0023:	inc     _death
+L0026:	inc     _death
 ;
 ; for(index = 0; index < MAX_ENEMY; ++index){
 ;
-L002F:	inc     _index
-	jmp     L002D
-;
-; }
-;
-L0017:	rts
+L0033:	inc     _index
+	jmp     L0031
 
 .endproc
 

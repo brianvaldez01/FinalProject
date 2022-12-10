@@ -103,7 +103,7 @@ struct Player PlayerGuy; // starting position
 // the width and height should be 1 less than the dimensions (14x14)
 // note, I'm using the top left as the 0,0 on x,y
 
-#define HERO_WIDTH 5
+#define HERO_WIDTH 6
 #define HERO_HEIGHT 13
 
 

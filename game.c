@@ -1,6 +1,6 @@
 #include "LIB/neslib.h"
 #include "LIB/nesdoug.h"
-#include "SCREENS/title_screen.h"
+#include "SCREENS/title.h"
 #include "Sprites.h"
 #include "game.h"
 #include "level_data.c"
@@ -10,7 +10,7 @@ static unsigned char frame_cnt;
 static int iy,dy;
 
 
-const unsigned char palTitle[]={ 0x0f,0x03,0x15,0x30,0x0f,0x01,0x21,0x31,0x0f,0x06,0x30,0x26,0x0f,0x09,0x19,0x29 };
+const unsigned char palTitle[16]={ 0x0f,0x03,0x15,0x30,0x0f,0x01,0x21,0x31,0x0f,0x06,0x30,0x26,0x0f,0x09,0x19,0x29 };
 const unsigned char palLevel[16]={ 0x0f,0x00,0x10,0x30,0x0f,0x30,0x11,0x16,0x0f,0x30,0x11,0x16,0x0f,0x17,0x19,0x29 };
 const unsigned char palSprite[16]={ 0x0f,0x00,0x10,0x30,0x0f,0x01,0x21,0x31,0x0f,0x37,0x15,0x12,0x0f,0x18,0x28,0x38 };
 
@@ -182,7 +182,7 @@ void show_title() {
 	
 	// Unpack nametable into VRAM
 	vram_adr(NAMETABLE_A);
-	vram_unrle(title_screen);
+	vram_unrle(title);
 	music_play(song);
 }
 
@@ -593,11 +593,15 @@ void bg_collision(void) {
 
 	if(collision & COL_DEATH) {
 		sfx_play(SFX_NOISE, 0);
-		if (lives) {
+		if (lifedeath) {
+			if (lives == 0) ++death;
+		}
+		else if (lives) {
 			lives = lives - 1;
-			if (lives > 0x80) lives = 0;
+			if (lives == 0) ++death;
 			++lifedeath;
 		} else {
+			if (lives > 0x80) ++death;
 			++death;
 		}
 	}
@@ -619,11 +623,15 @@ void bg_collision(void) {
 	
 	if(collision & COL_DEATH) {
 		sfx_play(SFX_NOISE, 0);
-		if (lives) {
+		if (lifedeath) {
+			if (lives == 0) ++death;
+		}
+		else if (lives) {
 			lives = lives - 1;
-			if (lives > 0x80) lives = 0;
+			if (lives == 0) ++death;
 			++lifedeath;
 		} else {
+			if (lives > 0x80) ++death;
 			++death;
 		}
 	}
@@ -648,11 +656,15 @@ void bg_collision(void) {
 
 	if(collision & COL_DEATH) {
 		sfx_play(SFX_NOISE, 0);
-		if (lives) {
+		if (lifedeath) {
+			if (lives == 0) ++death;
+		}
+		else if (lives) {
 			lives = lives - 1;
-			if (lives > 0x80) lives = 0;
+			if (lives == 0) ++death;
 			++lifedeath;
 		} else {
+			if (lives > 0x80) ++death;
 			++death;
 		}
 	}
@@ -674,11 +686,15 @@ void bg_collision(void) {
 
 	if(collision & COL_DEATH) {
 		sfx_play(SFX_NOISE, 0);
-		if (lives) {
+		if (lifedeath) {
+			if (lives == 0) ++death;
+		}
+		else if (lives) {
 			lives = lives - 1;
-			if (lives > 0x80) lives = 0;
+			if (lives == 0) ++death;
 			++lifedeath;
 		} else {
+			if (lives > 0x80) ++death;
 			++death;
 		}
 	}
@@ -755,10 +771,12 @@ void sprite_collisions(void) {
 				} 
 
 				
-				
-				if (lives) {
+				if(lifedeath) {
+					if (lives == 0) ++death;
+				}
+				else if (lives) {
 					lives = lives - 1;
-					if (lives > 0x80) lives = 0;
+					if (lives == 0) ++death;
 					++lifedeath;
 				} else {
 					++death;
